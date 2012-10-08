@@ -3,7 +3,7 @@ import java.sql.*;
 import java.util.ArrayList;
 /*
  * Skaber forbindelse til vores database
- * t00r
+ * t00r psyko
  */ 
 //=== Provides an interface to execute SQL statements
 // WHAT THE COMMIT!
