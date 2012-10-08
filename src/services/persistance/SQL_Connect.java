@@ -3,8 +3,10 @@ import java.sql.*;
 import java.util.ArrayList;
 /*
  * Skaber forbindelse til vores database
- */
+ * t00r
+ */ 
 //=== Provides an interface to execute SQL statements
+// WHAT THE COMMIT!
 //=== 2011 Henrik Hauge - vi har ændret en smule i den 
 public class SQL_Connect {
 	private String driver			= "com.mysql.jdbc.Driver";;
