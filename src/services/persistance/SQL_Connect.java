@@ -4,6 +4,7 @@ import java.util.ArrayList;
 /*
  * Skaber forbindelse til vores database
  * t00r psyko
+ * testsimon
  */ 
 //=== Provides an interface to execute SQL statements
 // WHAT THE COMMIT!
