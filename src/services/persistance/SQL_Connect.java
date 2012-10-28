@@ -98,7 +98,7 @@ public class SQL_Connect {
 	    return rows;
 	  }
 	  
-	  public int saveGame(int gId, int pId, int fieldNumber, int houses, int pledge) throws SQLException
+	  public int createUser(String userName, String fName, String lName, String email, String password) throws SQLException
 	  {
 	      
 	    PreparedStatement preparedStatement	= null;
@@ -116,11 +116,11 @@ public class SQL_Connect {
 	      //=== execute statement
 	      preparedStatement = connection.prepareStatement(insertSQL); // create statement object
 	  
-   	   	  preparedStatement.setInt(1,gId);				// exchange placeholders for values 
-   	   	  preparedStatement.setInt(2,pId);
-   	   	  preparedStatement.setInt(3,fieldNumber);
-   	   	  preparedStatement.setInt(4,houses);
-   	   	  preparedStatement.setInt(5, pledge);
+   	   	  preparedStatement.setString(1,userName);				// exchange placeholders for values 
+   	   	  preparedStatement.setString(2,fName);
+   	   	  preparedStatement.setString(3,lName);
+   	   	  preparedStatement.setString(4,email);
+   	   	  preparedStatement.setString(5, password);
 	      rows = preparedStatement.executeUpdate();                     
 	          
 	    }
