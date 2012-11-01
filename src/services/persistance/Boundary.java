@@ -4,6 +4,10 @@ import java.util.Scanner;
 public class Boundary {
 	Scanner scan = new Scanner(System.in);
 	
+	public int getInt(){
+		int integer = scan.nextInt();
+		return integer;
+	}
 	/*
 	 * Gets user name from user
 	 */
@@ -55,4 +59,15 @@ public class Boundary {
 		}while(!pass1.equals(pass2));
 		return pass1;
 	}
+	/*
+	 * displayLoggedInMenu displays menu when you are logged in
+	 */
+	public void displayLoggedInMenu(){
+		System.out.println("Indtast tallet på dit valg \n\n" +
+						   "(1) - Tilføj Destination \n" +
+						   "(2) - Find Venner \n" +
+						   "(3) - Se Venners Profiler \n" +
+						   "(4) - Log Ud");
+	}
+	
 }

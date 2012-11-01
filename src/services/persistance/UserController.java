@@ -9,7 +9,10 @@ public class UserController {
 	
 	
 	/*
-	 * Creates a new user in the database
+	 * Opretter nye bruger i databasen
+	 * Først kalder den getUserInfo som henter infoen om brugeren og assigner de nødvendige variabler.
+	 * Derefter kalder den createUser i SQL_Connect klassen som gemmer brugeren i databasen
+	 * sidst sætter den variablerne til empty String så den er klar til næste gang.
 	 */
 	public void createUser(){
 		getUserInfo();
@@ -21,7 +24,9 @@ public class UserController {
 		resetVar();
 	}
 	/*
-	 * checks if the username is taken
+	 * isNameAvailable tjekker om det userName der er blevet indtastet allerede er i brug retunere true hvis det er ledigt
+	 * Den kalder executeQuery i SQL_Connect retunere bruger antal rækker brugernavnet findes i hvis det allerede eksistere
+	 * og null hvis brugernavnet ikke eksistere. 
 	 */
 	private boolean isNameAvailable(String userName){
 		Object[][] nameAvailability;
@@ -34,7 +39,7 @@ public class UserController {
 		return false;
 	}
 	/*
-	 * gets user info from user and initializes the info
+	 * getUserInfo prombter brugeren for info checker om brugernavn er ledigt
 	 */
 	private void getUserInfo(){
 		do{
