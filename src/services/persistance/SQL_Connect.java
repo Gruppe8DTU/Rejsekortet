@@ -98,7 +98,7 @@ public class SQL_Connect {
 	    return rows;
 	  }
 	  
-	  public int createUser(String userName, String fName, String lName, String email, String password) throws SQLException
+	  public int createUser(User user) throws SQLException
 	  {
 	      
 	    PreparedStatement preparedStatement	= null;
@@ -116,11 +116,11 @@ public class SQL_Connect {
 	      //=== execute statement
 	      preparedStatement = connection.prepareStatement(insertSQL); // create statement object
 	  
-   	   	  preparedStatement.setString(1,userName);				// exchange placeholders for values 
-   	   	  preparedStatement.setString(2,fName);
-   	   	  preparedStatement.setString(3,lName);
-   	   	  preparedStatement.setString(4,email);
-   	   	  preparedStatement.setString(5, password);
+   	   	  preparedStatement.setString(1,user.getUserName());				// exchange placeholders for values 
+   	   	  preparedStatement.setString(2,user.getfirstName());
+   	   	  preparedStatement.setString(3,user.getLastName());
+   	   	  preparedStatement.setString(4,user.getEmail());
+   	   	  preparedStatement.setString(5, user.getPassword());
 	      rows = preparedStatement.executeUpdate();                     
 	          
 	    }

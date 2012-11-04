@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 public class UserController {
 	String userName, firstName, lastName, eMail, password;
+	User user;
 	Boundary gui = new Boundary();
 	SQL_Connect connect = new SQL_Connect();
 	
@@ -16,8 +17,9 @@ public class UserController {
 	 */
 	public void createUser(){
 		getUserInfo();
+		new User(userName,firstName,lastName,eMail,password);
 		try {
-			connect.createUser(userName, firstName, lastName, eMail, password);
+			connect.createUser(user);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
