@@ -98,7 +98,7 @@ public class SQL_Connect {
 	    return rows;
 	  }
 	  
-	  public int createUser(User user) throws SQLException
+	  public int createUser(UserData user) throws SQLException
 	  {
 	      
 	    PreparedStatement preparedStatement	= null;

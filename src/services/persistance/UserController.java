@@ -5,7 +5,7 @@ public class UserController {
 	
 
 	
-	public void loggedInMenu(User user){
+	public void loggedInMenu(UserData user){
 		bound.displayLoggedInMenu();
 		switch(bound.getInt()){
 			case 1: // Tilf¿j destination

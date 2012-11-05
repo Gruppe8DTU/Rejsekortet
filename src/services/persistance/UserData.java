@@ -1,9 +1,9 @@
 package services.persistance;
 
-public class User {
+public class UserData {
 	private String uName, fName, lName, eMail, password;
 
-	public User(String uName, String fName, String lName, String eMail, String password){
+	public UserData(String uName, String fName, String lName, String eMail, String password){
 		this.uName = uName;
 		this.fName = fName;
 		this.lName = lName;
