@@ -59,6 +59,13 @@ public class Boundary {
 		}while(!pass1.equals(pass2));
 		return pass1;
 	}
+	
+	public String getUserNameLogIn(){
+		System.out.println("Username: ");
+		String uName = scan.nextLine();
+		return uName;
+	}
+	
 	/*
 	 * displayLoggedInMenu displays menu when you are logged in
 	 */
