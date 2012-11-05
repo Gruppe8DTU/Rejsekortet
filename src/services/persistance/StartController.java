@@ -26,7 +26,6 @@ public class StartController {
 		resetVar();
 	}
 	public void logIn(){
-		String uName
 	}
 	
 	/*
