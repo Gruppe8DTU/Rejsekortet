@@ -8,46 +8,19 @@ public class Boundary {
 		int integer = scan.nextInt();
 		return integer;
 	}
-	
+	/*
+	 * Prints out a string
+	 */
+	public void printLine(String str){
+		System.out.println(str);
+	}
+	/*
+	 * Display prombtinfo and returns input
+	 */
 	public String prombtForString(String str){
 		System.out.println(str);
-		String returnString = scan.nextLine();
-		return returnString;
-	}
-	/*
-	 * Gets user name from user
-	 */
-	public String getUserName(){
-		System.out.println("Type the username you want: ");
-		String uName = scan.nextLine();
-		return uName;
-	}
-	
-	/*
-	 * gets first name from user
-	 */
-	public String getFirstName(){
-		System.out.println("Type your sir name: ");
-		String fName = scan.nextLine();
-		return fName;
-	}
-	
-	/*
-	 * Gets last name from user
-	 */
-	public String getLastName(){
-		System.out.println("Type your last name: ");
-		String lName = scan.nextLine();
-		return lName;
-	}
-	
-	/*
-	 * Gets email from user
-	 */
-	public String getEMail(){
-		System.out.println("Type your e-mail address: ");
-		String email = scan.nextLine();
-		return email;
+		String input = scan.nextLine();
+		return input;
 	}
 	
 	/*

@@ -3,11 +3,10 @@ package services.persistance;
 import java.sql.SQLException;
 
 public class StartController {
-	String userName, firstName, lastName, eMail, password;
-	UserData user;
-	Boundary bound = new Boundary();
-	SQL_Connect connect = new SQL_Connect();
-	
+	private String userName, firstName, lastName, eMail, password;
+	private UserData user;
+	private Boundary bound = new Boundary();
+	private SQL_Connect connect = new SQL_Connect();
 	
 	/*
 	 * Opretter nye bruger i databasen
@@ -15,7 +14,7 @@ public class StartController {
 	 * Derefter kalder den createUser i SQL_Connect klassen som gemmer brugeren i databasen
 	 * sidst sætter den variablerne til empty String så den er klar til næste gang.
 	 */
-	public void createUser(){
+	private void createUser(){
 		getUserInfo();
 		new UserData(userName,firstName,lastName,eMail,password);
 		try {
@@ -23,15 +22,18 @@ public class StartController {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		resetVar();
 	}
 	/*
 	 * Prombts user for login till he enters correct login info
+	 * if user enters '0' he will be redirected to create a new user
 	 */
-	private void Login(){
+	private void getLogin(){
+		bound.printLine("Log in or type 0 to create new user");
 		boolean bool = false;
 		do{
 			userName = bound.prombtForString("Username: ");
+			if(userName =="0")
+				createUser();
 			password = bound.prombtForString("Password: ");
 			if (isLoginValid(userName, password)==true){
 				System.out.println("Logged in");
@@ -78,25 +80,19 @@ public class StartController {
 	 * getUserInfo prombter brugeren for info checker om brugernavn er ledigt
 	 */
 	private void getUserInfo(){
+		bound.printLine("Log in or type 0 to create new user");
 		do{
-			userName = bound.getUserName();
+			userName = bound.prombtForString("Type the username you want: ");
+			if(userName == "0")
+				getLogin();
 			if (!isNameAvailable(userName))
-				System.out.println("User name is not available, try another one");
+				bound.printLine("User name is not available, try another one");
 		}while(!isNameAvailable(userName));
-		firstName = bound.getFirstName();
-		lastName = bound.getLastName();
-		eMail = bound.getEMail();
+		firstName = bound.prombtForString("Type your sir name: ");
+		lastName = bound.prombtForString("Type your last name: ");
+		eMail = bound.prombtForString("Type your e-mail address: ");
 		password = bound.getPassword();
 	}
-	/*
-	 * resets variables to empty strings
-	 */
-	private void resetVar(){
-		userName ="";
-		firstName ="";
-		lastName = "";
-		eMail = "";
-		password = "";
-	}
+	
 }
 
