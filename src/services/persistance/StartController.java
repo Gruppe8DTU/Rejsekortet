@@ -9,6 +9,8 @@ public class StartController {
 	private SQL_Connect connect = new SQL_Connect();
 	
 	/*
+	 * halllooooooooooooo 
+	 * 
 	 * Opretter nye bruger i databasen
 	 * F¿rst kalder den getUserInfo som henter infoen om brugeren og assigner de n¿dvendige variabler.
 	 * Derefter kalder den createUser i SQL_Connect klassen som gemmer brugeren i databasen
