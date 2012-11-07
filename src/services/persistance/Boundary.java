@@ -8,6 +8,12 @@ public class Boundary {
 		int integer = scan.nextInt();
 		return integer;
 	}
+	
+	public String prombtForString(String str){
+		System.out.println(str);
+		String returnString = scan.nextLine();
+		return returnString;
+	}
 	/*
 	 * Gets user name from user
 	 */

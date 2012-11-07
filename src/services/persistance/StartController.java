@@ -4,8 +4,8 @@ import java.sql.SQLException;
 
 public class StartController {
 	String userName, firstName, lastName, eMail, password;
-	User user;
-	Boundary gui = new Boundary();
+	UserData user;
+	Boundary bound = new Boundary();
 	SQL_Connect connect = new SQL_Connect();
 	
 	
@@ -17,7 +17,7 @@ public class StartController {
 	 */
 	public void createUser(){
 		getUserInfo();
-		new User(userName,firstName,lastName,eMail,password);
+		new UserData(userName,firstName,lastName,eMail,password);
 		try {
 			connect.createUser(user);
 		} catch (SQLException e) {
@@ -25,7 +25,20 @@ public class StartController {
 		}
 		resetVar();
 	}
-	public void logIn(){
+	
+	private void Login(){
+		boolean bool = false;
+		do{
+			userName = bound.prombtForString("Username: ");
+			password = bound.prombtForString("Password: ");
+			if (isLoginValid(userName, password)==true){
+				System.out.println("Logged in");
+				bool = true;	
+			}
+			else {
+				System.out.println("Incorrect username or password");
+			}
+		}while(bool == false);
 	}
 	
 	/*
@@ -42,6 +55,22 @@ public class StartController {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	/*
+	 * Calls checkLogin on SQL_connect and that returns true if password and username mathces
+	 */
+	private boolean isLoginValid(String userName, String password){
+		boolean accepted = false; 
+		try {
+		if (connect.checkLogin(userName, password)==true){
+			accepted = true;
+		}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return accepted;
 	}
 	/*
 	 * getUserInfo prombter brugeren for info checker om brugernavn er ledigt
