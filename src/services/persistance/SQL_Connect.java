@@ -1,6 +1,8 @@
 package services.persistance;
 import java.sql.*;
 import java.util.ArrayList;
+
+import rejsekortet.data.UserData;
 /*
  * Skaber forbindelse til vores database
  */ 
