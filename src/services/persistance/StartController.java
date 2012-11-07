@@ -25,7 +25,9 @@ public class StartController {
 		}
 		resetVar();
 	}
-	
+	/*
+	 * Prombts user for login till he enters correct login info
+	 */
 	private void Login(){
 		boolean bool = false;
 		do{
@@ -77,14 +79,14 @@ public class StartController {
 	 */
 	private void getUserInfo(){
 		do{
-			userName = gui.getUserName();
+			userName = bound.getUserName();
 			if (!isNameAvailable(userName))
 				System.out.println("User name is not available, try another one");
 		}while(!isNameAvailable(userName));
-		firstName = gui.getFirstName();
-		lastName = gui.getLastName();
-		eMail = gui.getEMail();
-		password = gui.getPassword();
+		firstName = bound.getFirstName();
+		lastName = bound.getLastName();
+		eMail = bound.getEMail();
+		password = bound.getPassword();
 	}
 	/*
 	 * resets variables to empty strings

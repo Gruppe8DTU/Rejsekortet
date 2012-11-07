@@ -135,6 +135,47 @@ public class SQL_Connect {
 	      connection.close();        
 	    } 
 	    return rows;
-	  }  
+	  }
+	  /*
+	   * Checks if the username and password matches
+	   */
+	  public boolean checkLogin(String userName, String password1) throws SQLException
+	  {
+	    PreparedStatement preparedStatement	= null;
+	    Connection connection 	= null;
+	    ResultSet resultSet = null;
+	    boolean accepted = false;		
+   	    try 
+	    {  
+	      //=== connect
+	      Class.forName(driver);
+	      connection = DriverManager.getConnection(database_url, username, password);                   
+	      String executeQuery = "SELECT userName FROM users WHERE userName = "
+					+ '?' + " AND password = " + '?';
+
+	      //=== execute statement
+	      preparedStatement = connection.prepareStatement(executeQuery); // create statement object
+
+   	   	  preparedStatement.setString(1,userName);				// exchange placeholders for values 
+   	   	  preparedStatement.setString(2, password1);
+	      resultSet = preparedStatement.executeQuery();                     
+	      
+	      if (resultSet.next()){
+		accepted = true; }
+	    }
+	    catch (Exception e)
+	    {
+	       e.printStackTrace();
+	       System.exit(1);
+	    }
+	    finally
+	    {  
+	      preparedStatement.close();
+	      connection.close();
+	      
+	    } 
+   	    
+   	    return accepted;
+	  }
 	
 }
