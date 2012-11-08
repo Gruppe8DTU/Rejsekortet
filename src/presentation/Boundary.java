@@ -1,10 +1,13 @@
-package rejsekortet.presentation;
+package presentation;
 import java.util.Scanner;
 
 public class Boundary {
 	Scanner scan = new Scanner(System.in);
-	
-	public int getInt(){
+	/*
+	 * prompts user for an integer. if you dont need a message passed, you have to pass an empty string
+	 */
+	public int promptForInt(String str){
+		System.out.println(str);
 		int integer = scan.nextInt();
 		return integer;
 	}
@@ -17,7 +20,7 @@ public class Boundary {
 	/*
 	 * Display prombtinfo and returns input
 	 */
-	public String prombtForString(String str){
+	public String promptForString(String str){
 		System.out.println(str);
 		String input = scan.nextLine();
 		return input;
@@ -37,12 +40,6 @@ public class Boundary {
 				System.out.println("They do not match. Try again");
 		}while(!pass1.equals(pass2));
 		return pass1;
-	}
-	
-	public String getUserNameLogIn(){
-		System.out.println("Username: ");
-		String uName = scan.nextLine();
-		return uName;
 	}
 	
 	/*

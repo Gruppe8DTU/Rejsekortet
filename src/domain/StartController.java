@@ -1,16 +1,21 @@
-package services.persistance;
+package domain;
 
 import java.sql.SQLException;
 
+import persistance.SQL_Connect;
+import presentation.Boundary;
+
+import data.UserData;
+
+
 public class StartController {
 	private String userName, firstName, lastName, eMail, password;
+	private int type;
 	private UserData user;
 	private Boundary bound = new Boundary();
 	private SQL_Connect connect = new SQL_Connect();
 	
 	/*
-	 * halllooooooooooooo 
-	 * 
 	 * Opretter nye bruger i databasen
 	 * F¿rst kalder den getUserInfo som henter infoen om brugeren og assigner de n¿dvendige variabler.
 	 * Derefter kalder den createUser i SQL_Connect klassen som gemmer brugeren i databasen
@@ -18,7 +23,7 @@ public class StartController {
 	 */
 	private void createUser(){
 		getUserInfo();
-		new UserData(userName,firstName,lastName,eMail,password);
+		user = new UserData(userName,firstName,lastName,eMail,password,type);
 		try {
 			connect.createUser(user);
 		} catch (SQLException e) {
@@ -31,20 +36,39 @@ public class StartController {
 	 */
 	private void getLogin(){
 		bound.printLine("Log in or type 0 to create new user");
+		UserData user;
 		boolean bool = false;
 		do{
-			userName = bound.prombtForString("Username: ");
+			userName = bound.promptForString("Username: ");
 			if(userName =="0")
 				createUser();
-			password = bound.prombtForString("Password: ");
+			password = bound.promptForString("Password: ");
 			if (isLoginValid(userName, password)==true){
-				System.out.println("Logged in");
+				bound.printLine("Logged in");
+				user = getUser(userName);
+				redirectToController(user);
 				bool = true;	
 			}
 			else {
 				System.out.println("Incorrect username or password");
 			}
 		}while(bool == false);
+	}
+	/*
+	 * Checks which type of user that has logged in and redirects the user to the right controller
+	 */
+	private void redirectToController(UserData user){
+		switch(user.getType()){
+			case 1:
+				new UserController(user, bound, connect);
+				break;
+			case 2:
+				new AdminController(user);
+				break;
+			case 3:
+				new ModController(user);
+				break;
+		}
 	}
 	
 	/*
@@ -84,17 +108,42 @@ public class StartController {
 	private void getUserInfo(){
 		bound.printLine("Log in or type 0 to create new user");
 		do{
-			userName = bound.prombtForString("Type the username you want: ");
+			userName = bound.promptForString("Type the username you want: ");
 			if(userName == "0")
 				getLogin();
 			if (!isNameAvailable(userName))
 				bound.printLine("User name is not available, try another one");
 		}while(!isNameAvailable(userName));
-		firstName = bound.prombtForString("Type your sir name: ");
-		lastName = bound.prombtForString("Type your last name: ");
-		eMail = bound.prombtForString("Type your e-mail address: ");
+		firstName = bound.promptForString("Type your sir name: ");
+		lastName = bound.promptForString("Type your last name: ");
+		eMail = bound.promptForString("Type your e-mail address: ");
 		password = bound.getPassword();
+		type = 1;
 	}
+	/*
+	 * creates a new object of the type user and inititializes the values
+	 */
+	private UserData getUser(String userName){
+		UserData user;
+		try {
+			Object[][] res = connect.executeQuery("select * from Users where userName = "+ userName);
+			Object[] userRow = res[0];
+			userName = (String) userRow[0];
+			firstName = (String) userRow[1];
+			lastName = (String) userRow[2];
+			eMail = (String) userRow[3];
+			password = (String) userRow[4];
+			type = (Integer) userRow[5];
+			
+			user = new UserData(userName,firstName,lastName,eMail,password,type);
+			return user;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	
 }
 
