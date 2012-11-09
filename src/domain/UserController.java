@@ -16,27 +16,46 @@ public class UserController {
 	ArrayList<String> friends = new ArrayList<String>();
 	
 	/*
-	 * displays users options and redirects to the right methods
+	 * initializes 
 	 */
 	public UserController(UserData user, Boundary bound, SQL_Connect connect){
 		this.user = user;
 		this.bound = bound;
-		// Displays menu for user, gets input and depending on the input decides which action to do next;
+		getFriends();
+	}
+	/*
+	 * Displays menu for user, gets input and depending on the input decides which action to do next
+	 */
+	private void menu(){
 		bound.displayLoggedInMenu();
 		switch(bound.promptForInt("")){
 			case 1: 
 				createNewDest();
 				break;
 			case 2:
-				getFriends();
-				for (String friend : friends)
-					bound.printLine(friend);
+				friendList();
 				break;
-			case 3: // Se venners profiler
+			case 3: 
+				recentDestinations();
 				break;
 			case 4: // Log ud
 				break;
-		}		
+		}
+	}
+	/*
+	 * Displays all your friends.
+	 */
+	private void friendList(){
+		for (String friend : friends)
+			bound.printLine(friend);
+		do{
+			int input = bound.promptForInt("Type '0' to go to menu");
+			if(input == 0)
+				menu();
+			else
+				bound.printLine("Invalid input");
+		}while(true);
+		
 	}
 	/*
 	 * gets address from user and creates destionation.  
@@ -49,8 +68,13 @@ public class UserController {
 		int zip = bound.promptForInt("Zip-code: ");
 		String country = bound.promptForString("Country: ");
 		checkDestAndUpdate(name,street,city,zip,country);
+		menu();
 		
 	}
+	private void recentDestinations(){
+		
+	}
+	
 	/*
 	 * Check is if destination already exists, opret destination i destinations tabel hvis den ikke eksistere,
 	 * Opret nyt bes¿g.
@@ -63,7 +87,7 @@ public class UserController {
 			Object[][] dest = connect.executeQuery("SELECT destID from destinations WHERE name ="+name+"street ="+street+"AND city ="+city+
 									"AND zip ="+zip+"country ="+country);
 			int destID =(Integer) dest[0][0];
-			connect.executeQuery("insert into userPosts "+user.getUserName()+ ","+destID+", picture,"+post);
+			connect.executeQuery("insert into userPosts "+user.getUserName()+ ","+destID+", picture,"+post+",date");//picture and date needs to be implemented
 			
 		} catch (SQLException e) {
 			//create new destination ID and save destinations, brug stored procedures til at finde det n¾ste destID
