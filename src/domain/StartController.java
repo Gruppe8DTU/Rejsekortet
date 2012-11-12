@@ -23,7 +23,7 @@ public class StartController {
 	 */
 	private void createUser(){
 		getUserInfo();
-		user = new UserData(userName,firstName,lastName,eMail,password,type);
+		user = new UserData(userName, firstName,lastName,eMail,password,type);
 		try {
 			connect.createUser(user);
 		} catch (SQLException e) {
@@ -34,19 +34,22 @@ public class StartController {
 	 * Prombts user for login till he enters correct login info
 	 * if user enters '0' he will be redirected to create a new user
 	 */
-	private void getLogin(){
+	public void getLogin(){
 		bound.printLine("Log in or type 0 to create new user");
 		UserData user;
 		boolean bool = false;
 		do{
 			userName = bound.promptForString("Username: ");
-			if(userName =="0")
+			if(userName.equals("0")){
 				createUser();
+				break;
+			}
 			password = bound.promptForString("Password: ");
 			if (isLoginValid(userName, password)==true){
 				bound.printLine("Logged in");
 				user = getUser(userName);
-				redirectToController(user);
+				System.out.println("yaaaay you logged in as"+user.getUserName());
+				//redirectToController(user);
 				bool = true;	
 			}
 			else {
@@ -57,7 +60,7 @@ public class StartController {
 	/*
 	 * Checks which type of user that has logged in and redirects the user to the right controller
 	 */
-	private void redirectToController(UserData user){
+	/*private void redirectToController(UserData user){
 		switch(user.getType()){
 			case 1:
 				new UserController(user, bound, connect);
@@ -106,14 +109,14 @@ public class StartController {
 	 * getUserInfo prombter brugeren for info checker om brugernavn er ledigt
 	 */
 	private void getUserInfo(){
-		bound.printLine("Log in or type 0 to create new user");
-		do{
+		bound.printLine("Create new user or type '0' to login");
+		//do{
 			userName = bound.promptForString("Type the username you want: ");
-			if(userName == "0")
-				getLogin();
-			if (!isNameAvailable(userName))
-				bound.printLine("User name is not available, try another one");
-		}while(!isNameAvailable(userName));
+			//if(userName.equals("0"))
+				//getLogin();
+			//if (!isNameAvailable(userName))
+				//bound.printLine("User name is not available, try another one");
+		//}while(!isNameAvailable(userName));
 		firstName = bound.promptForString("Type your sir name: ");
 		lastName = bound.promptForString("Type your last name: ");
 		eMail = bound.promptForString("Type your e-mail address: ");
@@ -126,7 +129,7 @@ public class StartController {
 	private UserData getUser(String userName){
 		UserData user;
 		try {
-			Object[][] res = connect.executeQuery("select * from Users where userName = "+ userName);
+			Object[][] res = connect.executeQuery("select * from users where userName = '"+ userName+"'");
 			Object[] userRow = res[0];
 			userName = (String) userRow[0];
 			firstName = (String) userRow[1];

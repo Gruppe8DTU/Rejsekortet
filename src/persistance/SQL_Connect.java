@@ -11,8 +11,8 @@ import data.UserData;
 // WHAT THE COMMIT!
 //=== 2011 Henrik Hauge - vi har ændret en smule i den 
 public class SQL_Connect {
-	private String driver			= "com.mysql.jdbc.Driver";;
-	private String database_url	= "jdbc:mysql://localhost:8889/Matador";
+	private String driver			= "com.mysql.jdbc.Driver";
+	private String database_url	= "jdbc:mysql://localhost:8889/Rejsekortet";
 	private String username		= "root";	
 	private String password		= "root";
 	
@@ -114,7 +114,7 @@ public class SQL_Connect {
 	      //=== connect
 	      Class.forName(driver);
 	      connection = DriverManager.getConnection(database_url, username, password);                   
-	      String insertSQL = "insert into Owned values(?,?,?,?,?)";
+	      String insertSQL = "insert into users values(?,?,?,?,?,?)";
 	      
 	      //=== execute statement
 	      preparedStatement = connection.prepareStatement(insertSQL); // create statement object
@@ -124,6 +124,7 @@ public class SQL_Connect {
    	   	  preparedStatement.setString(3,user.getLastName());
    	   	  preparedStatement.setString(4,user.getEmail());
    	   	  preparedStatement.setString(5, user.getPassword());
+   	   	  preparedStatement.setInt(6,user.getType());
 	      rows = preparedStatement.executeUpdate();                     
 	          
 	    }
