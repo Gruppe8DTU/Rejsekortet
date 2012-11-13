@@ -36,7 +36,6 @@ public class StartController {
 	 */
 	public void getLogin(){
 		bound.printLine("Log in or type 0 to create new user");
-		UserData user;
 		boolean bool = false;
 		do{
 			userName = bound.promptForString("Username: ");
@@ -48,8 +47,8 @@ public class StartController {
 			if (isLoginValid(userName, password)==true){
 				bound.printLine("Logged in");
 				user = getUser(userName);
-				System.out.println("yaaaay you logged in as"+user.getUserName());
-				//redirectToController(user);
+				System.out.println("yaaaay you logged in as "+user.getUserName());
+				redirectToController();
 				bool = true;	
 			}
 			else {
@@ -60,30 +59,36 @@ public class StartController {
 	/*
 	 * Checks which type of user that has logged in and redirects the user to the right controller
 	 */
-	/*private void redirectToController(UserData user){
+	private void redirectToController(){
 		switch(user.getType()){
 			case 1:
 				new UserController(user, bound, connect);
 				break;
-			case 2:
+			/*case 2:
 				new AdminController(user);
 				break;
 			case 3:
 				new ModController(user);
-				break;
+				break;*/
 		}
 	}
 	
 	/*
-	 * isNameAvailable tjekker om det userName der er blevet indtastet allerede er i brug retunere true hvis det er ledigt
-	 * Den kalder executeQuery i SQL_Connect retunere bruger antal r¾kker brugernavnet findes i hvis det allerede eksistere
-	 * og null hvis brugernavnet ikke eksistere. 
+	 * isNameAvailable tjekker om det userName der er blevet indtastet allerede er i brug.
+	 * Den pr¿ver at hente en r¾kke fra databasen med det username som pr¿ves at oprettes og gemmer dem i det 2 dimensionelle
+	 * array 'nameAvailability'.
+	 * Hvis dette array ikke er tomt vil der retuneres false, og hvis den er tom vil der retuneres true.
 	 */
 	private boolean isNameAvailable(String userName){
 		Object[][] nameAvailability;
 		try {
-			nameAvailability = connect.executeQuery("SELECT userName FROM users WHERE userName = " + userName);
-			return nameAvailability == null;
+			nameAvailability = connect.executeQuery("SELECT userName FROM users WHERE userName = '" + userName+"'");
+			try{
+				if(nameAvailability[0].length>0)
+					return false;
+			}catch(ArrayIndexOutOfBoundsException e){
+				return true;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -110,13 +115,13 @@ public class StartController {
 	 */
 	private void getUserInfo(){
 		bound.printLine("Create new user or type '0' to login");
-		//do{
+		do{
 			userName = bound.promptForString("Type the username you want: ");
-			//if(userName.equals("0"))
-				//getLogin();
-			//if (!isNameAvailable(userName))
-				//bound.printLine("User name is not available, try another one");
-		//}while(!isNameAvailable(userName));
+			if(userName.equals("0"))
+				getLogin();
+			if (!isNameAvailable(userName))
+				bound.printLine("User name is not available, try another one");
+		}while(!isNameAvailable(userName));
 		firstName = bound.promptForString("Type your sir name: ");
 		lastName = bound.promptForString("Type your last name: ");
 		eMail = bound.promptForString("Type your e-mail address: ");
