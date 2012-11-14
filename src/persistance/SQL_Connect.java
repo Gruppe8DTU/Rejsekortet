@@ -103,6 +103,16 @@ public class SQL_Connect {
 	  
 	  public int createUser(UserData user) throws SQLException
 	  {
+		  String cypher = "";
+		  // Forsoeg at oprette instans af encrypter for at kryptere password
+		  try {
+			Crypto crypto = new Crypto(user.getPassword());
+			cypher = crypto.encrypt(user.getPassword());
+		} catch (Exception e1) {
+			System.out.println("Crypto module not initialized");
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	      
 	    PreparedStatement preparedStatement	= null;
 	    Connection connection 	= null;
@@ -123,7 +133,7 @@ public class SQL_Connect {
    	   	  preparedStatement.setString(2,user.getfirstName());
    	   	  preparedStatement.setString(3,user.getLastName());
    	   	  preparedStatement.setString(4,user.getEmail());
-   	   	  preparedStatement.setString(5, user.getPassword());
+   	   	  preparedStatement.setString(5, cypher);
    	   	  preparedStatement.setInt(6,user.getType());
 	      rows = preparedStatement.executeUpdate();                     
 	          
@@ -145,6 +155,17 @@ public class SQL_Connect {
 	   */
 	  public boolean checkLogin(String userName, String password1) throws SQLException
 	  {
+		  String cypher = "";
+		  // Forsoeg at oprette instans af encrypter for at kryptere password
+		  try {
+			  Crypto crypto = new Crypto(password1);
+			  cypher = crypto.encrypt(password1);
+		  } catch (Exception e1) {
+			  System.out.println("Crypto module not initialized");
+			  // TODO Auto-generated catch block
+			  e1.printStackTrace();
+		  }
+		  
 	    PreparedStatement preparedStatement	= null;
 	    Connection connection 	= null;
 	    ResultSet resultSet = null;
@@ -161,7 +182,7 @@ public class SQL_Connect {
 	      preparedStatement = connection.prepareStatement(executeQuery); // create statement object
 
    	   	  preparedStatement.setString(1,userName);				// exchange placeholders for values 
-   	   	  preparedStatement.setString(2, password1);
+   	   	  preparedStatement.setString(2, cypher);				// hvis vi kan finde en bruger med samme krypterede pass = win
 	      resultSet = preparedStatement.executeQuery();                     
 	      
 	      if (resultSet.next()){
