@@ -186,12 +186,13 @@ public class SQL_Connect {
 	      resultSet = preparedStatement.executeQuery();                     
 	      
 	      if (resultSet.next()){
-		accepted = true; }
+		accepted = true; } // ¾ndret 
 	    }
 	    catch (Exception e)
 	    {
-	       e.printStackTrace();
-	       System.exit(1);
+	      // e.printStackTrace();
+	    	System.exit(1);
+	    	accepted = false;// ¾ndret
 	    }
 	    finally
 	    {  

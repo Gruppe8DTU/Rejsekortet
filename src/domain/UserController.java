@@ -13,7 +13,7 @@ public class UserController {
 	Boundary bound;
 	UserData user;
 	SQL_Connect connect;
-	ArrayList<String> friends = new ArrayList<String>();
+	Object[][] friends;
 	
 	/*
 	 * initializes 
@@ -22,6 +22,7 @@ public class UserController {
 		this.user = user;
 		this.bound = bound;
 		this.connect = connect;
+		System.out.println("HEEEEEEY");
 		getFriends();
 	}
 	/*
@@ -37,7 +38,7 @@ public class UserController {
 				friendList();
 				break;
 			case 3: 
-				recentDestinations();
+				recentFriendDestinations();
 				break;
 			case 4: // Log ud
 				
@@ -51,8 +52,9 @@ public class UserController {
 	 * Displays all your friends.
 	 */
 	private void friendList(){
-		for (String friend : friends)
-			bound.printLine(friend);
+		for(int i = 0; i < friends.length; i++){
+			bound.printLine((String)friends[i][0]);
+		}
 		do{
 			int input = bound.promptForInt("Type '0' to go to menu");
 			if(input == 0)
@@ -72,12 +74,39 @@ public class UserController {
 		String city = bound.promptForString("City: ");
 		int zip = bound.promptForInt("Zip-code: ");
 		String country = bound.promptForString("Country: ");
-		checkDestAndUpdate(name,street,city,zip,country);
+		checkDestAndUpdate(name.toLowerCase(),street.toLowerCase(),city.toLowerCase(),zip,country.toLowerCase());
 		menu();
 		
 	}
-	private void recentDestinations(){
-		
+	
+	/*
+	 * Gets a table from the database with all the destinations your friend have visited.
+	 * Prints the 10 most recent and if you want to see more you can ask to see 10 more.
+	 */
+	private void recentFriendDestinations(){
+		Object[][] visits = null;
+		try {
+			connect.executeUpdate("CALL create_Friend_Visits('"+user.getUserName()+"')");
+			visits = connect.executeQuery("SELECT tempVisits.username,destinations.name FROM tempVisits INNER JOIN destinations"+
+										  "ON tempVisits.destID = destinations.destID ORDER BY tempVisits.date DESC");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if(visits != null){
+			int index = 0;
+			showTenDest(index, visits);
+			do{
+				index += 10;
+				int desition = bound.promptForInt("Type '0' to print 10 more friend destinations \n"+
+									  "Type any other key to go back to menu");
+				if(desition==0)
+					showTenDest(index,visits);
+				else{
+					break;
+				}
+				
+			}while(true);
+		}
 	}
 	
 	/*
@@ -89,8 +118,9 @@ public class UserController {
 		String post = getPost();
 		try {
 			// skal implementeres at name skal v¾re case insensitive sŒ der ikke kommer flere af samme destination i databasen
-			Object[][] dest = connect.executeQuery("SELECT destID from destinations WHERE name ="+name+"street ="+street+"AND city ="+city+
+			Object[][] dest = connect.executeQuery("SELECT destID FROM destinations WHERE name ="+name+"street ="+street+"AND city ="+city+
 									"AND zip ="+zip+"country ="+country);
+			
 			int destID =(Integer) dest[0][0];
 			connect.executeQuery("insert into userPosts "+user.getUserName()+ ","+destID+", picture,"+post+",date");//picture and date needs to be implemented
 			
@@ -107,28 +137,32 @@ public class UserController {
 		return post;
 	}
 	/*
-	 * Pulls list of friends from DB
+	 * Pulls list of friends from DB, saves it in the 2 dimensional friend array
 	 */
 	private void getFriends(){
 		String uName = user.getUserName();
 		try {
-			Object[][] userRelations = connect.executeQuery("SELECT * FROM userRelations WHERE userName1 = " + uName + "OR userName2 =" + uName);
-			parseFriends(userRelations, uName);
+			// whaaaaaat?
+			friends = connect.executeQuery("CALL Create_Friendlist('"+uName+"');\n" +
+										   "SELECT * FROM TempFriendlist;");
+			System.out.println("heeeey");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
-	// Help method for extracting friends from userRelations from DB
-	final void parseFriends(Object[][] userRelations, String uName){
-		for (int i = 0; i < userRelations.length; i++){
-			for (int k = 0; k < userRelations[i].length; k++){
-				if (userRelations[i][k] != uName){
-					friends.add( (String) userRelations[i][k] );
-				}
+	/*
+	 * Prints the next ten destinations in the visits table
+	 */
+	private void showTenDest(int index, Object[][] visits){
+		System.out.println("Username\t| Destination\t|");
+		for(int i = index; i < index+10;index++){
+			for(int j = 0; j < visits[0].length; j++){
+				System.out.print(visits[i][j]+"\t|");
 			}
+			System.out.print("Check content");
+			System.out.println();
 		}
 	}
-		
 	
 }
