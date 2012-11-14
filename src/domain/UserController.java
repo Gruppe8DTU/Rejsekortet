@@ -21,6 +21,7 @@ public class UserController {
 	public UserController(UserData user, Boundary bound, SQL_Connect connect){
 		this.user = user;
 		this.bound = bound;
+		this.connect = connect;
 		getFriends();
 	}
 	/*
@@ -39,6 +40,10 @@ public class UserController {
 				recentDestinations();
 				break;
 			case 4: // Log ud
+				
+			// case 5 tilfoej ven
+			// case 6 egne destinationer
+			// 
 				break;
 		}
 	}
