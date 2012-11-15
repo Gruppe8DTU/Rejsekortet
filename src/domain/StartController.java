@@ -63,6 +63,7 @@ public class StartController {
 		switch(user.getType()){
 			case 1:
 				new UserController(user, bound, connect);
+				
 				break;
 			/*case 2:
 				new AdminController(user);

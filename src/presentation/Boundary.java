@@ -23,6 +23,7 @@ public class Boundary {
 	public String promptForString(String str){
 		System.out.println(str);
 		String input = scan.nextLine();
+		System.out.println(input);
 		return input;
 	}
 	
@@ -46,11 +47,16 @@ public class Boundary {
 	 * displayLoggedInMenu displays menu when you are logged in
 	 */
 	public void displayLoggedInMenu(){
+		seperator();
 		System.out.println("Indtast tallet på dit valg \n\n" +
 						   "(1) - Tilføj Destination \n" +
 						   "(2) - Find Venner \n" +
 						   "(3) - Se Venners Profiler \n" +
 						   "(4) - Log Ud");
+		seperator();
 	}
 	
+	public void seperator(){
+		System.out.println("-----------------------------");
+	}
 }

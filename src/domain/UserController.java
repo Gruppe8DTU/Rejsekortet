@@ -13,7 +13,7 @@ public class UserController {
 	Boundary bound;
 	UserData user;
 	SQL_Connect connect;
-	Object[][] friends;
+	ArrayList<String> friends;
 	
 	/*
 	 * initializes 
@@ -22,8 +22,8 @@ public class UserController {
 		this.user = user;
 		this.bound = bound;
 		this.connect = connect;
-		System.out.println("HEEEEEEY");
 		getFriends();
+		menu();
 	}
 	/*
 	 * Displays menu for user, gets input and depending on the input decides which action to do next
@@ -34,42 +34,46 @@ public class UserController {
 			case 1: 
 				createNewDest();
 				break;
-			case 2:
-				friendList();
-				break;
+//			case 2:
+//				friendList();
+//				break;
 			case 3: 
 				recentFriendDestinations();
 				break;
-			case 4: // Log ud
+//			case 4: 
+//				addFriend();
 				
 			// case 5 tilfoej ven
 			// case 6 egne destinationer
 			// 
-				break;
+				//break;
 		}
 	}
 	/*
 	 * Displays all your friends.
 	 */
-	private void friendList(){
-		for(int i = 0; i < friends.length; i++){
-			bound.printLine((String)friends[i][0]);
-		}
-		do{
-			int input = bound.promptForInt("Type '0' to go to menu");
-			if(input == 0)
-				menu();
-			else
-				bound.printLine("Invalid input");
-		}while(true);
+//	private void friendList(){
+//		for(int i = 0; i < friends.length; i++){
+//			bound.printLine((String)friends[i][0]);
+//		}
+//		do{
+//			bound.seperator();
+//			int input = bound.promptForInt("Type '0' to go to menu");
+//			if(input == 0)
+//				menu();
+//			else
+//				bound.printLine("Invalid input");
+//		}while(true);
 		
-	}
+//	}
 	/*
-	 * gets address from user and creates destionation.  
+	 * gets address from user and creates destionation. 
+	 * WHAT THE FUCKING FUCK? 
+	 * HJ®LP MANDAG TAK
 	 */
 	private void createNewDest(){
-		bound.printLine("Create new destination. \n Enter address: ");
-		String name = bound.promptForString("Name of the place: ");
+		bound.printLine("Create new destination. \nEnter address: ");
+		String name = bound.promptForString("Name: ");
 		String street = bound.promptForString("Street: ");
 		String city = bound.promptForString("City: ");
 		int zip = bound.promptForInt("Zip-code: ");
@@ -86,9 +90,7 @@ public class UserController {
 	private void recentFriendDestinations(){
 		Object[][] visits = null;
 		try {
-			connect.executeUpdate("CALL create_Friend_Visits('"+user.getUserName()+"')");
-			visits = connect.executeQuery("SELECT tempVisits.username,destinations.name FROM tempVisits INNER JOIN destinations"+
-										  "ON tempVisits.destID = destinations.destID ORDER BY tempVisits.date DESC");
+			visits = connect.executeQuery("CALL create_Friend_Visits('"+user.getUserName()+"')");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -115,15 +117,20 @@ public class UserController {
 	 */
 	private void checkDestAndUpdate(String name, String street, String city, int zip, String country){
 		// get pictures method
-		String post = getPost();
+		//String post = getPost();
 		try {
-			// skal implementeres at name skal v¾re case insensitive sŒ der ikke kommer flere af samme destination i databasen
 			Object[][] dest = connect.executeQuery("SELECT destID FROM destinations WHERE name ="+name+"street ="+street+"AND city ="+city+
 									"AND zip ="+zip+"country ="+country);
-			
-			int destID =(Integer) dest[0][0];
-			connect.executeQuery("insert into userPosts "+user.getUserName()+ ","+destID+", picture,"+post+",date");//picture and date needs to be implemented
-			
+			try{
+				int destID =(Integer) dest[0][0];
+				connect.executeUpdate("insert into visits values('"+user.getUserName()+ "',"+destID+", null,null,CURRENT_TIMESTAMP");
+			}catch(ArrayIndexOutOfBoundsException e){
+				connect.executeUpdate("INSERT INTO destinations(name,street,city,zip,country)" +
+									  "VALUES('"+name+"','"+street+"','"+city+"',"+zip+",'"+country+"');");
+				Object[][] mDest = connect.executeQuery("SELECT MAX(destID) FROM destinations;");
+				int maxDest = (Integer)mDest[0][0];
+				connect.executeUpdate("insert into visits values('"+user.getUserName()+ "',"+maxDest+", null,null,CURRENT_TIMESTAMP");
+			}
 		} catch (SQLException e) {
 			//create new destination ID and save destinations, brug stored procedures til at finde det n¾ste destID
 			
@@ -142,27 +149,47 @@ public class UserController {
 	private void getFriends(){
 		String uName = user.getUserName();
 		try {
-			// whaaaaaat?
-			friends = connect.executeQuery("CALL Create_Friendlist('"+uName+"');\n" +
-										   "SELECT * FROM TempFriendlist;");
-			System.out.println("heeeey");
+			Object[][] friendArray = connect.executeQuery("CALL Create_Friendlist('"+uName+"');");
+			parseToArraylist(friendArray);
 		} catch (SQLException e) {
 			
 			e.printStackTrace();
 		}
 	}
 	/*
+	 * Parsing the two dimensional array to a Arraylist of friends.
+	 */
+	private void parseToArraylist(Object[][] friendArray){
+		for(int i = 0; i < friendArray.length;i++){
+			for(int j = 0; j < friendArray[0].length;j++){
+				friends.add((String)friendArray[i][j]);
+			}
+		}
+	}
+	/*
 	 * Prints the next ten destinations in the visits table
 	 */
 	private void showTenDest(int index, Object[][] visits){
-		System.out.println("Username\t| Destination\t|");
-		for(int i = index; i < index+10;index++){
+		int limit;
+		if(index+10 > visits.length)
+			limit= visits.length;
+		else
+			limit = index +10;
+		for(int i = index; i < limit;i++){
 			for(int j = 0; j < visits[0].length; j++){
-				System.out.print(visits[i][j]+"\t|");
+				System.out.print(visits[i][j]+", ");
 			}
-			System.out.print("Check content");
 			System.out.println();
 		}
+		menu();
 	}
 	
+//	private void addFriend(){
+//		bound.printLine("Add Friend");
+//		bound.promptForString("Enter the username of the friend you want to add: ");
+////		if
+////		connect.executeUpdate("INSERT INTO userRelations)
+////	}
+////	private int binarySearch(String key, ArrayList<String> f)
+////}
 }
