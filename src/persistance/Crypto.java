@@ -25,13 +25,14 @@ public class Crypto {
 	    private SecretKey key;
 	    private byte[] iv;
 
-	    Crypto(String passPhrase) throws Exception {
+	    public Crypto(String passPhrase) throws Exception {
 	        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 	        KeySpec spec = new PBEKeySpec(passPhrase.toCharArray(), salt, iterationCount, keyStrength);
 	        SecretKey tmp = factory.generateSecret(spec);
 	        key = new SecretKeySpec(tmp.getEncoded(), "AES");
 	        dcipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 	    }
+	    
 
 	    public String encrypt(String data) throws Exception {
 	        dcipher.init(Cipher.ENCRYPT_MODE, key);
@@ -42,6 +43,7 @@ public class Crypto {
 
 	        //System.out.println("IV " + new sun.misc.BASE64Encoder().encodeBuffer(iv));
 	        System.out.println("Encrypted Data " + base64EncryptedData);
+	        System.out.println(base64EncryptedData.length);
 	        String returnValue = new String(base64EncryptedData);
 	        return returnValue;
 	    }
