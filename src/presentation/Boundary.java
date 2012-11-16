@@ -23,7 +23,6 @@ public class Boundary {
 	public String promptForString(String str){
 		System.out.println(str);
 		String input = scan.nextLine();
-		System.out.println(input);
 		return input;
 	}
 	

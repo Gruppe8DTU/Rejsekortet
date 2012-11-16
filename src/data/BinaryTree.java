@@ -4,15 +4,46 @@ public class BinaryTree {
 	
 	private Node root;
 	/*
-	 * Wrapper method
+	 * Wrapper method for adding a string
 	 */
 	public void add(String str){
 		insert(root, str);
 	}
+	
+	/*
+	 * Wrapper method for checking if the binary tree contains a string
+	 */
+	public boolean contains(String str){
+		if(root != null){
+			if(findNode(root, str) != null)
+				return true;
+		}
+		return false;
+		
+	}
+	/*
+	 * This is a recursive method for finding the node with the string we are searching for
+	 * The basecase is that if the current node contains the string we are searching for
+	 * it will return the node, if it equals null it will return null
+	 * If not any of these cases are true, it will check if the String has a higher or lower value than the one in the node
+	 * if the value is bigger, it will recurse on the node to the left
+	 * if the value is smaller, it will recurse on the node to the right.
+	 */
+	private Node findNode(Node curNode, String str){
+		if(curNode == null)
+			return null;
+		else if(str.equals(curNode.str))
+			return curNode;
+		else if(str.compareToIgnoreCase(curNode.str) < 0)
+			return findNode(curNode.left, str);
+		else
+			return findNode(curNode.right, str);
+	}
+	
 	/*
 	 * Insert a String in the binary tree. checks the string in every node.
 	 * If the has a higher alphabetical value, it will go to the right
-	 * If it has a low it will go left. the structure is shown in comments below.
+	 * If it has a lower it will go left. the structure is shown in comments below.
 	 */
 	/* 					*
 	 * 				  /   \

@@ -6,6 +6,7 @@ import java.util.*;
 import persistance.SQL_Connect;
 import presentation.Boundary;
 
+import data.BinaryTree;
 import data.UserData;
 
 
@@ -13,7 +14,8 @@ public class UserController {
 	Boundary bound;
 	UserData user;
 	SQL_Connect connect;
-	ArrayList<String> friends;
+	ArrayList<String> friendArrayList;
+	BinaryTree friends;
 	
 	/*
 	 * initializes 
@@ -34,9 +36,9 @@ public class UserController {
 			case 1: 
 				createNewDest();
 				break;
-//			case 2:
-//				friendList();
-//				break;
+			case 2:
+				friendList();
+				break;
 			case 3: 
 				recentFriendDestinations();
 				break;
@@ -52,20 +54,20 @@ public class UserController {
 	/*
 	 * Displays all your friends.
 	 */
-//	private void friendList(){
-//		for(int i = 0; i < friends.length; i++){
-//			bound.printLine((String)friends[i][0]);
-//		}
-//		do{
-//			bound.seperator();
-//			int input = bound.promptForInt("Type '0' to go to menu");
-//			if(input == 0)
-//				menu();
-//			else
-//				bound.printLine("Invalid input");
-//		}while(true);
+	private void friendList(){
+		for(int i = 0; i < friendArrayList.size(); i++){
+			bound.printLine(friendArrayList.get(i));
+		}
+		do{
+			bound.seperator();
+			int input = bound.promptForInt("Type '0' to go to menu");
+			if(input == 0)
+				menu();
+			else
+				bound.printLine("Invalid input");
+		}while(true);
 		
-//	}
+	}
 	/*
 	 * gets address from user and creates destionation. 
 	 * WHAT THE FUCKING FUCK? 
@@ -163,6 +165,7 @@ public class UserController {
 		for(int i = 0; i < friendArray.length;i++){
 			for(int j = 0; j < friendArray[0].length;j++){
 				friends.add((String)friendArray[i][j]);
+				friendArrayList.add((String)friendArray[i][j]);
 			}
 		}
 	}
@@ -184,12 +187,35 @@ public class UserController {
 		menu();
 	}
 	
-//	private void addFriend(){
-//		bound.printLine("Add Friend");
-//		bound.promptForString("Enter the username of the friend you want to add: ");
-////		if
-////		connect.executeUpdate("INSERT INTO userRelations)
-////	}
-////	private int binarySearch(String key, ArrayList<String> f)
-////}
+	private void addFriend(){
+		bound.printLine("Add Friend");
+		String newFriend = bound.promptForString("Enter the username of the friend you want to add: ");
+		if(!isNameAvailable(newFriend)){
+			try {
+				connect.executeUpdate("INSERT INTO userRelations VALUES('"+user.getUserName()+"','"+newFriend+"')");
+				friendArrayList.add(newFriend);
+				friends.add(newFriend);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private boolean isNameAvailable(String userName){
+		Object[][] nameAvailability;
+		try {
+			nameAvailability = connect.executeQuery("SELECT userName FROM users WHERE userName = '" + userName+"'");
+			try{
+				if(nameAvailability[0].length>0)
+					return false;
+			}catch(ArrayIndexOutOfBoundsException e){
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+
 }
