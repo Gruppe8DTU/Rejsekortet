@@ -119,31 +119,38 @@ public class UserController {
 	 */
 	private void checkDestAndUpdate(String name, String street, String city, int zip, String country){
 		// get pictures method
-		//String post = getPost();
+		int textID = getPost();
 		try {
-			Object[][] dest = connect.executeQuery("SELECT destID FROM destinations WHERE name ="+name+"street ="+street+"AND city ="+city+
-									"AND zip ="+zip+"country ="+country);
+			Object[][] dest = connect.executeQuery("SELECT destID FROM destinations WHERE name ='"+name+"' AND street ='"+street+"' AND city ='"+city+
+									"' AND zip ="+zip+" AND country ='"+country+"';");
 			try{
 				int destID =(Integer) dest[0][0];
-				connect.executeUpdate("insert into visits values('"+user.getUserName()+ "',"+destID+", null,null,CURRENT_TIMESTAMP");
+				System.out.println();
+				connect.executeUpdate("insert into visits values('"+user.getUserName()+ "',"+destID+",null,'"+textID+"'CURRENT_TIMESTAMP;");
 			}catch(ArrayIndexOutOfBoundsException e){
 				connect.executeUpdate("INSERT INTO destinations(name,street,city,zip,country)" +
 									  "VALUES('"+name+"','"+street+"','"+city+"',"+zip+",'"+country+"');");
 				Object[][] mDest = connect.executeQuery("SELECT MAX(destID) FROM destinations;");
 				int maxDest = (Integer)mDest[0][0];
-				connect.executeUpdate("insert into visits values('"+user.getUserName()+ "',"+maxDest+", null,null,CURRENT_TIMESTAMP");
+				connect.executeUpdate("insert into visits values('"+user.getUserName()+ "',"+maxDest+", null,null,CURRENT_TIMESTAMP)");
 			}
 		} catch (SQLException e) {
-			//create new destination ID and save destinations, brug stored procedures til at finde det n¾ste destID
 			
 		}
 	}
 	/*
 	 * gets post from user
 	 */
-	private String getPost(){
-		String post = bound.promptForString("Write your post: ");
-		return post;
+	private int getPost(){
+		String post = bound.promptForString("Write your post dont press enter till you're done: ");
+		Object[][] text = null;
+		try {
+			connect.executeUpdate("INSERT INTO text(source) VALUES('"+post+"')");
+			text = connect.executeQuery("SELECT max(text_ID) FROM text;");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return	(Integer)text[0][0];
 	}
 	/*
 	 * Pulls list of friends from DB, saves it in the 2 dimensional friend array
