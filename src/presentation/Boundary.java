@@ -8,8 +8,9 @@ public class Boundary {
 	 */
 	public int promptForInt(String str){
 		System.out.println(str);
-		int integer = scan.nextInt();
-		return integer;
+		String stringInt = scan.nextLine();
+		int intInt = Integer.parseInt(stringInt);
+		return intInt;
 	}
 	/*
 	 * Prints out a string
