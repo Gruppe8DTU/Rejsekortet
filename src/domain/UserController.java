@@ -14,8 +14,8 @@ public class UserController {
 	Boundary bound;
 	UserData user;
 	SQL_Connect connect;
-	ArrayList<String> friendArrayList;
-	BinaryTree friends;
+	ArrayList<String> friendArrayList = new ArrayList();
+	BinaryTree friends = new BinaryTree();
 	
 	/*
 	 * initializes 
@@ -163,10 +163,9 @@ public class UserController {
 	 */
 	private void parseToArraylist(Object[][] friendArray){
 		for(int i = 0; i < friendArray.length;i++){
-			for(int j = 0; j < friendArray[0].length;j++){
-				friends.add((String)friendArray[i][j]);
-				friendArrayList.add((String)friendArray[i][j]);
-			}
+			friends.add((String)friendArray[i][0]);
+			friendArrayList.add((String)friendArray[i][0]);
+			
 		}
 	}
 	/*
