@@ -1,4 +1,4 @@
-package domain;
+	package domain;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -214,6 +214,10 @@ public class UserController {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	private void reportPost(){
+		
 	}
 	
 
