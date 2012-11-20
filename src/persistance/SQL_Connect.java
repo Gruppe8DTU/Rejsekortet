@@ -1,4 +1,6 @@
 package persistance;
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -16,7 +18,7 @@ public class SQL_Connect {
 	private String username		= "root";	
 	private String password		= "root";
 	
-	  public Object[][] executeQuery(String query) throws SQLException
+		public Object[][] executeQuery(String query) throws SQLException
 	  {  
 	    if (query == null)
 	      return null;
@@ -187,7 +189,7 @@ public class SQL_Connect {
 	      resultSet = preparedStatement.executeQuery();                     
 	      
 	      if (resultSet.next()){
-		accepted = true; } // ¾ndret 
+		accepted = true; } 
 	    }
 	    catch (Exception e)
 	    {
@@ -198,11 +200,32 @@ public class SQL_Connect {
 	    finally
 	    {  
 	      preparedStatement.close();
-	      connection.close();
-	      
-	    } 
-   	    
+	      connection.close();	      
+	    }   
    	    return accepted;
 	  }
 	
+	  /*
+	   * Inserts the the picture as a stream in the pics table in the database
+	   */
+	  public void insertPic(FileInputStream fis, File file) throws SQLException{
+		PreparedStatement ps = null;
+		Connection connect = null;
+		try {
+			Class.forName(driver);
+			connect = DriverManager.getConnection(database_url, username, password); 
+			String insertPic = "INSERT INTO pics(source) VALUES(?);";
+			connect.setAutoCommit(false);
+			ps = connect.prepareStatement(insertPic);	// Creates a statement object
+			ps.setBinaryStream(1,fis, (int) file.length()); // exchanges placeholder with value
+			ps.executeUpdate();		// Executes the update on the database and auto increments picID
+			connect.commit();
+		} catch (ClassNotFoundException e) {
+			System.out.println(e);
+		}finally{
+			ps.close();
+		    connect.close();	
+		}
+		
+	}
 }

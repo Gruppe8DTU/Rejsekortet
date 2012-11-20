@@ -1,8 +1,9 @@
 	package domain;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
-
+import java.io.*;
 import persistance.SQL_Connect;
 import presentation.*;
 import data.*;
@@ -68,13 +69,11 @@ public class UserController {
 	}
 	/*
 	 * gets address from user and creates destionation. 
-	 * WHAT THE FUCKING FUCK? 
-	 * HJ®LP MANDAG TAK
 	 */
 	private void createNewDest(){
 		bound.printLine("Create new destination. \nEnter address: ");
-		String name = bound.promptForString("Name: ");
-		String street = bound.promptForString("Street: ");
+		String name =bound.promptForString("Name: ");
+		String street =bound.promptForString("Street: ");
 		String city = bound.promptForString("City: ");
 		int zip = bound.promptForInt("Zip-code: ");
 		String country = bound.promptForString("Country: ");
@@ -116,21 +115,44 @@ public class UserController {
 	 * Opret nyt bes¿g.
 	 */
 	private void checkDestAndUpdate(String name, String street, String city, int zip, String country){
-		// get pictures method
-		int textID = getPost();
+		Integer picID = null;
+		Integer textID = null;
+		
+		// Call the getPicID function that asks the user if he wants to upload a picture to, returns '0' if he doesnt
+		// and if he wants it returns the primary key related to the uploaded picture and initializes tempPicID to this value.
+		int tempPicID = getPicID();
+		if(tempPicID != 0)
+			picID = tempPicID; // if tempPicID does not equal '0' it initializes picID to the value of the primary key for the picture uploaded
+		
+		// Calls the getPost function that gives the user the possibility to attach a post to the his visit
+		// It sets tempPostID to the return value of getPost which is '0' if he didnt want to attach a post.
+		// And the primary key of the post in the text table in the database.
+		int tempPostID = getPost();
+		if(tempPostID != 0)
+			textID = tempPostID;	// if tempPostID does not equal '0' it initializes textID to the value of the primary key for the post uploaded
 		try {
+			// If the destination that the user has visited already exists in the database it will initialize a 2 dimensianal array to contain
+			// only the value of the corrosponding destination ID.
 			Object[][] dest = connect.executeQuery("SELECT destID FROM destinations WHERE name ='"+name+"' AND street ='"+street+"' AND city ='"+city+
 									"' AND zip ="+zip+" AND country ='"+country+"';");
+			
 			try{
+				// initializes destID to the value in the 2 dimensional array if it is not empty if it is empty it will throw an exception
 				int destID =(Integer) dest[0][0];
 				System.out.println();
-				connect.executeUpdate("insert into visits values('"+user.getUserName()+ "',"+destID+",null,'"+textID+"'CURRENT_TIMESTAMP;");
+				// Inserts username, destID, picID, textID, and the date of the upload will also be saved in the database
+				connect.executeUpdate("insert into visits values('"+user.getUserName()+ "',"+destID+","+picID+","+textID+",CURRENT_TIMESTAMP;");
+		
 			}catch(ArrayIndexOutOfBoundsException e){
+				//If the 2 dimensional array was empty means that the database does not contain that destination
+				//So it will create a the destination in the database, and auto increment the destID
 				connect.executeUpdate("INSERT INTO destinations(name,street,city,zip,country)" +
 									  "VALUES('"+name+"','"+street+"','"+city+"',"+zip+",'"+country+"');");
+				//Creates a 2 dimensional array that will contain the the biggest destID which will be the ID of the destination
+				//which was just created. And it will insert this destID in the visits table with the username, picID, textID and the timestamp
 				Object[][] mDest = connect.executeQuery("SELECT MAX(destID) FROM destinations;");
 				int maxDest = (Integer)mDest[0][0];
-				connect.executeUpdate("insert into visits values('"+user.getUserName()+ "',"+maxDest+", null,null,CURRENT_TIMESTAMP)");
+				connect.executeUpdate("insert into visits values('"+user.getUserName()+ "',"+maxDest+","+picID+","+textID+",CURRENT_TIMESTAMP)");
 			}
 		} catch (SQLException e) {
 			
@@ -140,15 +162,24 @@ public class UserController {
 	 * gets post from user
 	 */
 	private int getPost(){
-		String post = bound.promptForString("Write your post dont press enter till you're done: ");
-		Object[][] text = null;
-		try {
-			connect.executeUpdate("INSERT INTO text(source) VALUES('"+post+"')");
-			text = connect.executeQuery("SELECT max(text_ID) FROM text;");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return	(Integer)text[0][0];
+		int textID = 0;
+		boolean repeat = true;
+		do{
+			String post = bound.promptForString("Write your post dont press enter till you're done\nTo cancel enter '0': ");
+			if (post.equals("0"))
+				return 0;
+			try {
+				connect.executeUpdate("INSERT INTO text(source) VALUES('"+post+"')");
+				Object[][] text = connect.executeQuery("SELECT max(text_ID) FROM text;");
+				textID =(Integer)text[0][0];
+				repeat = false;
+				System.out.println(repeat);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}while(repeat);
+			
+		return	textID;
 	}
 	/*
 	 * Pulls list of friends from DB, saves it in the 2 dimensional friend array
@@ -219,6 +250,39 @@ public class UserController {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	/*
+	 * getPicID Asks user if he wants to upload a picture returns 0, if he doesn't. Asks for the address of the picture
+	 * If the address is correct it will save it in the database and return the related primarykey.
+	 * 
+	 * By: Jacob Espersen
+	 */
+	private int getPicID(){
+		boolean repeat = true;
+		int picID = 0;
+		do{
+			String address = bound.promptForString("Write the address of the picture\nEnter '0' to cancel");
+			if (address.equals("0")) 	//Returns zero if The user will not upload a picture
+				return 0;
+			if(address.charAt(0) != '/'){	//If the address that the user typed It will go to the next iteration of the while loop
+				bound.printLine("The address has to start with '/'");
+				continue;
+			}
+			FileInputStream fis = null;
+			try{
+				File file = new File(address); 	//Creates the file
+				fis = new FileInputStream(file);	// reads the file and creates a stream of bytes
+				connect.insertPic(fis, file); 	// inserts the byte stream in the database
+				Object[][] maxPicID = connect.executeQuery("SELECT MAX(picID) FROM pics"); // creates a 2 dimensional array with only the max value of picID
+				picID = (Integer)maxPicID[0][0]; // Passes the max value of picID to a integer
+				repeat = false;
+			}catch(Exception e){
+				System.out.println(e);
+				System.out.println("File not found try again");
+			}
+		}while(repeat);
+		return picID; // returns the picID
 	}
 	
 	private void reportPost(){
