@@ -7,10 +7,15 @@ public class Boundary {
 	 * prompts user for an integer. if you dont need a message passed, you have to pass an empty string
 	 */
 	public int promptForInt(String str){
-		System.out.println(str);
-		String stringInt = scan.nextLine();
-		int intInt = Integer.parseInt(stringInt);
-		return intInt;
+		String stringInt;
+		do{
+			System.out.println(str);
+			stringInt = scan.nextLine();
+			if(!isNumeric(stringInt))
+				System.out.println("Invalid input, Enter a number");
+		}while(!isNumeric(stringInt));
+		int integer = Integer.parseInt(stringInt);
+		return integer;
 	}
 	/*
 	 * Prints out a string
@@ -56,7 +61,23 @@ public class Boundary {
 		seperator();
 	}
 	
+	/*
+	 * Prints out seperator line
+	 */
 	public void seperator(){
 		System.out.println("-----------------------------");
+	}
+	
+	/*
+	 * Checks if a string is a number
+	 */
+	private boolean isNumeric(String str){
+		try{
+			Integer.parseInt(str);
+		}catch(NumberFormatException e){
+			return false;
+		}
+		return true;
+		
 	}
 }
