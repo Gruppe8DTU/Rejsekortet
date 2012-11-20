@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import persistance.SQL_Connect;
 import presentation.Boundary;
+import presentation.Login;
 
 import data.UserData;
 
@@ -14,6 +15,15 @@ public class StartController {
 	private UserData user;
 	private Boundary bound = new Boundary();
 	private SQL_Connect connect = new SQL_Connect();
+	private StartController sc = this;
+	
+	public void setUserName(String name){
+		this.userName = name;
+	}
+	
+	public void setPassword(String password){
+		this.password = password;
+	}
 	
 	/*
 	 * Opretter nye bruger i databasenn
@@ -22,6 +32,7 @@ public class StartController {
 	 * sidst sætter den variablerne til empty String så den er klar til næste gang.
 	 */
 	private void createUser(){
+		/*
 		getUserInfo();
 		user = new UserData(userName, firstName,lastName,eMail,password,type);
 		try {
@@ -29,12 +40,24 @@ public class StartController {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 	/*
 	 * Prombts user for login till he enters correct login info
 	 * if user enters '0' he will be redirected to create a new user
 	 */
 	public void getLogin(){
+		   /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+            	// This controller needs to be passed as parameter sc
+                new Login(sc).setVisible(true);
+            }
+        });
+		System.out.println("Login screen closed");
+	
+		
+		/*
 		bound.printLine("Log in or type 0 to create new user");
 		boolean bool = false;
 		do{
@@ -55,7 +78,10 @@ public class StartController {
 				System.out.println("Incorrect username or password");
 			}
 		}while(bool == false);
+		*/
 	}
+	
+	
 	/*
 	 * Checks which type of user that has logged in and redirects the user to the right controller
 	 */
@@ -98,7 +124,7 @@ public class StartController {
 	/*
 	 * Calls checkLogin on SQL_connect and that returns true if password and username mathces
 	 */
-	private boolean isLoginValid(String userName, String password){
+	public boolean isLoginValid(String userName, String password){
 		boolean accepted = false; 
 		try {
 		if (connect.checkLogin(userName, password)==true){
