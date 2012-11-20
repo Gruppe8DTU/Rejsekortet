@@ -4,10 +4,8 @@ import java.sql.SQLException;
 import java.util.*;
 
 import persistance.SQL_Connect;
-import presentation.Boundary;
-
-import data.BinaryTree;
-import data.UserData;
+import presentation.*;
+import data.*;
 
 
 public class UserController {
