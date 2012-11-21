@@ -13,17 +13,40 @@ import data.UserData;
  */
 public class CreateUser extends javax.swing.JFrame {
 	
-	StartController sc;
-	private UserData ud;
 	private int type = 1;
 	private boolean passConsistent = false;
 	private boolean mailCheck = false;
+	
+	 public void addButtonActionListener1(java.awt.event.ActionListener listener) {
+	        jButton1.addActionListener(listener);
+	      }
+	 public void addButtonActionListener2(java.awt.event.ActionListener listener) {
+	        jButton1.addActionListener(listener);
+	      }
+	 public String getUserName(){
+		 return jTextField1.getText();
+	 }
+	 public String getFirstName(){
+		 return jTextField2.getText();
+	 }
+	 public String getSurName(){
+		 return jTextField3.getText();
+	 }
+	 public String getMail(){
+		 return jTextField4.getText();
+	 }
+	 public String getPass1(){
+		 return jTextField5.getText();
+	 }
+	 public String getPass2(){
+		 return jTextField6.getText();
+	 }
+	 
 
     /**
      * Creates new form CreateUser
      */
-    public CreateUser(StartController sc) {
-    	this.sc = sc;
+    public CreateUser() {
         initComponents();
     }
 
@@ -149,29 +172,9 @@ public class CreateUser extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    	
-    	// check email so far only for @
-    	for ( char c : jTextField4.getText().toCharArray() ){
-    		if (c == '@'){
-    			mailCheck = true;
-    		}
-    	}	
-    	// check if entered passwords match, if they do create instance of UserData
-    	String password = jTextField5.getText();
-    	if ( password.equals(jTextField6.getText()) && mailCheck == true){
-    		passConsistent = true;
-    		ud = new UserData(jTextField1.getText(), jTextField2.getText(), jTextField3.getText(), jTextField4.getText(), password, type);
-    	} else
-    	System.out.println("Passwords and/or mail are not correctly entered");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseReleased
-    	if (passConsistent == true && mailCheck == true)
-    		this.dispose();
-    	else {
-    		jTextField5.setText("err");
-    		jTextField6.setText("err");
-    	}
     }//GEN-LAST:event_jButton1MouseReleased
 
     /**
@@ -204,8 +207,7 @@ public class CreateUser extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-            	StartController start = new StartController();
-                new CreateUser(start).setVisible(true);
+                new CreateUser().setVisible(true);
             }
         });
     }

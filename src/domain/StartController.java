@@ -5,17 +5,16 @@ import java.sql.SQLException;
 import persistance.SQL_Connect;
 import presentation.Boundary;
 import presentation.Login;
-
+import presentation.CreateUser;
 import data.UserData;
 
 
 public class StartController {
 	private String userName, firstName, lastName, eMail, password;
-	private int type;
+	private int DEFAULT_USER_TYPE = 1;
 	private UserData user;
 	private Boundary bound = new Boundary();
 	private SQL_Connect connect = new SQL_Connect();
-	private StartController sc = this;
 	
 	public void setUserName(String name){
 		this.userName = name;
@@ -32,30 +31,63 @@ public class StartController {
 	 * sidst sætter den variablerne til empty String så den er klar til næste gang.
 	 */
 	private void createUser(){
-		/*
-		getUserInfo();
-		user = new UserData(userName, firstName,lastName,eMail,password,type);
-		try {
-			connect.createUser(user);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		*/
+		final CreateUser cu = new CreateUser();
+		cu.addButtonActionListener1(
+				new java.awt.event.ActionListener(){
+					public void actionPerformed(java.awt.event.ActionEvent evt){	
+						if (isNameAvailable(cu.getUserName()) && cu.getPass1().toCharArray() == cu.getPass2().toCharArray() ){
+							// if name is availabe and passwords consistent we create the userdata
+							user = new UserData(cu.getUserName(), cu.getFirstName(), cu.getSurName(), cu.getMail(), cu.getPass1(), DEFAULT_USER_TYPE);
+						}
+						System.out.println("new user credentials saved in start controller");
+					}
+				}
+		);
+		cu.setVisible(true);
 	}
 	/*
 	 * Prombts user for login till he enters correct login info
 	 * if user enters '0' he will be redirected to create a new user
 	 */
 	public void getLogin(){
-		   /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-            	// This controller needs to be passed as parameter sc
-                new Login(sc).setVisible(true);
-            }
-        });
-		System.out.println("Login screen closed");
-	
+		final Login login = new Login();
+		System.out.println("hej");
+		
+		// for at holde mvc laegges eventet her i controlleren. Dette er login knappen
+		
+		login.addButtonActionListener1(
+				new java.awt.event.ActionListener(){
+					public void actionPerformed(java.awt.event.ActionEvent evt){	
+						userName = login.getName();
+						password = login.getPass();
+						System.out.println("credentials saved in start controller");
+						if (isLoginValid(userName, password))
+								System.out.println("login is valid");
+								user = getUser(userName);	
+								new UserController( user, bound, connect );
+						login.setVisible(false);
+					}	
+				}
+		);
+		// dette er create new user knap
+		login.addButtonActionListener2(
+				new java.awt.event.ActionListener(){
+					public void actionPerformed(java.awt.event.ActionEvent evt){	
+						createUser();
+					}
+				}
+		);	
+		// dette er exit button
+		login.addButtonActionListener3(
+				new java.awt.event.ActionListener(){
+					public void actionPerformed(java.awt.event.ActionEvent evt){	
+						System.exit(0);
+					}
+				}
+		);
+		
+		login.setVisible(true);
+		System.out.println("woooop");
 		
 		/*
 		bound.printLine("Log in or type 0 to create new user");
@@ -85,7 +117,7 @@ public class StartController {
 	/*
 	 * Checks which type of user that has logged in and redirects the user to the right controller
 	 */
-	private void redirectToController(){
+	public void redirectToController(){
 		switch(user.getType()){
 			case 1:
 				new UserController(user, bound, connect);
@@ -128,32 +160,16 @@ public class StartController {
 		boolean accepted = false; 
 		try {
 		if (connect.checkLogin(userName, password)==true){
+			System.out.println("login succesfull");
 			accepted = true;
 		}
 			
 		} catch (SQLException e) {
+			System.out.println("login failed");
 			e.printStackTrace();
 		}
 		
 		return accepted;
-	}
-	/*
-	 * getUserInfo prombter brugeren for info checker om brugernavn er ledigt
-	 */
-	private void getUserInfo(){
-		bound.printLine("Create new user or type '0' to login");
-		do{
-			userName = bound.promptForString("Type the username you want: ");
-			if(userName.equals("0"))
-				getLogin();
-			if (!isNameAvailable(userName))
-				bound.printLine("User name is not available, try another one");
-		}while(!isNameAvailable(userName));
-		firstName = bound.promptForString("Type your sir name: ");
-		lastName = bound.promptForString("Type your last name: ");
-		eMail = bound.promptForString("Type your e-mail address: ");
-		password = bound.getPassword();
-		type = 1;
 	}
 	/*
 	 * creates a new object of the type user and inititializes the values
@@ -168,9 +184,9 @@ public class StartController {
 			lastName = (String) userRow[2];
 			eMail = (String) userRow[3];
 			password = (String) userRow[4];
-			type = (Integer) userRow[5];
+			int uType = (Integer) userRow[5];
 			
-			user = new UserData(userName,firstName,lastName,eMail,password,type);
+			user = new UserData(userName,firstName,lastName,eMail,password,uType);
 			return user;
 			
 		} catch (SQLException e) {

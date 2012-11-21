@@ -4,9 +4,6 @@
  */
 package presentation;
 
-import domain.StartController;
-import presentation.CreateUser;
-
 /**
  *
  * @author user
@@ -14,17 +11,12 @@ import presentation.CreateUser;
 public class Login extends javax.swing.JFrame {
     String name;
     String pass;
-    StartController sc;
-
     /**
      * Creates new form Login
      */
-    public Login(StartController sc) {
-    	System.out.println("login constructor");
-    	this.sc = sc;
+    public Login() {
         initComponents();
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -55,35 +47,9 @@ public class Login extends javax.swing.JFrame {
         });
 
         jButton1.setText("Login");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jButton1MouseReleased(evt);
-            }
-        });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         jButton2.setText("Exit");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         jButton3.setText("Create User");
-        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jButton3MouseReleased(evt);
-            }
-        });
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+       
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -133,42 +99,50 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    public void addButtonActionListener1(java.awt.event.ActionListener listener) {
+        jButton1.addActionListener(listener);
+        System.out.println("some code");
+      }
+    public void addButtonActionListener2(java.awt.event.ActionListener listener) {
+        jButton2.addActionListener(listener);
+      }
+    public void addButtonActionListener3(java.awt.event.ActionListener listener) {
+        jButton3.addActionListener(listener);
+      }
+     
+    
+    public String getUserName(){
+    	return this.name;
+    }
+    public String getPass(){
+    	return this.pass;
+    }
+    
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        System.out.println("login pressed");
-        sc.setUserName( jTextField1.getText() );
-        sc.setPassword( jTextField2.getText() );
-        this.setEnabled(false);
+    public void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+     
   
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-            System.exit(0);        // TODO add your handling code here:
+      // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-    		System.out.println("Create new user button pressed");
-    		// create the create user window here :S
-    		   java.awt.EventQueue.invokeLater(new Runnable() {
-    	            public void run() {
-    	            	// This controller needs to be passed as parameter sc
-    	                new CreateUser(sc).setVisible(true);
-    	                
-    	            }
-    	        });
-    		// TODO add your handling code here:
+   
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseReleased
-        this.dispose();        // TODO add your handling code here:
+    	
     }//GEN-LAST:event_jButton1MouseReleased
 
     private void jButton3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseReleased
-        this.dispose();        // TODO add your handling code here:
+
     }//GEN-LAST:event_jButton3MouseReleased
 
     /**
@@ -200,9 +174,8 @@ public class Login extends javax.swing.JFrame {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-            	// This controller needs to be passed as parameter sc
-            	StartController start = new StartController();
-                new Login(start).setVisible(true);
+               System.out.println("main running in login");
+               new Login().setVisible(true); 
             }
         });
         
