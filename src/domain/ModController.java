@@ -2,6 +2,7 @@ package domain;
 
 import persistance.SQL_Connect;
 import presentation.Boundary;
+import presentation.ModScreen;
 import data.UserData;
 
 public class ModController extends UserController {
@@ -11,27 +12,59 @@ public class ModController extends UserController {
 		}
 		
 		// Moderatorer faar et begraenset admin panel der re-implementeres i AdminController
-		private void adminPanel(){
-			bound.displayAdminMenu();
-			switch(bound.promptForInt("")){
-			case 1: 
-				viewReportedUsers();
-				break;
-			case 2:
-				viewReportedPosts();
-				break;
-			}
-		}
-		
-		private void hidePost(){
+		protected void adminPanel(){
+			final ModScreen ms = new ModScreen();
+			
+			// back button in the footer panel
+			ms.addButtonActionListener1(
+					new java.awt.event.ActionListener(){
+						public void actionPerformed(java.awt.event.ActionEvent evt){	
+							ms.setVisible(false);
+						}
+					}
+			);
+			// Exit button in the footer panel
+			ms.addButtonActionListener2(
+					new java.awt.event.ActionListener(){
+						public void actionPerformed(java.awt.event.ActionEvent evt){	
+							System.exit(0);
+						}
+					}
+			);	
+			// View reported posts
+			ms.addButtonActionListener3(
+					new java.awt.event.ActionListener(){
+						public void actionPerformed(java.awt.event.ActionEvent evt){	
+							viewReportedPosts();
+						}
+					}
+			);	
+			// View reported pics
+			ms.addButtonActionListener4(
+					new java.awt.event.ActionListener(){
+						public void actionPerformed(java.awt.event.ActionEvent evt){	
+							viewReportedPics();
+						}
+					}
+			);	
+			// View reported destinations
+			ms.addButtonActionListener5(
+					new java.awt.event.ActionListener(){
+						public void actionPerformed(java.awt.event.ActionEvent evt){	
+							viewReportedDestinations();
+						}
+					}
+			);	
 			
 		}
 		
-		private void hideUser(){
+		protected void viewReportedPosts(){
+			System.out.println("you want to view reported posts?");
+		}
+		protected void viewReportedPics(){
 			
 		}
-		
-		private void viewReportedPosts(){
+		protected void viewReportedDestinations(){
 			
 		}
 		

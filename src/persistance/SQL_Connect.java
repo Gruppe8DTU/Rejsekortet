@@ -105,17 +105,7 @@ public class SQL_Connect {
 	  
 	  public int createUser(UserData user) throws SQLException
 	  {
-		  String cypher = "";
-		  // Forsoeg at oprette instans af encrypter for at kryptere password
-		  try {
-//			Crypto crypto = new Crypto(user.getPassword());
-//			cypher = crypto.encrypt(user.getPassword());
-		} catch (Exception e1) {
-			System.out.println("Crypto module not initialized");
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	      
+	
 	    PreparedStatement preparedStatement	= null;
 	    Connection connection 	= null;
 	    
@@ -157,17 +147,6 @@ public class SQL_Connect {
 	   */
 	  public boolean checkLogin(String userName, String password1) throws SQLException
 	  {
-		  String cypher = "";
-		  // Forsoeg at oprette instans af encrypter for at kryptere password
-		  try {
-//			  Crypto crypto = new Crypto(password1);
-//			  cypher = crypto.encrypt(password1);
-//			  System.out.println(cypher);
-		  } catch (Exception e1) {
-			  System.out.println("Crypto module not initialized");
-			  // TODO Auto-generated catch block
-			  e1.printStackTrace();
-		  }
 		  
 	    PreparedStatement preparedStatement	= null;
 	    Connection connection 	= null;

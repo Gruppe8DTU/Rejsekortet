@@ -1,6 +1,7 @@
 package domain;
 
 import data.UserData;
+import presentation.AdminScreen;
 import persistance.SQL_Connect;
 import presentation.Boundary;
 
@@ -11,17 +12,26 @@ public class AdminController extends ModController {
 	}
 	
 	// Samme som i ModController men udvidet
-	private void adminPanel(){
-		bound.displayAdminMenu();
-		switch(bound.promptForInt("")){
-		case 1: 
-			viewReportedUsers();
-			break;
-		case 2:
-			viewReportedPosts();
-			break;
+	protected void adminPanel(){
+		super.adminPanel();
+		final AdminScreen as = new AdminScreen();
+		System.out.println("Admin screen initialized");
 		
-		}
+		// This is "view reported users" button
+		as.addButtonActionListener1(
+			new java.awt.event.ActionListener(){
+				public void actionPerformed(java.awt.event.ActionEvent evt){
+					
+				}
+			}
+		);	
+		as.addButtonActionListener2(
+				new java.awt.event.ActionListener(){
+					public void actionPerformed(java.awt.event.ActionEvent evt){
+						//some action
+					}
+				}
+			);	
 	}
 		
 	private void deleteUser(String user){
@@ -36,16 +46,21 @@ public class AdminController extends ModController {
 		
 	}
 	
+	// reimplementation of parent method
+	protected void viewReportedPosts(){
+		super.viewReportedPosts();
+	}
+	
 	/*
 	 * Denne metode skal vise anmeldte brugere, men samtidig vise dem der er blevet skjult af moderatorer oeverst derfor skal den re-implementeres.
 	 */
 	private void viewReportedUsers(){
-		
+	
 	}
 	
 	private void changeUserRights(UserData user){
 		int userType = bound.promptForInt("");
-		connect.changeUserRights(user.getUserName(), userType);
+		//connect.changeUserRights(user.getUserName(), userType);
 	}
 	
 	

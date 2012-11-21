@@ -32,29 +32,45 @@ public class StartController {
 	 */
 	private void createUser(){
 		final CreateUser cu = new CreateUser();
+		cu.setVisible(true);
+		
 		cu.addButtonActionListener1(
 				new java.awt.event.ActionListener(){
-					public void actionPerformed(java.awt.event.ActionEvent evt){	
-						if (isNameAvailable(cu.getUserName()) && cu.getPass1().toCharArray() == cu.getPass2().toCharArray() ){
-							// if name is availabe and passwords consistent we create the userdata
-							user = new UserData(cu.getUserName(), cu.getFirstName(), cu.getSurName(), cu.getMail(), cu.getPass1(), DEFAULT_USER_TYPE);
+					public void actionPerformed(java.awt.event.ActionEvent evt){
+						String pass1 = cu.getPass1();
+						String pass2 = cu.getPass2();
+						if ( pass1.equals(pass2) ){
+							user = new UserData(cu.getUserName(), cu.getFirstName(), cu.getSurName(), cu.getMail(), pass1, DEFAULT_USER_TYPE);
+							System.out.println("password check succesfull");
+						} else {
+							System.out.println("password check failed");
 						}
-						System.out.println("new user credentials saved in start controller");
+						// check username availability
+						if (isNameAvailable(user.getUserName()) ){
+							System.out.println("user name available");
+							// now the actual insertion into db
+							try {
+								connect.createUser(user);
+							} catch (SQLException e) {
+								System.out.println("User not created, might be connection error");
+								e.printStackTrace();
+							}
+						} else {
+							System.out.println("username not availabe or passwords inconsistent");
+						}
+						redirectToController();
+						cu.setVisible(false);
 					}
 				}
 		);
-		cu.setVisible(true);
 	}
 	/*
 	 * Prombts user for login till he enters correct login info
 	 * if user enters '0' he will be redirected to create a new user
 	 */
 	public void getLogin(){
-		final Login login = new Login();
-		System.out.println("hej");
-		
-		// for at holde mvc laegges eventet her i controlleren. Dette er login knappen
-		
+		final Login login = new Login();		
+		// for at holde mvc laegges eventet her i controlleren. Dette er login knappen		
 		login.addButtonActionListener1(
 				new java.awt.event.ActionListener(){
 					public void actionPerformed(java.awt.event.ActionEvent evt){	
@@ -71,47 +87,23 @@ public class StartController {
 				}
 		);
 		// dette er create new user knap
-		login.addButtonActionListener2(
+		login.addButtonActionListener3(
 				new java.awt.event.ActionListener(){
 					public void actionPerformed(java.awt.event.ActionEvent evt){	
 						createUser();
+						login.setVisible(false);
 					}
 				}
 		);	
 		// dette er exit button
-		login.addButtonActionListener3(
+		login.addButtonActionListener2(
 				new java.awt.event.ActionListener(){
 					public void actionPerformed(java.awt.event.ActionEvent evt){	
 						System.exit(0);
 					}
 				}
 		);
-		
 		login.setVisible(true);
-		System.out.println("woooop");
-		
-		/*
-		bound.printLine("Log in or type 0 to create new user");
-		boolean bool = false;
-		do{
-			userName = bound.promptForString("Username: ");
-			if(userName.equals("0")){
-				createUser();
-				break;
-			}
-			password = bound.promptForString("Password: ");
-			if (isLoginValid(userName, password)==true){
-				bound.printLine("Logged in");
-				user = getUser(userName);
-				System.out.println("yaaaay you logged in as "+user.getUserName());
-				redirectToController();
-				bool = true;	
-			}
-			else {
-				System.out.println("Incorrect username or password");
-			}
-		}while(bool == false);
-		*/
 	}
 	
 	

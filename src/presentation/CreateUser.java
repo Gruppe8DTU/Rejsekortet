@@ -13,16 +13,16 @@ import data.UserData;
  */
 public class CreateUser extends javax.swing.JFrame {
 	
-	private int type = 1;
+	private int DEFAULT_USER_TYPE = 1;
 	private boolean passConsistent = false;
 	private boolean mailCheck = false;
 	
 	 public void addButtonActionListener1(java.awt.event.ActionListener listener) {
 	        jButton1.addActionListener(listener);
 	      }
-	 public void addButtonActionListener2(java.awt.event.ActionListener listener) {
-	        jButton1.addActionListener(listener);
-	      }
+//	 public void addButtonActionListener2(java.awt.event.ActionListener listener) {
+//	        jButton1.addActionListener(listener);
+//	      }
 	 public String getUserName(){
 		 return jTextField1.getText();
 	 }
@@ -76,34 +76,13 @@ public class CreateUser extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("User name");
-
         jLabel2.setText("First Name");
-
         jLabel3.setText("Sur name");
-
         jLabel4.setText("Email");
-
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
-            }
-        });
-
         jLabel5.setText("Password");
-
         jLabel6.setText("Confirm pass");
-
         jButton1.setText("Submit");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jButton1MouseReleased(evt);
-            }
-        });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+     
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -207,6 +186,7 @@ public class CreateUser extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+            	System.out.println("Warning, Create User running in own main method");
                 new CreateUser().setVisible(true);
             }
         });
