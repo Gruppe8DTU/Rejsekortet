@@ -58,7 +58,8 @@ public class StartController {
 		login.addButtonActionListener1(
 				new java.awt.event.ActionListener(){
 					public void actionPerformed(java.awt.event.ActionEvent evt){	
-						userName = login.getName();
+						userName = login.getUserName();
+						System.out.println(userName);
 						password = login.getPass();
 						System.out.println("credentials saved in start controller");
 						if (isLoginValid(userName, password))
@@ -177,6 +178,7 @@ public class StartController {
 	private UserData getUser(String userName){
 		UserData user;
 		try {
+			System.out.println(userName);
 			Object[][] res = connect.executeQuery("select * from users where userName = '"+ userName+"'");
 			Object[] userRow = res[0];
 			userName = (String) userRow[0];
