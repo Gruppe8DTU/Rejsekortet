@@ -1,5 +1,11 @@
 package data;
-
+/*
+ * Class BinaryTree
+ * 
+ * Stores Strings as a binary tree
+ * 
+ * By: Jacob Espersen
+ */
 public class BinaryTree {
 	
 	private Node root;

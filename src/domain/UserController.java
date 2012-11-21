@@ -13,7 +13,7 @@ public class UserController {
 	Boundary bound;
 	UserData user;
 	SQL_Connect connect;
-	ArrayList<String> friendArrayList = new ArrayList();
+	ArrayList<String> friendArrayList = new ArrayList<String>();
 	BinaryTree friends = new BinaryTree();
 	
 	/*
@@ -41,6 +41,12 @@ public class UserController {
 			case 3: 
 				recentFriendDestinations();
 				break;
+			case 4:
+				ownDest();
+				break;
+			case 5:
+				addFriend();
+				break;
 //			case 4: 
 //				addFriend();
 				
@@ -50,25 +56,25 @@ public class UserController {
 				//break;
 		}
 	}
+	
 	/*
 	 * Displays all your friends.
 	 */
 	private void friendList(){
+		/* If the list of friends is empty it tells the user that he doesnt have any friends yet, and returns to menu*/
+		if(friendArrayList.isEmpty()){
+			bound.printLine("You don't have any friends yet");
+			menu();
+		}
+		/* Prints out all the friends in the friend array*/
 		for(int i = 0; i < friendArrayList.size(); i++){
 			bound.printLine(friendArrayList.get(i));
 		}
-		do{
-			bound.seperator();
-			int input = bound.promptForInt("Type '0' to go to menu");
-			if(input == 0)
-				menu();
-			else
-				bound.printLine("Invalid input");
-		}while(true);
-		
+		menu();	
 	}
+	
 	/*
-	 * gets address from user and creates destionation. 
+	 * gets address from user and creates converts all the strings to lowercase so there wont be dublicates in the database. 
 	 */
 	private void createNewDest(){
 		bound.printLine("Create new destination. \nEnter address: ");
@@ -89,25 +95,19 @@ public class UserController {
 	private void recentFriendDestinations(){
 		Object[][] visits = null;
 		try {
+			/* Initializes  visits to a 2 dimensional array with all destinations the users friends has visited ordered by date*/
 			visits = connect.executeQuery("CALL create_Friend_Visits('"+user.getUserName()+"')");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if(visits != null){
-			int index = 0;
-			showTenDest(index, visits);
-			do{
-				index += 10;
-				int desition = bound.promptForInt("Type '0' to print 10 more friend destinations \n"+
-									  "Type any other key to go back to menu");
-				if(desition==0)
-					showTenDest(index,visits);
-				else{
-					break;
-				}
-				
-			}while(true);
-		}
+		/* If the 2 dimensional array is empty, it will let the user know there is no destinations and return to menu
+		 * If it is not empty it will print the destinations 10 at a time */
+		if(visits == null){
+			System.out.println("There are no destinations");
+			return;
+		}else
+			printDestinations(visits);	
+		menu();
 	}
 	
 	/*
@@ -185,12 +185,19 @@ public class UserController {
 	 * Pulls list of friends from DB, saves it in the 2 dimensional friend array
 	 */
 	private void getFriends(){
+		
+		Object[][] friendArray = null;
 		String uName = user.getUserName();
 		try {
-			Object[][] friendArray = connect.executeQuery("CALL Create_Friendlist('"+uName+"');");
+			/* Calls a stored procedure that will return a list of friends as a 2 dimensional array*/
+			friendArray = connect.executeQuery("CALL Create_Friendlist('"+uName+"');");
+			/* If the user does not have any friends, stored procedure will not have returned anything and the 2 dimensional array will
+			 * still equal null, and we will stop the method */
+			if (friendArray == null)
+				return;
+			/* Passes the 2 dimensional array to intialize the friends arraylist and binarytree*/
 			parseToArraylist(friendArray);
 		} catch (SQLException e) {
-			
 			e.printStackTrace();
 		}
 	}
@@ -198,6 +205,7 @@ public class UserController {
 	 * Parsing the two dimensional array to a Arraylist of friends.
 	 */
 	private void parseToArraylist(Object[][] friendArray){
+		/*Each friend in the 2 dimensional array will be saved in the friends arraylist and binarytree*/
 		for(int i = 0; i < friendArray.length;i++){
 			friends.add((String)friendArray[i][0]);
 			friendArrayList.add((String)friendArray[i][0]);
@@ -207,45 +215,98 @@ public class UserController {
 	/*
 	 * Prints the next ten destinations in the visits table
 	 */
-	private void showTenDest(int index, Object[][] visits){
+	private void printDestinations(Object[][] dest){
+		int index = 0;
+		do{
+			/* If index > dest.length it means that there are no more destinations in dest and it returns to menu */
+			if(index >= dest.length)
+				break;
+			if (index == 0){
+				printTenDest(index, dest);
+				index += 10;
+				continue;
+			}
+			int desition = bound.promptForInt("Type '0' to print 10 more friend destinations \n"+
+					  						  "Type any other number to go back to menu");
+			/* If user entered '0' it call printTenDest that print 10 destinations if possible
+			 * If any other number is entered it will return to menu */
+			if(desition == 0)
+				
+				printTenDest(index, dest);
+			else
+				break;
+			index += 10;
+		}while(true);
+	}
+	
+	/*
+	 * Prints up to 10 destinations from the 2 dimensional array
+	 */
+	private void printTenDest(int index, Object[][] dest){
 		int limit;
-		if(index+10 > visits.length)
-			limit= visits.length;
+		/* If there is not 10 more destinations in dest it will set the limit to the length of dest
+		 * Else it will set the limit to index + 10 which will result in 10 more printed destinations*/
+		if(index+10 > dest.length)
+			limit= dest.length;
 		else
 			limit = index +10;
+		/* Will print the next destination in dest till it reach the limit*/
 		for(int i = index; i < limit;i++){
-			for(int j = 0; j < visits[0].length; j++){
-				System.out.print(visits[i][j]+", ");
+			for(int j = 0; j < dest[0].length; j++){
+				System.out.print(dest[i][j]+", ");
 			}
 			System.out.println();
 		}
-		menu();
+		/* Tells the user when there are no more destinations*/
+		if(index+10 > dest.length)
+			System.out.println("There are no more destinations!");
 	}
 	
+	/*
+	 * Adds a friend  to the database, arraylist and binarytree
+	 */
 	private void addFriend(){
 		bound.printLine("Add Friend");
 		String newFriend = bound.promptForString("Enter the username of the friend you want to add: ");
-		if(!isNameAvailable(newFriend)){
+		/* Checks if the username entered is already a friend, if it is it will let the user know and return to menu*/
+		if(friends.contains(newFriend)){
+			System.out.println(newFriend + " is already your friend");
+			menu();
+			return;
+		/* If the user is not alredy friends with the username entered it  will check if the user exists,
+		 * if it does it will be saved in the database, arraylist and binary tree and it will return to menu*/
+		}else if(!isNameAvailable(newFriend)){
 			try {
 				connect.executeUpdate("INSERT INTO userRelations VALUES('"+user.getUserName()+"','"+newFriend+"')");
 				friendArrayList.add(newFriend);
 				friends.add(newFriend);
+				System.out.println(newFriend+" has been added as a friend");
+				menu();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		/* If neither of the above is true, the user doesn't exist. It will let the user know and return to menu*/
+		}else{
+			System.out.println("The username entered does not exist");
+			menu();
 		}
 	}
 	
+	/*
+	 * Checks if a username is available, returns true if it is, false if not
+	 */
 	private boolean isNameAvailable(String userName){
-		Object[][] nameAvailability;
+		Object[][] nameAvailability = null;
 		try {
+			/* If the username exists in the database, it will save the username in nameAvailability, if not the value will stay null*/
 			nameAvailability = connect.executeQuery("SELECT userName FROM users WHERE userName = '" + userName+"'");
-			try{
-				if(nameAvailability[0].length>0)
-					return false;
-			}catch(ArrayIndexOutOfBoundsException e){
+			
+			/* If the nameAvailabilty is empty there is no such name in the database and it will return true, else it will return false*/
+			if(nameAvailability == null)
 				return true;
-			}
+			else
+				return false;
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -283,6 +344,29 @@ public class UserController {
 			}
 		}while(repeat);
 		return picID; // returns the picID
+	}
+	
+	/*
+	 * Gives the user the possibility to print all his destinations ordered by date
+	 */
+	private void ownDest(){
+		Object[][] dest = null;
+		try{
+			/* Creates a 2 dimensional array of destinations that the user has visited*/
+			dest = connect.executeQuery("SELECT name, city, country FROM destinations, visits WHERE destinations.destID = visits.destID "+
+										"AND visits.username ='"+user.getUserName()+"' ORDER BY visits.date DESC;" );
+			/* If the 2 dimensional array is empty, the user hasn't visited any destinations, and returns to menu,
+			 * else it prints the destinations the user visited 10 at the time*/
+			if(dest == null){
+				System.out.println("You haven't added any destinations yet");
+				return;
+			}else
+				printDestinations(dest);
+		}catch(SQLException e){
+			System.out.println(e);
+		}
+		menu();
+				
 	}
 	
 	private void reportPost(){

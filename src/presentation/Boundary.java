@@ -53,11 +53,13 @@ public class Boundary {
 	 */
 	public void displayLoggedInMenu(){
 		seperator();
-		System.out.println("Indtast tallet på dit valg \n\n" +
-						   "(1) - Tilføj Destination \n" +
-						   "(2) - Find Venner \n" +
-						   "(3) - Se Venners Profiler \n" +
-						   "(4) - Log Ud");
+		System.out.println("Enter the value of your choice \n\n" +
+						   "(1) - Add Destination \n" +
+						   "(2) - See a list of friends \n" +
+						   "(3) - See your friends latest destination \n" +
+						   "(4) - See own destinations\n" +
+						   "(5) - Add friend\n" +
+						   "(6) - Search for specifik friends destinations\n");
 		seperator();
 	}
 	
