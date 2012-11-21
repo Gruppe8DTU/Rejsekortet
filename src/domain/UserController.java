@@ -13,6 +13,7 @@ public class UserController {
 	Boundary bound;
 	UserData user;
 	SQL_Connect connect;
+	StartController start;
 	ArrayList<String> friendArrayList = new ArrayList<String>();
 	BinaryTree friends = new BinaryTree();
 	
@@ -42,20 +43,29 @@ public class UserController {
 				recentFriendDestinations();
 				break;
 			case 4:
-				ownDest();
+				specificDest(user.getUserName());
 				break;
 			case 5:
 				addFriend();
 				break;
-//			case 4: 
-//				addFriend();
+			case 6: 
+				String name = bound.promptForString("Enter the username of whoms you wanna browse destinations: ");
+				if(friends.contains(name))
+					specificDest(name);
+				else{
+					System.out.println(name+" is not a friend");
+					menu();
+				}
+				break;
+			case 7:
+				user = null;
+				start = new StartController();
+				start.getLogin();
 				
-			// case 5 tilfoej ven
-			// case 6 egne destinationer
-			// 
-				//break;
+				
 		}
 	}
+	
 	
 	/*
 	 * Displays all your friends.
@@ -349,16 +359,16 @@ public class UserController {
 	/*
 	 * Gives the user the possibility to print all his destinations ordered by date
 	 */
-	private void ownDest(){
+	private void specificDest(String name){
 		Object[][] dest = null;
 		try{
 			/* Creates a 2 dimensional array of destinations that the user has visited*/
 			dest = connect.executeQuery("SELECT name, city, country FROM destinations, visits WHERE destinations.destID = visits.destID "+
-										"AND visits.username ='"+user.getUserName()+"' ORDER BY visits.date DESC;" );
+										"AND visits.username ='"+name+"' ORDER BY visits.date DESC;" );
 			/* If the 2 dimensional array is empty, the user hasn't visited any destinations, and returns to menu,
 			 * else it prints the destinations the user visited 10 at the time*/
 			if(dest == null){
-				System.out.println("You haven't added any destinations yet");
+				System.out.println("There have'nt been added any destinations yet");
 				return;
 			}else
 				printDestinations(dest);
@@ -368,6 +378,7 @@ public class UserController {
 		menu();
 				
 	}
+
 	
 	private void reportPost(){
 		

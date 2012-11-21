@@ -69,6 +69,7 @@ public class StartController {
 	 * if user enters '0' he will be redirected to create a new user
 	 */
 	public void getLogin(){
+		System.out.println("hallo");
 		final Login login = new Login();		
 		// for at holde mvc laegges eventet her i controlleren. Dette er login knappen		
 		login.addButtonActionListener1(
