@@ -35,11 +35,11 @@ public class AdminController extends ModController {
 	}
 		
 	private void deleteUser(String user){
-		connect.deleteUser(user);
+		//connect.deleteUser(user);
 	}
 	
 	private void deleteDestinations(String dest){
-		connect.deleteDestination(dest);
+		//connect.deleteDestination(dest);
 	}
 	
 	private void viewDeletedDestinations(){

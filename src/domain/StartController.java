@@ -58,6 +58,7 @@ public class StartController {
 						} else {
 							System.out.println("username not availabe or passwords inconsistent");
 						}
+						System.out.println("redirecting to controller");
 						redirectToController();
 						cu.setVisible(false);
 					}
@@ -69,19 +70,22 @@ public class StartController {
 	 * if user enters '0' he will be redirected to create a new user
 	 */
 	public void getLogin(){
-		final Login login = new Login();		
+		final Login login = new Login();	
+		System.out.println("1");
 		// for at holde mvc laegges eventet her i controlleren. Dette er login knappen		
 		login.addButtonActionListener1(
 				new java.awt.event.ActionListener(){
-					public void actionPerformed(java.awt.event.ActionEvent evt){	
+					public void actionPerformed(java.awt.event.ActionEvent evt){
+						System.out.println("2");
 						userName = login.getUserName();
 						System.out.println(userName);
 						password = login.getPass();
 						System.out.println("credentials saved in start controller");
-						if (isLoginValid(userName, password))
+						if (isLoginValid(userName, password)){
 								System.out.println("login is valid");
 								user = getUser(userName);	
-								new UserController( user, bound, connect );
+								redirectToController();
+						}
 						login.setVisible(false);
 					}	
 				}
@@ -111,17 +115,17 @@ public class StartController {
 	 * Checks which type of user that has logged in and redirects the user to the right controller
 	 */
 	public void redirectToController(){
+		System.out.println(user.getType());
 		switch(user.getType()){
 			case 1:
 				new UserController(user, bound, connect);
-				
 				break;
-			/*case 2:
-				new AdminController(user);
+			case 2:
+				new ModController(user, bound, connect);
 				break;
 			case 3:
-				new ModController(user);
-				break;*/
+				new AdminController(user, bound, connect);
+				break;
 		}
 	}
 	

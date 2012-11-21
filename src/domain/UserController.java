@@ -188,13 +188,17 @@ public class UserController {
 		
 		Object[][] friendArray = null;
 		String uName = user.getUserName();
+		System.out.println(uName);
 		try {
 			/* Calls a stored procedure that will return a list of friends as a 2 dimensional array*/
 			friendArray = connect.executeQuery("CALL Create_Friendlist('"+uName+"');");
+			System.out.println("hmmm");
 			/* If the user does not have any friends, stored procedure will not have returned anything and the 2 dimensional array will
 			 * still equal null, and we will stop the method */
-			if (friendArray == null)
+			if (friendArray == null){
+				System.out.println("no friensa");
 				return;
+			}
 			/* Passes the 2 dimensional array to intialize the friends arraylist and binarytree*/
 			parseToArraylist(friendArray);
 		} catch (SQLException e) {
