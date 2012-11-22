@@ -18,8 +18,12 @@ public class UserController {
 	StartController start;
 	ArrayList<String> friendArrayList = new ArrayList<String>();
 	BinaryTree friends = new BinaryTree();
+<<<<<<< HEAD
 	String userAction;
 	int intAction;
+=======
+	UserMenu userMenu;
+>>>>>>> UI prøve pis
 	
 	/*
 	 * initializes 
@@ -35,6 +39,7 @@ public class UserController {
 	 * Displays menu for user, gets input and depending on the input decides which action to do next
 	 */
 	private void menu(){
+<<<<<<< HEAD
 		home.setVisible(true);
 		addActionListener(home);
 	}
@@ -64,6 +69,12 @@ public class UserController {
 		}
 		switch (intAction){
 			case 1:
+=======
+		userMenu = new UserMenu(user.getUserName());
+		switch(bound.promptForInt("")){
+			case 1: 
+				createNewDest();
+>>>>>>> UI prøve pis
 				break;
 			case 2: friendList();
 				break;
