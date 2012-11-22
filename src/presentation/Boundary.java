@@ -59,7 +59,8 @@ public class Boundary {
 						   "(3) - See your friends latest destination \n" +
 						   "(4) - See own destinations\n" +
 						   "(5) - Add friend\n" +
-						   "(6) - Search for specifik friends destinations\n");
+						   "(6) - Search for specifik friends destinations\n" +
+						   "(7) - Log out");
 		seperator();
 	}
 	

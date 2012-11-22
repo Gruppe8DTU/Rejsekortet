@@ -38,12 +38,15 @@ public class BinaryTree {
 	private Node findNode(Node curNode, String str){
 		if(curNode == null)
 			return null;
-		else if(str.equals(curNode.str))
+		else if(str.equals(curNode.str)){
 			return curNode;
-		else if(str.compareToIgnoreCase(curNode.str) < 0)
+		}
+		else if(str.compareToIgnoreCase(curNode.str) < 0){
 			return findNode(curNode.left, str);
-		else
+		}
+		else{
 			return findNode(curNode.right, str);
+		}
 	}
 	
 	/*
@@ -59,16 +62,19 @@ public class BinaryTree {
 	private void insert(Node currentNode, String str){
 		Node prev = root;
 		while(currentNode != null){
+			prev = currentNode;
 			if(str.equals(currentNode.str))
 				break;
-			if(str.compareToIgnoreCase(currentNode.str) < 0)
+			if(str.compareToIgnoreCase(currentNode.str) < 0){
 				currentNode = currentNode.left;
-			else
+			}
+			else{
 				currentNode = currentNode.right;
+			}
 		}
 		
 		Node newNode = new Node(str);
-		if(currentNode==root){
+		if(currentNode==prev){
 			this.root = newNode;
 		}else if(str.compareToIgnoreCase(prev.str) < 0){
 			prev.left = newNode;
