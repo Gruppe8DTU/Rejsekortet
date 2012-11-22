@@ -14,6 +14,7 @@ public class ModController extends UserController {
 		// Moderatorer faar et begraenset admin panel der re-implementeres i AdminController
 		protected void adminPanel(){
 			final ModScreen ms = new ModScreen();
+			ms.setVisible(true);
 			
 			// back button in the footer panel
 			ms.addButtonActionListener1(
