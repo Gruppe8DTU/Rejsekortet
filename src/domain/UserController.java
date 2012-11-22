@@ -9,13 +9,17 @@ import presentation.*;
 import data.*;
 
 
+
 public class UserController {
+	final Home home = new Home();
 	Boundary bound;
 	UserData user;
 	SQL_Connect connect;
 	StartController start;
 	ArrayList<String> friendArrayList = new ArrayList<String>();
 	BinaryTree friends = new BinaryTree();
+	String userAction;
+	int intAction;
 	
 	/*
 	 * initializes 
@@ -31,92 +35,72 @@ public class UserController {
 	 * Displays menu for user, gets input and depending on the input decides which action to do next
 	 */
 	private void menu(){
-		final Home home = new Home();
 		home.setVisible(true);
-		
-		// Add destinations
-		home.addButtonActionListener2(
+		addActionListener(home);
+	}
+	private void addActionListener(Home home){
+		home.addButtonActionListener1(
 				new java.awt.event.ActionListener(){
-					public void actionPerformed(java.awt.event.ActionEvent evt){	
-						createNewDest();
+					public void actionPerformed(java.awt.event.ActionEvent evt){
+						userAction = ((javax.swing.JButton)evt.getSource()).getName();
+						menuAction();
 					}
 				}
 		);
-		// Friend list
-		home.addButtonActionListener2(
-				new java.awt.event.ActionListener(){
-					public void actionPerformed(java.awt.event.ActionEvent evt){	
-						friendList();
+	}
+	
+	private boolean isNumeric(String str){
+		try{
+			Integer.parseInt(str);
+		}catch(NumberFormatException e){
+			return false;
+		}
+		return true;
+	}
+	
+	private void menuAction(){
+		if ( isNumeric(userAction)){
+			intAction = Integer.parseInt(userAction);
+		}
+		switch (intAction){
+			case 1:
+				break;
+			case 2: friendList();
+				break;
+			case 3: recentFriendDestinations();
+				break;
+			case 4: specificDest(user.getUserName());
+				break;
+			case 5: addFriend();
+				break;
+			case 6: String name = bound.promptForString("Enter the username of whoms you wanna browse destinations: ");
+					if(friends.contains(name))
+						specificDest(name);
+					else{
+						System.out.println(name+" is not a friend");
+						menu();
 					}
-				}
-		);
-		// Friend destinations
-		home.addButtonActionListener2(
-				new java.awt.event.ActionListener(){
-					public void actionPerformed(java.awt.event.ActionEvent evt){	
-						recentFriendDestinations();
+				break;
+			// redirect to option screen
+			case 7: int type = user.getType(); 
+					if (type == 1){
+						System.out.println("you don't have acces noob!");
+					} else if (type == 2){
+						final ModScreen ms = new ModScreen();
+						home.setVisible(false);
+						ms.setVisible(true);
+					} else if (type == 3){
+						final AdminScreen as = new AdminScreen();
+						home.setVisible(false);
+						as.setVisible(true);
 					}
-				}
-		);
-		// Your destinations 
-		home.addButtonActionListener2(
-				new java.awt.event.ActionListener(){
-					public void actionPerformed(java.awt.event.ActionEvent evt){	
-						specificDest(user.getUserName());
-					}
-				}
-		);
-		// Add friends 
-		home.addButtonActionListener2(
-				new java.awt.event.ActionListener(){
-					public void actionPerformed(java.awt.event.ActionEvent evt){	
-						addFriend();
-					}
-				}
-		);
-		// Search destinations
-		home.addButtonActionListener2(
-				new java.awt.event.ActionListener(){
-					public void actionPerformed(java.awt.event.ActionEvent evt){	
-						String name = bound.promptForString("Enter the username of whoms you wanna browse destinations: ");
-						if(friends.contains(name))
-							specificDest(name);
-						else{
-							System.out.println(name+" is not a friend");
-							menu();
-						}
-					}
-				}
-		);
-		// dette er options button
-		home.addButtonActionListener2(
-				new java.awt.event.ActionListener(){
-					public void actionPerformed(java.awt.event.ActionEvent evt){	
-						int type = user.getType();
-						if (type == 1){
-							
-						} else if (type == 2){
-							final ModScreen ms = new ModScreen();
-							home.setVisible(false);
-							ms.setVisible(true);
-						} else if (type == 3){
-							final AdminScreen as = new AdminScreen();
-							home.setVisible(false);
-							as.setVisible(true);
-						}
-					}
-				}
-		);
-		// dette er exit button
-		home.addButtonActionListener8(
-				new java.awt.event.ActionListener(){
-					public void actionPerformed(java.awt.event.ActionEvent evt){	
-						user = null;
+				break;
+			// logout button
+			case 8: 	user = null;
 						start = new StartController();
 						start.getLogin();	
-					}
-				}
-		);					
+						break;
+			}			
 	}
 	
 	
@@ -441,6 +425,4 @@ public class UserController {
 	private void reportPost(){
 		
 	}
-	
-
 }

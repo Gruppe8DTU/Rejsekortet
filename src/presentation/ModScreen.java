@@ -17,25 +17,34 @@ public class ModScreen extends javax.swing.JFrame {
         initComponents();
         jButton6.setVisible(false);
     }
-    
+    // back button
     public void addButtonActionListener1(java.awt.event.ActionListener listener) {
         jButton1.addActionListener(listener);
         System.out.println("some code");
       }
+    // exit button
     public void addButtonActionListener2(java.awt.event.ActionListener listener) {
         jButton2.addActionListener(listener);
         System.out.println("some code");
       }
+    // view reported posts
     public void addButtonActionListener3(java.awt.event.ActionListener listener) {
         jButton3.addActionListener(listener);
         System.out.println("some code");
       }
+    // view reported pics
     public void addButtonActionListener4(java.awt.event.ActionListener listener) {
         jButton4.addActionListener(listener);
         System.out.println("some code");
       }
+    // view reported destinations 
     public void addButtonActionListener5(java.awt.event.ActionListener listener) {
         jButton5.addActionListener(listener);
+        System.out.println("some code");
+      }
+    // view reported users 
+    public void addButtonActionListener6(java.awt.event.ActionListener listener) {
+        jButton6.addActionListener(listener);
         System.out.println("some code");
       }
 

@@ -56,6 +56,14 @@ public class ModController extends UserController {
 						}
 					}
 			);	
+			// View reported users
+			ms.addButtonActionListener6(
+					new java.awt.event.ActionListener(){
+						public void actionPerformed(java.awt.event.ActionEvent evt){	
+							viewReportedDestinations();
+						}
+					}
+			);	
 			
 		}
 		
