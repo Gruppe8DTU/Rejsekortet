@@ -6,7 +6,6 @@ import persistance.SQL_Connect;
 import presentation.Boundary;
 import presentation.Login;
 import presentation.CreateUser;
-import presentation.ModScreen;
 import data.UserData;
 
 
@@ -16,7 +15,13 @@ public class StartController {
 	private UserData user;
 	private Boundary bound = new Boundary();
 	private SQL_Connect connect = new SQL_Connect();
+	final Login login = new Login();
 	String userAction;
+	
+	public StartController(){
+		login.setVisible(true);
+		addActionListener();
+	}
 	
 	public void setUserName(String name){
 		this.userName = name;
@@ -69,24 +74,24 @@ public class StartController {
 	}
 	
 	public void addActionListener(){
-		final Login login = new Login();
 		login.addButtonActionListener(
 				new java.awt.event.ActionListener(){
 					public void actionPerformed(java.awt.event.ActionEvent evt){
-						System.out.println("kjdbf");
 						userAction = ((javax.swing.JButton)evt.getSource()).getName();
 						System.out.println(userAction);
-						action(login);
+						action();
 					}
 				}
 		);
 	}
 	
-	private void action(Login login){
+	private void action(){
 		int intAction = Integer.parseInt(userAction);
 		switch(intAction){
 			case 1:
-				getLogin(login);
+				System.out.println("get login");
+				login.setVisible(false);
+				getLogin();
 				break;
 			case 2:
 				createUser();
@@ -95,14 +100,13 @@ public class StartController {
 			case 3:
 				System.exit(0);			
 		}
-		login.setVisible(true);
 	}
 	/*
 	 * Prombts user for login till he enters correct login info
 	 * if user enters '0' he will be redirected to create a new user
 	 */
 	
-	public void getLogin(Login login){		
+	public void getLogin(){		
 		// for at holde mvc laegges eventet her i controlleren. Dette er login knappen		
 		
 		userName = login.getUserName();
@@ -114,12 +118,11 @@ public class StartController {
 			user = getUser(userName);	
 			redirectToController();
 		}
-			login.setVisible(false);
 	}	
 	
 	
 	/*
-	 * Checks which type of user that has logged in and redirects the user to the right controller
+	 * redirects the user to the right controller
 	 */
 	public void redirectToController(){
 		System.out.println(user.getType());

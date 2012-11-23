@@ -65,11 +65,7 @@ public class UserController {
 		
 		switch (intAction){
 			case 1:
-<<<<<<< HEAD
-				newDest = new CreateDestinationHandler(user);
-=======
-				newDest = new CreateDestinationHandler(user, connect);
->>>>>>> 3064ea693589516504379b409134c069858f6b2f
+				//newDest = new CreateDestinationHandler(user, connect);
 				break;
 			case 2: friendList();
 				break;
