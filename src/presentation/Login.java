@@ -15,6 +15,7 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     public Login() {
+    	System.out.println("fjgnf");
         initComponents();
     }
     /**
@@ -37,8 +38,11 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Name");
-
         jLabel2.setText("Password");
+        
+        jButton1.setName("1");
+        jButton2.setName("3");
+        jButton3.setName("2");
 
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -99,17 +103,12 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    public void addButtonActionListener1(java.awt.event.ActionListener listener) {
-        jButton1.addActionListener(listener);
-        System.out.println("some code");
-      }
-    public void addButtonActionListener2(java.awt.event.ActionListener listener) {
-        jButton2.addActionListener(listener);
-      }
-    public void addButtonActionListener3(java.awt.event.ActionListener listener) {
-        jButton3.addActionListener(listener);
-      }
+    public void addButtonActionListener(java.awt.event.ActionListener listener) {
+        jButton1.addActionListener(listener); // Submit
+        jButton2.addActionListener(listener); // Exit 
+        jButton3.addActionListener(listener); // Create new user
+      
+    }
      
     
     public String getUserName(){

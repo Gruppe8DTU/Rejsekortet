@@ -11,7 +11,7 @@ public class ModController extends UserController {
 	final ModScreen ms = new ModScreen();
 
 		public ModController(UserData user, Boundary bound, SQL_Connect connect){
-			super(user, bound, connect);	
+			super(user, bound, connect);
 			menu();
 		}
 		

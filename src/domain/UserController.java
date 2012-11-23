@@ -16,11 +16,8 @@ public class UserController {
 	StartController start;
 	ArrayList<String> friendArrayList = new ArrayList<String>();
 	BinaryTree friends = new BinaryTree();
-<<<<<<< HEAD
 	protected String userAction;
 	int intAction;
-=======
->>>>>>> New destination process
 	
 	/*
 	 * initializes 
@@ -65,13 +62,10 @@ public class UserController {
 		int intAction = 0;
 		if ( isNumeric(userAction))
 			intAction = Integer.parseInt(userAction);
+		
 		switch (intAction){
-<<<<<<< HEAD
-			case 1: createNewDest();
-=======
 			case 1:
-				newDest = new CreateDestinationHandler(user);
->>>>>>> New destination process
+				newDest = new CreateDestinationHandler(user, connect);
 				break;
 			case 2: friendList();
 				break;
@@ -91,26 +85,13 @@ public class UserController {
 					}
 				break;
 			// redirect to option screen
-<<<<<<< HEAD
-			case 7: int type = user.getType(); 
-					if (type == 1){
-						System.out.println("you don't have access noob!");
-					} else if (type == 2){
-						final ModController mc = new ModController(user, bound, connect);
-						home.setVisible(false);
-					} else if (type == 3){
-						final AdminController ac = new AdminController(user, bound, connect);
-						home.setVisible(false);
-					}
-=======
 			case 7: 
 				redirectToOption();
->>>>>>> New destination process
 				break;
 			// logout button
 			case 8: 	user = null;
 						start = new StartController();
-						start.getLogin();	
+						start.addActionListener();	
 						break;
 			}			
 	}
