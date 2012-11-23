@@ -62,9 +62,14 @@ public class UserController {
 		int intAction = 0;
 		if ( isNumeric(userAction))
 			intAction = Integer.parseInt(userAction);
+		
 		switch (intAction){
 			case 1:
+<<<<<<< HEAD
 				newDest = new CreateDestinationHandler(user);
+=======
+				newDest = new CreateDestinationHandler(user, connect);
+>>>>>>> 3064ea693589516504379b409134c069858f6b2f
 				break;
 			case 2: friendList();
 				break;
@@ -90,7 +95,7 @@ public class UserController {
 			// logout button
 			case 8: 	user = null;
 						start = new StartController();
-						start.getLogin();	
+						start.addActionListener();	
 						break;
 			}			
 	}

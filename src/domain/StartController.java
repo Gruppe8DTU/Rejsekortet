@@ -6,6 +6,7 @@ import persistance.SQL_Connect;
 import presentation.Boundary;
 import presentation.Login;
 import presentation.CreateUser;
+import presentation.ModScreen;
 import data.UserData;
 
 
@@ -15,6 +16,7 @@ public class StartController {
 	private UserData user;
 	private Boundary bound = new Boundary();
 	private SQL_Connect connect = new SQL_Connect();
+	String userAction;
 	
 	public void setUserName(String name){
 		this.userName = name;
@@ -65,48 +67,55 @@ public class StartController {
 				}
 		);
 	}
+	
+	public void addActionListener(){
+		final Login login = new Login();
+		login.addButtonActionListener(
+				new java.awt.event.ActionListener(){
+					public void actionPerformed(java.awt.event.ActionEvent evt){
+						System.out.println("kjdbf");
+						userAction = ((javax.swing.JButton)evt.getSource()).getName();
+						System.out.println(userAction);
+						action(login);
+					}
+				}
+		);
+	}
+	
+	private void action(Login login){
+		int intAction = Integer.parseInt(userAction);
+		switch(intAction){
+			case 1:
+				getLogin(login);
+				break;
+			case 2:
+				createUser();
+				login.setVisible(false);
+				break;
+			case 3:
+				System.exit(0);			
+		}
+		login.setVisible(true);
+	}
 	/*
 	 * Prombts user for login till he enters correct login info
 	 * if user enters '0' he will be redirected to create a new user
 	 */
-	public void getLogin(){			
-		final Login login = new Login();	
+	
+	public void getLogin(Login login){		
 		// for at holde mvc laegges eventet her i controlleren. Dette er login knappen		
-		login.addButtonActionListener1(
-				new java.awt.event.ActionListener(){
-					public void actionPerformed(java.awt.event.ActionEvent evt){
-						userName = login.getUserName();
-						System.out.println(userName);
-						password = login.getPass();
-						System.out.println("credentials saved in start controller");
-						if (isLoginValid(userName, password)){
-								System.out.println("login is valid");
-								user = getUser(userName);	
-								redirectToController();
-						}
-						login.setVisible(false);
-					}	
-				}
-		);
-		// dette er create new user knap
-		login.addButtonActionListener3(
-				new java.awt.event.ActionListener(){
-					public void actionPerformed(java.awt.event.ActionEvent evt){	
-						createUser();
-						login.setVisible(false);
-					}
-				}
-		);	
-		// dette er exit button
-		login.addButtonActionListener2(
-				new java.awt.event.ActionListener(){
-					public void actionPerformed(java.awt.event.ActionEvent evt){	
-						System.exit(0);
-					}
-				}
-		);
-		login.setVisible(true);
-	}
+		
+		userName = login.getUserName();
+		System.out.println(userName);
+		password = login.getPass();
+		System.out.println("credentials saved in start controller");
+		if (isLoginValid(userName, password)){
+			System.out.println("login is valid");
+			user = getUser(userName);	
+			redirectToController();
+		}
+			login.setVisible(false);
+	}	
 	
 	
 	/*

@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
@@ -16,9 +17,13 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
+
+
 import javax.swing.Action;
+import javax.swing.JTextArea;
 
 public class NewDestMenu extends JFrame {
+	
 
 	private JPanel contentPane;
 	private JTextField destTextField;
@@ -26,17 +31,20 @@ public class NewDestMenu extends JFrame {
 	private JTextField cityTextField;
 	private JTextField zipTextField;
 	private JTextField countryTextField;
+	private JTextArea txtarea;
 	private JButton btnSubmit;
 	private JButton btnCancel;
-	private JButton btnText;
 	private JButton btnBrowse;
+	
 	
 	public NewDestMenu(){
 		initComponents();
 	}
 	
-	public void addSubmitListener(java.awt.event.ActionListener listener){
+	public void addButtonActionListener(java.awt.event.ActionListener listener){
 		btnSubmit.addActionListener(listener);
+		btnCancel.addActionListener(listener);
+		btnBrowse.addActionListener(listener);
 	}
 	
 	public String getDestName(){
@@ -61,12 +69,24 @@ public class NewDestMenu extends JFrame {
 		return countryTextField.getText();
 	}
 	
+	public String getPicURL(){
+		return "url";
+	}
+	
+	public String getPost(){
+		return txtarea.getText();
+	}
+	
 
 	/*
 	 * Initializes the GUI window
 	 */
 	private void initComponents() {
-		getContentPane().setLayout(null);
+		setBounds(100, 100, 450, 350);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
 		
 		/* -------------------- Name of destination panel -------------------- */
 		JPanel panel1 = new JPanel();
@@ -143,30 +163,51 @@ public class NewDestMenu extends JFrame {
 		panel6.add(lblAddPic);
 		
 		btnBrowse = new JButton("Browse");
+		btnBrowse.setName("3");
 		panel6.add(btnBrowse);
 		
 		/* -------------------- Add post panel -------------------- */
 		JPanel panel7 = new JPanel();
-		panel7.setBounds(6, 203, 438, 28);
+		panel7.setBounds(6, 203, 438, 93);
 		getContentPane().add(panel7);
-		panel7.setLayout(new GridLayout(1, 0, 0, 0));
+		panel7.setLayout(null);
 		
-		JLabel lblAddPost = new JLabel("  Add post: ");
+		JLabel lblAddPost = new JLabel("Add Post: ");
+		lblAddPost.setBounds(6, 6, 67, 16);
 		panel7.add(lblAddPost);
 		
-		btnText = new JButton("Open text editor");
-		panel7.add(btnText);
+		txtarea = new JTextArea();
+		txtarea.setText("Fill in");
+		txtarea.setBounds(85, 6, 347, 81);
+		JScrollPane scrollPane = new JScrollPane(txtarea);
+		scrollPane.setBounds(85, 6, 347, 81);
+		panel7.add(scrollPane);
 		
 		/* -------------------- Submit and cancel buttons -------------------- */
 		btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(43, 243, 160, 29);
+		btnCancel.setName("2");
+		btnCancel.setBounds(35, 299, 160, 29);
 		getContentPane().add(btnCancel);
 		
 		btnSubmit = new JButton("Submit");
-		btnSubmit.setBounds(238, 243, 160, 29);
+		btnSubmit.setName("1");
+		btnSubmit.setBounds(255, 299, 160, 29);
 		getContentPane().add(btnSubmit);
 		
 	}
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Browse frame = new Browse();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
 		
 	
 }

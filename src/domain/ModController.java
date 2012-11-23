@@ -19,7 +19,7 @@ public class ModController extends UserController {
 	protected int currentReport = 1;
 
 		public ModController(UserData user, Boundary bound, SQL_Connect connect){
-			super(user, bound, connect);	
+			super(user, bound, connect);
 			menu();
 		}
 		
