@@ -9,14 +9,18 @@ import data.*;
 
 public class UserController {
 	final Home home = new Home();
+	CreateDestinationHandler newDest;
 	Boundary bound;
 	UserData user;
 	SQL_Connect connect;
 	StartController start;
 	ArrayList<String> friendArrayList = new ArrayList<String>();
 	BinaryTree friends = new BinaryTree();
+<<<<<<< HEAD
 	protected String userAction;
 	int intAction;
+=======
+>>>>>>> New destination process
 	
 	/*
 	 * initializes 
@@ -40,8 +44,9 @@ public class UserController {
 		home.addButtonActionListener1(
 				new java.awt.event.ActionListener(){
 					public void actionPerformed(java.awt.event.ActionEvent evt){
-						userAction = ((javax.swing.JButton)evt.getSource()).getName();
-						menuAction();
+						String userAction = ((javax.swing.JButton)evt.getSource()).getName();
+						System.out.println(userAction);
+						menuAction(userAction);
 					}
 				}
 		);
@@ -56,12 +61,17 @@ public class UserController {
 		return true;
 	}
 	
-	private void menuAction(){
-		if ( isNumeric(userAction)){
+	private void menuAction(String userAction){
+		int intAction = 0;
+		if ( isNumeric(userAction))
 			intAction = Integer.parseInt(userAction);
-		}
 		switch (intAction){
+<<<<<<< HEAD
 			case 1: createNewDest();
+=======
+			case 1:
+				newDest = new CreateDestinationHandler(user);
+>>>>>>> New destination process
 				break;
 			case 2: friendList();
 				break;
@@ -71,7 +81,8 @@ public class UserController {
 				break;
 			case 5: addFriend();
 				break;
-			case 6: String name = bound.promptForString("Enter the username of whoms you wanna browse destinations: ");
+			case 6: 
+				String name = bound.promptForString("Enter the username of whoms you wanna browse destinations: ");
 					if(friends.contains(name))
 						specificDest(name);
 					else{
@@ -80,6 +91,7 @@ public class UserController {
 					}
 				break;
 			// redirect to option screen
+<<<<<<< HEAD
 			case 7: int type = user.getType(); 
 					if (type == 1){
 						System.out.println("you don't have access noob!");
@@ -90,6 +102,10 @@ public class UserController {
 						final AdminController ac = new AdminController(user, bound, connect);
 						home.setVisible(false);
 					}
+=======
+			case 7: 
+				redirectToOption();
+>>>>>>> New destination process
 				break;
 			// logout button
 			case 8: 	user = null;
@@ -100,7 +116,23 @@ public class UserController {
 	}
 	
 	
-	
+	/* 
+	 * Redirects you to either moderator option site, administrator option site or tells you that you dont have the access
+	 */
+	private void redirectToOption() {
+		int type = user.getType(); 
+		if (type == 1){
+			System.out.println("you don't have acces noob!");
+		} else if (type == 2){
+			final ModScreen ms = new ModScreen();
+			home.setVisible(false);
+			ms.setVisible(true);
+		} else if (type == 3){
+			final AdminScreen as = new AdminScreen();
+			home.setVisible(false);
+			as.setVisible(true);
+		}	
+	}
 	/*
 	 * Displays all your friends.
 	 */

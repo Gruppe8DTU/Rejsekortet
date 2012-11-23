@@ -55,7 +55,7 @@ public class Home extends javax.swing.JFrame {
         jPanel1.setLayout(new java.awt.GridLayout(3, 2));
 
         jButton1.setText("Add destination");
-        jButton1.setName("Add destinations"); // NOI18N
+        jButton1.setName("1"); // NOI18N
         jPanel1.add(jButton1);
 
         jButton2.setText("Friend list");
