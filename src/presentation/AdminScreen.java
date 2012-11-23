@@ -21,7 +21,6 @@ public class AdminScreen extends ModScreen {
     
     public void addActionListener1(java.awt.event.ActionListener listener){
     	super.addButtonActionListener1(listener);
-
     }
     
 
