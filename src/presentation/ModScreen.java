@@ -24,7 +24,6 @@ public class ModScreen extends javax.swing.JFrame {
         jButton3.addActionListener(listener); // view reported posts
         jButton4.addActionListener(listener); // view reported pics
         jButton5.addActionListener(listener); // view reported destinations
-        jButton6.addActionListener(listener); // view reported users
       }
  
     /**
@@ -54,12 +53,15 @@ public class ModScreen extends javax.swing.JFrame {
         jPanel1.setLayout(new java.awt.GridLayout(2, 0));
 
         jButton3.setText("View reported posts");
+        jButton3.setName("3"); // NOI18N
         jPanel1.add(jButton3);
 
         jButton4.setText("View reported pics");
+        jButton4.setName("4"); // NOI18N
         jPanel1.add(jButton4);
 
         jButton5.setText("View reported dests");
+        jButton5.setName("5"); // NOI18N
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -73,8 +75,10 @@ public class ModScreen extends javax.swing.JFrame {
         jPanel2.setName("footer"); // NOI18N
 
         jButton1.setText("Back");
+        jButton1.setName("1"); // NOI18N
 
         jButton2.setText("Exit");
+        jButton2.setName("2"); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

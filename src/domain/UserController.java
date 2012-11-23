@@ -1,14 +1,11 @@
-	package domain;
+package domain;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 import java.io.*;
 import persistance.SQL_Connect;
 import presentation.*;
 import data.*;
-
-
 
 public class UserController {
 	final Home home = new Home();
@@ -18,7 +15,7 @@ public class UserController {
 	StartController start;
 	ArrayList<String> friendArrayList = new ArrayList<String>();
 	BinaryTree friends = new BinaryTree();
-	String userAction;
+	protected String userAction;
 	int intAction;
 	
 	/*
@@ -28,17 +25,18 @@ public class UserController {
 		this.user = user;
 		this.bound = bound;
 		this.connect = connect;
-		getFriends();
 		menu();
 	}
 	/*
 	 * Displays menu for user, gets input and depending on the input decides which action to do next
 	 */
 	private void menu(){
+		getFriends();
 		home.setVisible(true);
 		addActionListener(home);
 	}
-	private void addActionListener(Home home){
+	
+	protected void addActionListener(Home home){
 		home.addButtonActionListener1(
 				new java.awt.event.ActionListener(){
 					public void actionPerformed(java.awt.event.ActionEvent evt){
@@ -49,7 +47,7 @@ public class UserController {
 		);
 	}
 	
-	private boolean isNumeric(String str){
+	protected boolean isNumeric(String str){
 		try{
 			Integer.parseInt(str);
 		}catch(NumberFormatException e){
@@ -63,7 +61,7 @@ public class UserController {
 			intAction = Integer.parseInt(userAction);
 		}
 		switch (intAction){
-			case 1:
+			case 1: createNewDest();
 				break;
 			case 2: friendList();
 				break;
@@ -84,15 +82,13 @@ public class UserController {
 			// redirect to option screen
 			case 7: int type = user.getType(); 
 					if (type == 1){
-						System.out.println("you don't have acces noob!");
+						System.out.println("you don't have access noob!");
 					} else if (type == 2){
-						final ModScreen ms = new ModScreen();
+						final ModController mc = new ModController(user, bound, connect);
 						home.setVisible(false);
-						ms.setVisible(true);
 					} else if (type == 3){
-						final AdminScreen as = new AdminScreen();
+						final AdminController ac = new AdminController(user, bound, connect);
 						home.setVisible(false);
-						as.setVisible(true);
 					}
 				break;
 			// logout button

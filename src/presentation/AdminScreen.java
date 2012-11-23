@@ -9,18 +9,20 @@ package presentation;
  * @author user
  */
 public class AdminScreen extends ModScreen {
+	
+	private javax.swing.JButton jButton6;
 
     /**
      * Creates new form AdminScreen
      */
     public AdminScreen() {
-        initComponents();   
+        initComponents();
     }
     
-    public void addButtonActionListener6(java.awt.event.ActionListener listener) {
-        //jButton6.addActionListener(listener);
-        System.out.println("some code");
-      }
+    public void addActionListener1(java.awt.event.ActionListener listener){
+    	super.addButtonActionListener1(listener);
+
+    }
     
 
     /**

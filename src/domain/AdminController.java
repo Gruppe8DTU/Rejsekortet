@@ -6,32 +6,15 @@ import persistance.SQL_Connect;
 import presentation.Boundary;
 
 public class AdminController extends ModController {
+	final AdminScreen as = new AdminScreen();
 
 	public AdminController(UserData user, Boundary bound, SQL_Connect connect){
 		super (user, bound, connect);
+		menu();
 	}
 	
-	// Samme som i ModController men udvidet
-	protected void adminPanel(){
-		super.adminPanel();
-		final AdminScreen as = new AdminScreen();
-		System.out.println("Admin screen initialized");
+	private void menu(){
 		
-		// This is "view reported users" button
-		as.addButtonActionListener1(
-			new java.awt.event.ActionListener(){
-				public void actionPerformed(java.awt.event.ActionEvent evt){
-					
-				}
-			}
-		);	
-		as.addButtonActionListener2(
-				new java.awt.event.ActionListener(){
-					public void actionPerformed(java.awt.event.ActionEvent evt){
-						//some action
-					}
-				}
-			);	
 	}
 		
 	private void deleteUser(String user){
@@ -54,9 +37,7 @@ public class AdminController extends ModController {
 	/*
 	 * Denne metode skal vise anmeldte brugere, men samtidig vise dem der er blevet skjult af moderatorer oeverst derfor skal den re-implementeres.
 	 */
-	private void viewReportedUsers(){
-	
-	}
+
 	
 	private void changeUserRights(UserData user){
 		int userType = bound.promptForInt("");

@@ -69,8 +69,8 @@ public class StartController {
 	 * Prombts user for login till he enters correct login info
 	 * if user enters '0' he will be redirected to create a new user
 	 */
-	public void getLogin(){
-		final Login login = new Login();			
+	public void getLogin(){			
+		final Login login = new Login();	
 		// for at holde mvc laegges eventet her i controlleren. Dette er login knappen		
 		login.addButtonActionListener1(
 				new java.awt.event.ActionListener(){
@@ -114,17 +114,7 @@ public class StartController {
 	 */
 	public void redirectToController(){
 		System.out.println(user.getType());
-		switch(user.getType()){
-			case 1:
-				new UserController(user, bound, connect);
-				break;
-			case 2:
-				new ModController(user, bound, connect);
-				break;
-			case 3:
-				new AdminController(user, bound, connect);
-				break;
-		}
+		new UserController(user, bound, connect);
 	}
 	
 	/*

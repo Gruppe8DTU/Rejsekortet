@@ -1,8 +1,12 @@
 package data;
 
+import java.util.ArrayList;
+
 public class UserData {
 	private String uName, fName, lName, eMail, password;
 	private int type;
+	public ArrayList<String> friendArrayList = new ArrayList<String>();
+	public BinaryTree friends = new BinaryTree();
 
 	public UserData(String uName, String fName, String lName, String eMail, String password, int type){
 		this.uName = uName;
