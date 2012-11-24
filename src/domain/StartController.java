@@ -93,12 +93,21 @@ public class StartController {
 				login.setVisible(false);
 				getLogin();
 				break;
+<<<<<<< HEAD
 			case 2:
 				System.exit(0);	
 				break;
 			case 3:
 				createUser();
 				login.setVisible(false);				
+=======
+			case 3:
+				createUser();
+				login.setVisible(false);
+				break;
+			case 2:
+				System.exit(0);			
+>>>>>>> Friendlist done
 		}
 	}
 	/*
