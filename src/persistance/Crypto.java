@@ -28,9 +28,14 @@ public class Crypto {
 	    public Crypto(String passPhrase) throws Exception {
 	        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 	        KeySpec spec = new PBEKeySpec(passPhrase.toCharArray(), salt, iterationCount, keyStrength);
+	        System.out.println("spec = " + spec);
 	        SecretKey tmp = factory.generateSecret(spec);
+	        System.out.println(tmp);
+	        System.out.println("secret key tmp : " + tmp);
 	        key = new SecretKeySpec(tmp.getEncoded(), "AES");
+	        System.out.println("key : " + key);
 	        dcipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+	        System.out.println(dcipher.getIV());
 	    }
 	    
 
@@ -40,8 +45,6 @@ public class Crypto {
 	        iv = params.getParameterSpec(IvParameterSpec.class).getIV();
 	        byte[] utf8EncryptedData = dcipher.doFinal(data.getBytes());
 	        byte[] base64EncryptedData = Base64.encodeBase64(utf8EncryptedData);
-
-	        //System.out.println("IV " + new sun.misc.BASE64Encoder().encodeBuffer(iv));
 	        System.out.println("Encrypted Data " + base64EncryptedData);
 	        System.out.println(base64EncryptedData.length);
 	        String returnValue = new String(base64EncryptedData);

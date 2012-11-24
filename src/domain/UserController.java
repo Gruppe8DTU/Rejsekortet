@@ -107,11 +107,11 @@ public class UserController {
 		if (type == 1){
 			System.out.println("you don't have acces noob!");
 		} else if (type == 2){
+			home.setVisible(false);
 			final ModController mc = new ModController(user, bound, connect);
-			home.setVisible(false);
 		} else if (type == 3){
-			final AdminController ac = new AdminController(user, bound, connect);
 			home.setVisible(false);
+			final AdminController ac = new AdminController(user, bound, connect);
 		}	
 	}
 	/*

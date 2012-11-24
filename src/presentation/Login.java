@@ -129,7 +129,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void addButtonActionListener(java.awt.event.ActionListener listener) {
-        jButton1.addActionListener(listener); // Submit
+        jButton1.addActionListener(listener); // Login
         jButton2.addActionListener(listener); // Exit 
         jButton3.addActionListener(listener); // Create new user   
     }  

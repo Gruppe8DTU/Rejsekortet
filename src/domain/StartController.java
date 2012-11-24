@@ -94,11 +94,11 @@ public class StartController {
 				getLogin();
 				break;
 			case 2:
-				createUser();
-				login.setVisible(false);
+				System.exit(0);	
 				break;
 			case 3:
-				System.exit(0);			
+				createUser();
+				login.setVisible(false);				
 		}
 	}
 	/*

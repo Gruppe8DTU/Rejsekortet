@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package presentation;
 
 /**
@@ -15,7 +12,7 @@ public class ModScreen extends javax.swing.JFrame {
      */
     public ModScreen() {
         initComponents();
-        jButton6.setVisible(false);
+       
     }
     
     public void addButtonActionListener1(java.awt.event.ActionListener listener) {
@@ -70,6 +67,7 @@ public class ModScreen extends javax.swing.JFrame {
         jPanel1.add(jButton5);
 
         jButton6.setText("View reported users");
+        jButton6.setName("6"); // NOI18N
         jPanel1.add(jButton6);
 
         jPanel2.setName("footer"); // NOI18N
