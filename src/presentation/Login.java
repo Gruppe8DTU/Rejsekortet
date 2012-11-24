@@ -133,6 +133,10 @@ public class Login extends javax.swing.JFrame {
         jButton2.addActionListener(listener); // Exit 
         jButton3.addActionListener(listener); // Create new user   
     }  
+    public void setText(String str){
+    	jTextField2.setText(str);
+    	jTextField1.setText(str);
+    }
     
     public String getUserName(){
     	name = jTextField1.getText();

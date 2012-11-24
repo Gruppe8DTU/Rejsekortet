@@ -18,10 +18,9 @@ public class ModController extends UserController {
 
 		public ModController(UserData user, Boundary bound, SQL_Connect connect){
 			super(user, bound, connect);
-			menu();
 		}
 		
-		private void menu(){
+		public void init(){
 			ms.setVisible(true);
 			addActionListener();
 			menuAction();
@@ -80,7 +79,7 @@ public class ModController extends UserController {
 		protected void viewReportedPosts(){
 			try {
 				res = connect.executeQuery("SELECT * FROM text, reports WHERE text.text_Id = reports.textID");
-				//pc.setData(res);
+			
 			} catch (SQLException e) {
 				System.out.println("connection error");
 				e.printStackTrace();
@@ -89,7 +88,6 @@ public class ModController extends UserController {
 		protected void viewReportedPics(){
 			try {
 				res = connect.executeQuery("SELECT * FROM pics, reports WHERE pics.picID = reports.picID");
-				//pc.setData(res);
 			} catch (SQLException e) {
 				System.out.println("connection error " + e);
 			}
@@ -97,7 +95,6 @@ public class ModController extends UserController {
 		protected void viewReportedDestinations(){
 			try {
 				res = connect.executeQuery("SELECT * FROM destinations, reports WHERE destinations.destID = reports.destID");
-				//pc.setData(res);
 			} catch (SQLException e){
 				System.out.println("connection error " + e);
 			}
@@ -105,7 +102,6 @@ public class ModController extends UserController {
 		protected void viewReportedUsers(){
 			try {
 				res = connect.executeQuery("SELECT * FROM users, reports WHERE users.userName = reports.reportedUser");
-				//pc.setData(res);
 			} catch (SQLException e){
 				System.out.println("connection error " + e);
 			}

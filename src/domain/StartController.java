@@ -86,20 +86,20 @@ public class StartController {
 	}
 	
 	private void action(){
-		int intAction = Integer.parseInt(userAction);
-		switch(intAction){
-			case 1:
-				System.out.println("get login");
-				login.setVisible(false);
-				getLogin();
-				break;
-			case 2:
-				System.exit(0);	
-				break;
-			case 3:
-				createUser();
-				login.setVisible(false);				
-		}
+			
+			int intAction = Integer.parseInt(userAction);
+		
+			switch(intAction){
+				case 1:
+					getLogin();
+					break;
+				case 2:
+					System.exit(0);	
+					break;
+				case 3:
+					createUser();
+					login.setVisible(false);
+			}		
 	}
 	/*
 	 * Prombts user for login till he enters correct login info
@@ -115,8 +115,11 @@ public class StartController {
 		System.out.println("credentials saved in start controller");
 		if (isLoginValid(userName, password)){
 			System.out.println("login is valid");
+			login.setVisible(false);
 			user = getUser(userName);	
 			redirectToController();
+		} else {
+			login.setText("TRY AGAIN");
 		}
 	}	
 	

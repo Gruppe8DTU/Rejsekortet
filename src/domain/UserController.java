@@ -7,11 +7,9 @@ import persistance.SQL_Connect;
 import presentation.*;
 import data.*;
 
-
-//kjdbsfkjdsfjbldskjbflbj
 public class UserController {
-	final Home home = new Home();
 	CreateDestinationHandler newDest;
+	final Home home = new Home();
 	Boundary bound;
 	UserData user;
 	SQL_Connect connect;
@@ -28,13 +26,13 @@ public class UserController {
 		this.user = user;
 		this.bound = bound;
 		this.connect = connect;
+		getFriends();
 		menu();
 	}
 	/*
 	 * Displays menu for user, gets input and depending on the input decides which action to do next
 	 */
 	private void menu(){
-		getFriends();
 		home.setVisible(true);
 		addActionListener(home);
 	}
@@ -64,6 +62,7 @@ public class UserController {
 		int intAction = 0;
 		if ( isNumeric(userAction))
 			intAction = Integer.parseInt(userAction);
+		home.dispose();
 		
 		switch (intAction){
 			case 1:
@@ -92,6 +91,8 @@ public class UserController {
 				break;
 			// logout button
 			case 8: 	user = null;
+						friends = null;
+						friendArrayList = null;
 						start = new StartController();
 						start.addActionListener();	
 						break;
@@ -109,6 +110,7 @@ public class UserController {
 		} else if (type == 2){
 			home.setVisible(false);
 			final ModController mc = new ModController(user, bound, connect);
+			mc.init();
 		} else if (type == 3){
 			home.setVisible(false);
 			final AdminController ac = new AdminController(user, bound, connect);
