@@ -2,12 +2,19 @@ package domain;
 
 import java.sql.SQLException;
 import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import persistance.SQL_Connect;
 import presentation.*;
 import data.*;
 
 public class UserController {
+<<<<<<< HEAD
+=======
+	
+	final Home home = new Home();
+>>>>>>> cfe450faeeb7d557d8215ab1c0de1313a01bb989
 	CreateDestinationHandler newDest;
 	final Home home = new Home();
 	Boundary bound;
@@ -66,9 +73,12 @@ public class UserController {
 		
 		switch (intAction){
 			case 1:
-				//newDest = new CreateDestinationHandler(user, connect);
+				new CreateDestinationHandler(user, connect);
 				break;
-			case 2: friendList();
+			case 2: 
+				System.out.println("friends");
+				FriendList fl = new FriendList(friendArrayList);
+				fl.setVisible(true);
 				break;
 			case 3: recentFriendDestinations();
 				break;

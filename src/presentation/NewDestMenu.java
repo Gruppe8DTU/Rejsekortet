@@ -1,9 +1,5 @@
 package presentation;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -11,20 +7,16 @@ import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import javax.swing.JButton;
-import javax.swing.AbstractAction;
-import java.awt.event.ActionEvent;
 
-
-import javax.swing.Action;
 import javax.swing.JTextArea;
 
 public class NewDestMenu extends JFrame {
 	
 
+	/*
+	 * Variables
+	 */
 	private JPanel contentPane;
 	private JTextField destTextField;
 	private JTextField streetTextField;
@@ -36,43 +28,54 @@ public class NewDestMenu extends JFrame {
 	private JButton btnCancel;
 	private JButton btnBrowse;
 	
-	
+	/*
+	 * Constructor calls initComponents
+	 */
 	public NewDestMenu(){
 		initComponents();
 	}
 	
+	/*
+	 * Gathers the button listeners
+	 */
 	public void addButtonActionListener(java.awt.event.ActionListener listener){
 		btnSubmit.addActionListener(listener);
 		btnCancel.addActionListener(listener);
 		btnBrowse.addActionListener(listener);
 	}
-	
+	/*
+	 * returns destination name
+	 */
 	public String getDestName(){
 		String name = destTextField.getText();
 		return name;
 	}
 	
+	/*
+	 * returns name of street
+	 */
 	public String getStreet(){
 		String street = streetTextField.getText();
 		return street;
 	}
 	
+	/*
+	 * returns name of city
+	 */
 	public String getCity(){
 		return cityTextField.getText();
 	}
 	
-	public String getZip(){
-		return zipTextField.getText();
-	}
-	
+	/*
+	 *  returns name of country
+	 */
 	public String getCountry(){
 		return countryTextField.getText();
 	}
 	
-	public String getPicURL(){
-		return "url";
-	}
-	
+	/*
+	 * returns the content of the textarea
+	 */
 	public String getPost(){
 		return txtarea.getText();
 	}
@@ -194,18 +197,6 @@ public class NewDestMenu extends JFrame {
 		btnSubmit.setBounds(255, 299, 160, 29);
 		getContentPane().add(btnSubmit);
 		
-	}
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Browse frame = new Browse();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
 	}
 
 		

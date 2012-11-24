@@ -193,7 +193,7 @@ public class SQL_Connect {
 		try {
 			Class.forName(driver);
 			connect = DriverManager.getConnection(database_url, username, password); 
-			String insertPic = "INSERT INTO pics(source) VALUES(?);";
+			String insertPic = "INSERT INTO pics(picSource) VALUES(?);";
 			connect.setAutoCommit(false);
 			ps = connect.prepareStatement(insertPic);	// Creates a statement object
 			ps.setBinaryStream(1,fis, (int) file.length()); // exchanges placeholder with value

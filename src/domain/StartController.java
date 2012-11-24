@@ -86,6 +86,7 @@ public class StartController {
 	}
 	
 	private void action(){
+<<<<<<< HEAD
 			
 			int intAction = Integer.parseInt(userAction);
 		
@@ -100,6 +101,31 @@ public class StartController {
 					createUser();
 					login.setVisible(false);
 			}		
+=======
+		int intAction = Integer.parseInt(userAction);
+		switch(intAction){
+			case 1:
+				System.out.println("get login");
+				login.setVisible(false);
+				getLogin();
+				break;
+<<<<<<< HEAD
+			case 2:
+				System.exit(0);	
+				break;
+			case 3:
+				createUser();
+				login.setVisible(false);				
+=======
+			case 3:
+				createUser();
+				login.setVisible(false);
+				break;
+			case 2:
+				System.exit(0);			
+>>>>>>> Friendlist done
+		}
+>>>>>>> cfe450faeeb7d557d8215ab1c0de1313a01bb989
 	}
 	/*
 	 * Prombts user for login till he enters correct login info

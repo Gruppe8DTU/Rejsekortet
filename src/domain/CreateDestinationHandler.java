@@ -1,6 +1,13 @@
 package domain;
+/*
+ * Class CreateDestinationHandler
+ * 
+ * Responsible for creating new destinations and saving them in the database
+ * 
+ * By: Jacob Espersen
+ * 
+ */
 
-import java.awt.image.ImageFilter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.SQLException;
@@ -10,8 +17,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import persistance.SQL_Connect;
-import presentation.Login;
-import presentation.ModScreen;
 import presentation.NewDestMenu;
 import data.UserData;
 
@@ -24,6 +29,8 @@ public class CreateDestinationHandler {
 	UserController uc;
 	SQL_Connect connect;
 
+	/* Initializes user connect and destMenu
+	 * shows the destmenu and */
 	public CreateDestinationHandler(UserData user, SQL_Connect connect){
 		this.user = user;
 		this.connect = connect;
@@ -33,6 +40,8 @@ public class CreateDestinationHandler {
 	}
 	
 	private void addActionListener(){
+		/* When the buttons are pushed they will return their name which is a number,
+		 * from that number we can decide what to do. */ 
 		destMenu.addButtonActionListener(
 			new java.awt.event.ActionListener(){
 				public void actionPerformed(java.awt.event.ActionEvent evt){
@@ -49,16 +58,15 @@ public class CreateDestinationHandler {
 	private void action(){
 		int actionInt = Integer.parseInt(userAction);
 		switch (actionInt){
-			case 1:
+			case 1:								// If Submit is pushed, saves the destination and returns to user menu
 				checkDestAndUpdate();
-				
 				destMenu.setVisible(false);
 				break;
-			case 2:
+			case 2:								// if Cancel is pushed returns to usermenu
+				destMenu.setVisible(false);
+				break;		
+			case 3:								// if browse is pushed, a directory is opened and the user can choose a picture
 				initializePic();
-				break;
-			case 3:
-				
 				break;
 		}
 	}
@@ -76,16 +84,13 @@ public class CreateDestinationHandler {
 		Integer picID = null;
 		Integer textID = null;
 		
-		// Call the getPicID function that asks the user if he wants to upload a picture to, returns '0' if he doesnt
-		// and if he wants it returns the primary key related to the uploaded picture and initializes tempPicID to this value.
-		// if tempPicID does not equal '0' it initializes picID to the value of the primary key for the picture uploaded
+		/* If the user uploaded a picture, getPicID will save it in the pics table and return the primarykey for that picture*/
 		if(pic != null)
 			picID = getPicID();
-		// Calls the getPost function that gives the user the possibility to attach a post to the his visit
-		// It sets tempPostID to the return value of getPost which is '0' if he didnt want to attach a post.
-		// And the primary key of the post in the text table in the database.
-		if(!post.equals("") || !post.equals("Fill in"))
+		/* If the user entered a post text, getPostID will save it in the text table and return the primarykey for that text*/
+		if(!post.equals("") && !post.equals("Fill in")){
 			textID = getPostID(post);	// if tempPostID does not equal '0' it initializes textID to the value of the primary key for the post uploaded
+		}
 		try {
 			// If the destination that the user has visited already exists in the database it will initialize a 2 dimensianal array to contain
 			// only the value of the corrosponding destination ID.
@@ -97,12 +102,12 @@ public class CreateDestinationHandler {
 				int destID =(Integer) dest[0][0];
 				System.out.println();
 				// Inserts username, destID, picID, textID, and the date of the upload will also be saved in the database
-				connect.executeUpdate("insert into visits values('"+user.getUserName()+ "',"+destID+","+picID+","+textID+",CURRENT_TIMESTAMP;");
+				connect.executeUpdate("insert into visits values('"+user.getUserName()+ "',"+destID+","+picID+","+textID+",CURRENT_TIMESTAMP);");
 		
 			}catch(ArrayIndexOutOfBoundsException e){
 				//If the 2 dimensional array was empty means that the database does not contain that destination
 				//So it will create a the destination in the database, and auto increment the destID
-				connect.executeUpdate("INSERT INTO destinations(name,street,city,zip,country)" +
+				connect.executeUpdate("INSERT INTO destinations(name,street,city,country)" +
 									  "VALUES('"+destName+"','"+street+"','"+city+"','"+country+"');");
 				//Creates a 2 dimensional array that will contain the the biggest destID which will be the ID of the destination
 				//which was just created. And it will insert this destID in the visits table with the username, picID, textID and the timestamp
@@ -140,19 +145,27 @@ public class CreateDestinationHandler {
 	 * filter the browse window so yo can only choose pictures
 	 */
 	private void initializePic(){
+		/* Creates a directory window */
 		JFileChooser chooser = new JFileChooser();
+		/* Creates a filter so only  pictures can be chosen */
 		FileFilter filter = new FileNameExtensionFilter("Image file (.jpg, .jpeg, .gif, .png)", new String[] {"jpg", "jpeg", "gif", "png"});
+		/* implements the filter on the directory*/
 		chooser.setFileFilter(filter);
 		int status = chooser.showOpenDialog(null);
-		
+		/* If the file is approved the pic variable will initialized to the picture chosen*/
 		if(status == JFileChooser.APPROVE_OPTION)
 			pic = chooser.getSelectedFile();				
 	}
 	
+	/*
+	 * Inserts the post in the table and returns the corresponding ID
+	 */
 	private int getPostID(String post){
 		int textID = 0;
 		try{
+			/* Inserts the post in the  text table*/
 			connect.executeUpdate("INSERT INTO text(source) VALUES('"+post+"')");
+			/* Gets the Primary key for the text inserted*/
 			Object[][] text = connect.executeQuery("SELECT max(text_ID) FROM text;");
 			textID =(Integer)text[0][0];
 		} catch (SQLException e) {
