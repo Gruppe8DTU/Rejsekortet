@@ -10,11 +10,7 @@ import presentation.*;
 import data.*;
 
 public class UserController {
-<<<<<<< HEAD
-=======
-	
-	final Home home = new Home();
->>>>>>> cfe450faeeb7d557d8215ab1c0de1313a01bb989
+
 	CreateDestinationHandler newDest;
 	final Home home = new Home();
 	Boundary bound;
@@ -115,15 +111,18 @@ public class UserController {
 	 */
 	private void redirectToOption() {
 		int type = user.getType(); 
+		System.out.println("your user type : " + type);
 		if (type == 1){
-			System.out.println("you don't have acces noob!");
+			System.out.println("you don't have access noob!");
 		} else if (type == 2){
 			home.setVisible(false);
-			final ModController mc = new ModController(user, bound, connect);
+			ModController mc = new ModController(user, bound, connect);
 			mc.init();
+			System.out.println("new mod controller initialization complete");
 		} else if (type == 3){
 			home.setVisible(false);
-			final AdminController ac = new AdminController(user, bound, connect);
+			AdminController ac = new AdminController(user, bound, connect);
+			System.out.println("New admin controller initialization complete");
 		}	
 	}
 	/*
@@ -440,10 +439,5 @@ public class UserController {
 		}
 		menu();
 				
-	}
-
-	
-	private void reportPost(){
-		
 	}
 }

@@ -15,6 +15,10 @@ public class ModScreen extends javax.swing.JFrame {
        
     }
     
+    public String getname(){
+    	return jButton2.getName();
+    }
+    
     public void addButtonActionListener1(java.awt.event.ActionListener listener) {
         jButton1.addActionListener(listener); // back button
         jButton2.addActionListener(listener); // logout button

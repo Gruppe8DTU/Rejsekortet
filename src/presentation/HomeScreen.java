@@ -24,7 +24,7 @@ public class HomeScreen extends javax.swing.JFrame {
         System.out.println("setImg called");
         ImgUrl = url;
     }
-    
+   
     public void setImage1(){
         System.out.println("setImage1 called");
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource(  ImgUrl )));

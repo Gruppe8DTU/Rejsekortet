@@ -86,46 +86,21 @@ public class StartController {
 	}
 	
 	private void action(){
-<<<<<<< HEAD
-			
-			int intAction = Integer.parseInt(userAction);
-		
-			switch(intAction){
-				case 1:
-					getLogin();
-					break;
-				case 2:
-					System.exit(0);	
-					break;
-				case 3:
-					createUser();
-					login.setVisible(false);
-			}		
-=======
+
 		int intAction = Integer.parseInt(userAction);
 		switch(intAction){
 			case 1:
-				System.out.println("get login");
-				login.setVisible(false);
+				System.out.println("get login");	
 				getLogin();
 				break;
-<<<<<<< HEAD
 			case 2:
 				System.exit(0);	
-				break;
-			case 3:
-				createUser();
-				login.setVisible(false);				
-=======
+				break;				
 			case 3:
 				createUser();
 				login.setVisible(false);
 				break;
-			case 2:
-				System.exit(0);			
->>>>>>> Friendlist done
 		}
->>>>>>> cfe450faeeb7d557d8215ab1c0de1313a01bb989
 	}
 	/*
 	 * Prombts user for login till he enters correct login info
@@ -183,15 +158,17 @@ public class StartController {
 	 * Calls checkLogin on SQL_connect and that returns true if password and username mathces
 	 */
 	public boolean isLoginValid(String userName, String password){
+		System.out.println("checking login");
 		boolean accepted = false; 
 		try {
-		if (connect.checkLogin(userName, password)==true){
-			System.out.println("login succesfull");
-			accepted = true;
-		}
-			
+			if (connect.checkLogin(userName, password)==true){
+				System.out.println("login succesfull");
+				accepted = true;
+			} else {
+				System.out.println("Login denied");
+			}
 		} catch (SQLException e) {
-			System.out.println("login failed");
+			System.out.println("login error in isLoginValid");
 			e.printStackTrace();
 		}
 		

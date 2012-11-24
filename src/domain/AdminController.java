@@ -1,51 +1,45 @@
 package domain;
 
 import data.UserData;
-import presentation.AdminScreen;
+import presentation.ModScreen;
 import persistance.SQL_Connect;
 import presentation.Boundary;
 
 public class AdminController extends ModController {
-	final AdminScreen as = new AdminScreen();
-
+	final ModScreen ms = new ModScreen();
+	Object[][] res;
+	protected String body;
+	protected int currentReport = 1;
+	
 	public AdminController(UserData user, Boundary bound, SQL_Connect connect){
 		super (user, bound, connect);
-		menu();
 	}
-	
-	private void menu(){
-		
+	public void init(){
+		super.init();
 	}
-		
-	private void deleteUser(String user){
-		//connect.deleteUser(user);
+	public void addActionListener(){
+		super.addActionListener();
 	}
-	
-	private void deleteDestinations(String dest){
-		//connect.deleteDestination(dest);
+	public void menuAction(){
+		super.menuAction();
 	}
-	
-	private void viewDeletedDestinations(){
-		
-	}
-	
-	// reimplementation of parent method
 	protected void viewReportedPosts(){
 		super.viewReportedPosts();
 	}
-	
-	/*
-	 * Denne metode skal vise anmeldte brugere, men samtidig vise dem der er blevet skjult af moderatorer oeverst derfor skal den re-implementeres.
-	 */
-
-	
+	protected void viewReportedPics(){
+		super.viewReportedPics();
+	}
+	protected void viewReportedDestinations(){
+		super.viewReportedDestinations();
+	}
+	protected void viewReportedUsers(){
+		super.viewReportedUsers();
+	}
+	private void deleteUser(String user){
+		//TODO
+	}			
 	private void changeUserRights(UserData user){
 		int userType = bound.promptForInt("");
 		//connect.changeUserRights(user.getUserName(), userType);
-	}
-	
-	
-	
-	
-	
+	}	
 }
