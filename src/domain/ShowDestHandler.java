@@ -13,6 +13,7 @@ import data.UserData;
 
 import persistance.SQL_Connect;
 import presentation.ListOfFriendDest;
+import presentation.ReportScreen;
 import presentation.ShowDest;
 
 public class ShowDestHandler {
@@ -23,10 +24,11 @@ public class ShowDestHandler {
 	String visitID;
 	String userAction;
 	
-	public ShowDestHandler(ArrayList<String> friendArray, SQL_Connect connect, UserData user, String username){
+	public ShowDestHandler(SQL_Connect connect, String username){
 		this.friendArray = friendArray;
 		this.connect = connect;
 		this.user = user;
+		specificDest(username);
 	}
 	public ShowDestHandler(ArrayList<String> friendArray, SQL_Connect connect, UserData user){
 		this.friendArray = friendArray;
@@ -40,25 +42,23 @@ public class ShowDestHandler {
 	 * Gets a table from the database with all the destinations your friend have visited.
 	 */
 	private void recentFriendDestinations(){
-		Object[][] visits = null;
+		ResultSet visits = null;
 		try {
 			/* Initializes  visits to a 2 dimensional array with all destinations the users friends has visited ordered by date*/
-			visits = connect.executeQuery("CALL create_Friend_Visits('"+user.getUserName()+"')");
-		} catch (SQLException e) {
+			visits = connect.select("CALL create_Friend_Visits('"+user.getUserName()+"')");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		/* If the 2 dimensional array is empty, it will let the user know there is no destinations and return to menu
 		 * If it is not empty it will print the destinations 10 at a time */
 		if(visits == null){
-			System.out.println("There are no destinations");
+			// fejl meddelese
 			return;
 		}else
-			for(int i = 0; i < visits.length;i++){
-			}
 			addActionListener(visits);
 	}
 	
-	private void addActionListener(Object[][] visits){
+	private void addActionListener(/*Object[][]*/ResultSet visits){
 		final ListOfFriendDest ls = new ListOfFriendDest(visits);
 		ls.setVisible(true);
 		/* When the buttons are pushed they will return their name which is a number,
@@ -135,6 +135,9 @@ public class ShowDestHandler {
 		return is;
 	}
 	
+	/*
+	 * Shows the a a specifik visit.
+	 */
 	private void showVisit(String userName, String post, String destName, String city, String country, InputStream is) throws IOException{
 		final ShowDest sd = new ShowDest(userName, city, destName, country, post, is);
 		sd.setVisible(true);
@@ -145,12 +148,64 @@ public class ShowDestHandler {
 						if(userAction.equals("0"))
 							sd.setVisible(false);
 						if(userAction.equals("1"))
-							report();
+							showReportScreen();
 					}
 				});	
 	}
-	private void report(){
+	
+	/*
+	 * 
+	 */
+	private void showReportScreen(){
+		final ReportScreen rs = new ReportScreen();
+		rs.setVisible(true);
+		rs.addButtonListeners(
+				new ActionListener(){
+					public void actionPerformed(ActionEvent evt){
+						userAction = ((javax.swing.JButton)evt.getSource()).getName();
+						if(userAction.equals("0"))
+							rs.setVisible(false);
+						if(userAction.equals("1"))
+							submitReport(rs);
+					}
+				});	
+	}
+	
+	/*
+	 * 
+	 */
+	private void submitReport(ReportScreen rs){
+		String reportText = rs.getReportText();
+		int type = rs.getType();
+		System.out.println(reportText+" heeey type: "+type+" heeey visitID = " +visitID);
+//		try {
+//			connect.executeUpdate("INSERT INTO reports(visitID, reportedBy, contentType, reason)" +
+//								  "VALUES("+visitID+",'"+user.getUserName()+"',"+type+",'"+reportText+"');");
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+		// insert into report values reporttext, username, visitid
 		
+	}
+	
+	/*
+	 * 
+	 */
+	private void specificDest(String name){
+		ResultSet visitsResult = null;
+		try{
+			/* Creates a 2 dimensional array of destinations that the user has visited*/
+			visitsResult = connect.select("CALL create_Spec_Visits('"+name+"');");
+			if(!visitsResult.next()){
+				// fejl besked
+				return;
+			}else			
+				addActionListener(visitsResult);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
 	}
 	
 	

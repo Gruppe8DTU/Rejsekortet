@@ -16,6 +16,8 @@ import java.awt.Button;
 import javax.swing.JTable;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
@@ -25,13 +27,17 @@ public class ListOfFriendDest extends JFrame {
 
 	private JPanel contentPane;
 	private ArrayList<JButton> buttons;
-	private Object[][] visits;
+	private /*Object[][]*/ ResultSet visits;
 	
 	
 
-	public ListOfFriendDest(Object[][] visits) {
+	public ListOfFriendDest( /*Object[][]*/ ResultSet visits) {
 		this.visits = visits;
-		initComponents();		
+		try {
+			initComponents();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
 	}
 	
 	public void addButtonActionListeners(java.awt.event.ActionListener listener){
@@ -45,7 +51,7 @@ public class ListOfFriendDest extends JFrame {
 	/*
 	 * Initializes all the components in the window
 	 */
-	private void initComponents(){
+	private void initComponents() throws SQLException{
 		buttons = new ArrayList();
 		setBounds(100, 100, 450,300 );
 		contentPane = (JPanel)this.getContentPane();
@@ -62,9 +68,13 @@ public class ListOfFriendDest extends JFrame {
 		/* -------------------- Sets Up a panel for the destinations -------------------- */
 		
 		/* -------------------- Adds buttons and labels to the panel -------------------- */
-		for(int i = 0; i < visits.length; i++){
+		//for(int i = 0; i < visits.length; i++){
+		int i = 0;
+		visits.first();
+		do{
 			JLabel label = new JLabel();
-			label.setText((String)visits[i][2]+" visited "+(String)visits[i][3]+" in "+(String)visits[i][4]+", "+(String)visits[i][5]);
+			//label.setText((String)visits[i][2]+" visited "+(String)visits[i][3]+" in "+(String)visits[i][4]+", "+(String)visits[i][5]);
+			label.setText(visits.getString(2)+" visited "+visits.getString(3)+" in "+visits.getString(4)+", "+visits.getString(5));
 			GridBagConstraints gbcLabel = new GridBagConstraints();
 			gbcLabel.insets = new Insets(0, 0, 5, 5);
 			gbcLabel.gridx = 0;
@@ -77,16 +87,20 @@ public class ListOfFriendDest extends JFrame {
 			gbcButton.gridy = i;
 			destPanel.add(button, gbcButton);
 			button.setText("see details");
-			button.setName(""+(Integer)visits[i][1]);
+			//button.setName(""+(Integer)visits[i][1]);
+			button.setName(""+visits.getInt(1));
 			buttons.add(button);
+			i++;
 			
-		}
+		}while(visits.next());
+		
 		/* -------------------- Adds a back button and adds everything to the window -------------------- */
 		JLabel fake = new JLabel();
 		GridBagConstraints gbcFake = new GridBagConstraints();
 		gbcFake.insets = new Insets(0, 0, 5, 5);
 		gbcFake.gridx = 0;
-		gbcFake.gridy = visits.length;
+//		gbcFake.gridy = visits.length;
+		gbcFake.gridy = buttons.size();
 		destPanel.add(fake, gbcFake);
 		
 		JButton back = new JButton();
@@ -95,7 +109,8 @@ public class ListOfFriendDest extends JFrame {
 		buttons.add(back);
 		GridBagConstraints gbcBack = new GridBagConstraints();
 		gbcBack.gridx = 1;
-		gbcBack.gridy = visits.length;
+//		gbcBack.gridy = visits.length;
+		gbcBack.gridy = buttons.size();
 		destPanel.add(back, gbcBack);
 		
 		JScrollPane scrollPane = new JScrollPane(destPanel);
