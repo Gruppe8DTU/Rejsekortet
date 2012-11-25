@@ -102,7 +102,7 @@ public class CreateDestinationHandler {
 				int destID =(Integer) dest[0][0];
 				System.out.println();
 				// Inserts username, destID, picID, textID, and the date of the upload will also be saved in the database
-				connect.executeUpdate("insert into visits values('"+user.getUserName()+ "',"+destID+","+picID+","+textID+",CURRENT_TIMESTAMP);");
+				connect.executeUpdate("insert into visits(username,destID,picID,textID,date) values('"+user.getUserName()+ "',"+destID+","+picID+","+textID+",CURRENT_TIMESTAMP);");
 		
 			}catch(ArrayIndexOutOfBoundsException e){
 				//If the 2 dimensional array was empty means that the database does not contain that destination
@@ -113,7 +113,7 @@ public class CreateDestinationHandler {
 				//which was just created. And it will insert this destID in the visits table with the username, picID, textID and the timestamp
 				Object[][] mDest = connect.executeQuery("SELECT MAX(destID) FROM destinations;");
 				int maxDest = (Integer)mDest[0][0];
-				connect.executeUpdate("insert into visits values('"+user.getUserName()+ "',"+maxDest+","+picID+","+textID+",CURRENT_TIMESTAMP)");
+				connect.executeUpdate("insert into visits(username,destID,picID,textID,date) values('"+user.getUserName()+ "',"+maxDest+","+picID+","+textID+",CURRENT_TIMESTAMP)");
 			}
 		} catch (SQLException e) {
 			
@@ -154,7 +154,8 @@ public class CreateDestinationHandler {
 		int status = chooser.showOpenDialog(null);
 		/* If the file is approved the pic variable will initialized to the picture chosen*/
 		if(status == JFileChooser.APPROVE_OPTION)
-			pic = chooser.getSelectedFile();				
+			pic = chooser.getSelectedFile();	
+		System.out.println(pic);
 	}
 	
 	/*

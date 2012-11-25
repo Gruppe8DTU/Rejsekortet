@@ -72,11 +72,10 @@ public class UserController {
 				new CreateDestinationHandler(user, connect);
 				break;
 			case 2: 
-				System.out.println("friends");
-				FriendList fl = new FriendList(friendArrayList);
-				fl.setVisible(true);
+				friendList();
 				break;
-			case 3: recentFriendDestinations();
+			case 3: 
+				new ShowDestHandler(friendArrayList, connect, user);
 				break;
 			case 4: specificDest(user.getUserName());
 				break;
@@ -96,12 +95,20 @@ public class UserController {
 				redirectToOption();
 				break;
 			// logout button
+<<<<<<< HEAD
 			case 8: 	user = null;
 						friends = null;
 						friendArrayList = null;
 						start = new StartController();
 						start.addActionListener();	
 						break;
+=======
+			case 8: 	
+				user = null;
+				start = new StartController();
+				start.addActionListener();
+				break;
+>>>>>>> See friends destinations done
 			}			
 	}
 	
@@ -129,16 +136,16 @@ public class UserController {
 	 * Displays all your friends.
 	 */
 	private void friendList(){
-		/* If the list of friends is empty it tells the user that he doesnt have any friends yet, and returns to menu*/
-		if(friendArrayList.isEmpty()){
-			bound.printLine("You don't have any friends yet");
-			menu();
-		}
-		/* Prints out all the friends in the friend array*/
-		for(int i = 0; i < friendArrayList.size(); i++){
-			bound.printLine(friendArrayList.get(i));
-		}
-		menu();	
+		final FriendList fl = new FriendList(friendArrayList);
+		fl.setVisible(true);
+		fl.buttonActionListener(
+				new ActionListener(){
+					public void actionPerformed(ActionEvent evt){
+						userAction = ((javax.swing.JButton)evt.getSource()).getName();
+						if(userAction.equals("1"))
+							fl.setVisible(false);
+					}
+				});	
 	}
 	
 	/*
