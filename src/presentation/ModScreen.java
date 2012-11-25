@@ -24,8 +24,15 @@ public class ModScreen extends javax.swing.JFrame {
         jButton2.addActionListener(listener); // logout button
         jButton3.addActionListener(listener); // view reported posts
         jButton4.addActionListener(listener); // view reported pics
-        jButton5.addActionListener(listener); // view reported destinations
+        jButton5.addActionListener(listener); // Change user rights
       }
+    public void hideUserRights(){
+    	jButton6.setVisible(false);
+    }
+    public void showUserRights(){
+    	System.out.println("kroko");
+    	jButton6.setVisible(true);
+    }
  
     /**
      * This method is called from within the constructor to initialize the form.
@@ -70,7 +77,7 @@ public class ModScreen extends javax.swing.JFrame {
         });
         jPanel1.add(jButton5);
 
-        jButton6.setText("View reported users");
+        jButton6.setText("Change user rights");
         jButton6.setName("6"); // NOI18N
         jPanel1.add(jButton6);
 

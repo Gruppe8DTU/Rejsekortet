@@ -123,6 +123,7 @@ public class UserController {
 		} else if (type == 3){
 			home.setVisible(false);
 			AdminController ac = new AdminController(user, bound, connect);
+			ac.init();
 			System.out.println("New admin controller initialization complete");
 		}	
 	}
