@@ -205,6 +205,13 @@ public class SQL_Connect {
 			ps.close();
 		    connect.close();	
 		}
-		
-	}
+	  }
+	  public ResultSet select(String query) throws Exception{
+		  Class.forName(driver);
+		  Connection connect = DriverManager.getConnection(database_url, username, password);
+		  PreparedStatement stmt = connect.prepareStatement(query);
+		  ResultSet result = stmt.executeQuery();
+		  return result;
+	  }
+	  
 }

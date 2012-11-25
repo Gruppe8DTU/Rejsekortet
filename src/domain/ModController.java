@@ -1,6 +1,7 @@
 package domain;
 
 import java.sql.SQLException;
+import java.sql.ResultSet;
 
 import persistance.SQL_Connect;
 import presentation.Boundary;
@@ -12,7 +13,8 @@ import data.UserData;
 
 public class ModController extends UserController {
 	final ModScreen ms = new ModScreen();
-	Object[][] res;
+	ResultSet res = null;
+	//Object[][] res;
 	protected String body;
 	protected int currentReport = 1;
 
@@ -74,31 +76,30 @@ public class ModController extends UserController {
 		
 		protected void viewReportedPosts(){
 			try {
-				res = connect.executeQuery("SELECT * FROM text, reports WHERE text.text_Id = reports.textID");
-			
-			} catch (SQLException e) {
+				res = connect.select("SELECT * FROM text, reports WHERE text.text_Id = reports.textID");
+			} catch (Exception e) {
 				System.out.println("connection error");
 				e.printStackTrace();
 			}
 		}
 		protected void viewReportedPics(){
 			try {
-				res = connect.executeQuery("SELECT * FROM pics, reports WHERE pics.picID = reports.picID");
-			} catch (SQLException e) {
+				res = connect.select("SELECT * FROM pics, reports WHERE pics.picID = reports.picID");
+			} catch (Exception e) {
 				System.out.println("connection error " + e);
 			}
 		}
 		protected void viewReportedDestinations(){
 			try {
-				res = connect.executeQuery("SELECT * FROM destinations, reports WHERE destinations.destID = reports.destID");
-			} catch (SQLException e){
+				res = connect.select("SELECT * FROM destinations, reports WHERE destinations.destID = reports.destID");
+			} catch (Exception e){
 				System.out.println("connection error " + e);
 			}
 		}
 		protected void viewReportedUsers(){
 			try {
-				res = connect.executeQuery("SELECT * FROM users, reports WHERE users.userName = reports.reportedUser");
-			} catch (SQLException e){
+				res = connect.select("SELECT * FROM users, reports WHERE users.userName = reports.reportedUser");
+			} catch (Exception e){
 				System.out.println("connection error " + e);
 			}
 		}
