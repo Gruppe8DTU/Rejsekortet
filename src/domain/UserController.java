@@ -95,20 +95,14 @@ public class UserController {
 				redirectToOption();
 				break;
 			// logout button
-<<<<<<< HEAD
-			case 8: 	user = null;
-						friends = null;
-						friendArrayList = null;
-						start = new StartController();
-						start.addActionListener();	
-						break;
-=======
 			case 8: 	
 				user = null;
+				friends = null;
+				friendArrayList = null;
 				start = new StartController();
-				start.addActionListener();
+				start.addActionListener();	
 				break;
->>>>>>> See friends destinations done
+
 			}			
 	}
 	

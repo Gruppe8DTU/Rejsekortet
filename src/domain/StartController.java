@@ -93,22 +93,13 @@ public class StartController {
 				System.out.println("get login");	
 				getLogin();
 				break;
-<<<<<<< HEAD
 			case 2:
 				System.exit(0);	
 				break;				
-=======
->>>>>>> See friends destinations done
 			case 3:
 				createUser();
 				login.setVisible(false);
 				break;
-<<<<<<< HEAD
-=======
-			case 2:
-				System.exit(0);
-				break;
->>>>>>> See friends destinations done
 		}
 	}
 	/*
