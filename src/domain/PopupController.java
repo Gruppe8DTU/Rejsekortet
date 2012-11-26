@@ -28,7 +28,7 @@ public class PopupController {
 		setSize();
 		this.pic = pic;
 		try {
-			reportType = data.getInt(1);
+			reportType = data.getInt(2);
 			ap.setVisible(true);
 			showReport();
 			addActionListener();
@@ -56,24 +56,27 @@ public class PopupController {
 		String msg = null;
 		// if 1 or 2 the data has same format for reported texts as pics
 		if (reportType == 1){
-				reportedUser = data.getString(4);
+				reportedUser = data.getString(5);
 				String header =	 "Reported text by user : " + reportedUser + "\n";
-				body =	 		 "Reported source :\n" + data.getString(2) + "\n" +
-								 "Reason : " + data.getString(5) + "\n";
-				footer =		 "Reported by : " + data.getString(6) + "\n"; 
+				body =	 		 "Reported source :\n" + data.getString(3) + "\n" +
+								 "Reason : " + data.getString(6) + "\n";
+				footer =		 "Reported by : " + data.getString(7) + "\n"; 
 				msg = header + body + footer;
+				ap.setButton1("Delete text");
 		} else if (reportType == 2) {
-				reportedUser = data.getString(4);
+				reportedUser = data.getString(5);
 				String header =	 "Reported picture by user : " + reportedUser + "\n";
-				body =	 		 "Reason : " + data.getString(5) + "\n";
-				footer =		 "Reported by : " + data.getString(6) + "\n"; 
+				body =	 		 "Reason : " + data.getString(6) + "\n";
+				footer =		 "Reported by : " + data.getString(7) + "\n"; 
 				msg = header + body + footer;
+				ap.setButton1("Delete picture");
 		} else if (reportType == 3){
-				body = 			"Destination : " + data.getString(2) + "\n" +
-								"In Street : " + data.getString(3) + ", city : " + data.getString(4) + ", country : " + data.getString(5) + "\n" +
-								"Reason : \n" + data.getString(6) + "\n";
-				footer  = 		"Reported by : " + data.getString(7);
+				body = 			"Destination : " + data.getString(3) + "\n" +
+								"In Street : " + data.getString(4) + ", city : " + data.getString(5) + ", country : " + data.getString(6) + "\n" +
+								"Reason : \n" + data.getString(7) + "\n";
+				footer  = 		"Reported by : " + data.getString(8);
 				msg = body + footer;
+				ap.setButton1("Delete destination");
 		}
 		return msg;
 	}
@@ -108,10 +111,11 @@ public class PopupController {
 				previousReport();
 				break;
 			case 5:
-				System.out.println("you pressed 5"); //TODO
+
+				deleteElement();
 				break;
 			case 6:
-				System.out.println("you pressed 6"); //TODO
+				deleteUser();
 				break;
 			case 7:
 				System.out.println("you pressed 7"); //TODO
@@ -127,6 +131,35 @@ public class PopupController {
 		}
 
 	}
+	
+	private void deleteElement(){
+		try{
+			if(reportType == 1){
+				connect.executeUpdate("DELETE FROM Rejsekortet.text WHERE text_ID = "+ data.getInt(8));
+			}
+			if(reportType == 2){
+				connect.executeUpdate("DELETE FROM Rejsekortet.pics WHERE picID = "+ data.getInt(8));
+			}
+			if(reportType == 3){
+				connect.executeUpdate("DELETE FROM Rejsekortet.destinations WHERE destID = "+ data.getInt(9));
+			}
+			connect.executeUpdate("DELETE FROM Rejsekortet.reports WHERE reportNo = " + data.getInt(1));
+		}catch(SQLException e){
+			System.out.println(e);
+		}
+	}
+	
+	private void deleteUser(){
+		try{
+			if (reportType == 3)
+				connect.executeUpdate("DELETE FROM Rejsekortet.users WHERE userName = '"+data.getString(10)+"'");
+			else
+				connect.executeUpdate("DELETE FROM Rejsekortet.users WHERE userName = '"+data.getString(5)+"'");
+		}catch(SQLException e){
+			System.out.println(e);
+		}
+	}
+	
 	private void previousReport(){
 		try {
 			if(!data.previous())
@@ -144,7 +177,7 @@ public class PopupController {
 	}
 	public void setPicture() throws Exception {
 		InputStream is;
-		is = data.getBinaryStream(2);
+		is = data.getBinaryStream(3);
 		ap.setPicture(is);
 	}
 	private void setSize(){
@@ -160,5 +193,8 @@ public class PopupController {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	public void hideBtn(){
+		ap.hideChangeUserRigths();
 	}
 }

@@ -143,6 +143,7 @@ public class AdminController extends ModController {
 	protected boolean isNumeric(String str){
 		return super.isNumeric(str);
 	}
+
 	protected InputStream convertResultSetToStream(ResultSet picData, InputStream is) throws Exception{
 		return super.convertResultSetToStream(picData, is);
 	}

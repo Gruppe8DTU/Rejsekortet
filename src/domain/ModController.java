@@ -67,7 +67,9 @@ public class ModController {
 					if(isEmpty()){
 						new MessagePopup("There is no reports");
 					}else{
+						pc.hideBtn();
 						pc.init(res, false);
+						
 					}
 					break;
 				case 4:
@@ -75,7 +77,8 @@ public class ModController {
 					if(isEmpty()){
 						new MessagePopup("There is no reports");
 					}else{
-					pc.init(res, true);
+						pc.hideBtn();
+						pc.init(res, true);
 					}
 					break;
 				case 5: 
@@ -83,7 +86,8 @@ public class ModController {
 					if(isEmpty()){
 						new MessagePopup("There is no reports");
 					}else{
-					pc.init(res, false);
+						pc.hideBtn();
+						pc.init(res, false);
 					}
 					break;
 			}
@@ -91,7 +95,7 @@ public class ModController {
 		
 		protected void viewReportedPosts(){
 			try {
-				res = connect.select("SELECT reports.contentType, text.source, visits.visitID, visits.username, reports.reason, reports.reportedBy " +
+				res = connect.select("SELECT reports.reportNo, reports.contentType, text.source, visits.visitID, visits.username, reports.reason, reports.reportedBy, text.text_ID " +
 										   "FROM text, reports, visits " +
 										   "WHERE reports.visitID = visits.visitID " +
 										   "AND visits.textID = text.text_ID " +
@@ -105,7 +109,7 @@ public class ModController {
 		
 		protected void viewReportedPics(){
 			try {
-				res = connect.select("SELECT reports.contentType, pics.picSource, visits.visitID, visits.username, reports.reason, reports.reportedBy " +
+				res = connect.select("SELECT reports.reportNo, reports.contentType, pics.picSource, visits.visitID, visits.username, reports.reason, reports.reportedBy, pics.PicID " +
 										   "FROM pics, reports, visits " +
 										   "WHERE reports.visitID = visits.visitID " +
 						   				   "AND visits.picID = pics.picID " +
@@ -119,7 +123,7 @@ public class ModController {
 
 		protected void viewReportedDestinations(){
 			try {
-				res = connect.select("SELECT reports.contentType, destinations.name, destinations.street, destinations.city, destinations.country, reports.reason, reports.reportedBy " +
+				res = connect.select("SELECT reports.reportNo, reports.contentType, destinations.name, destinations.street, destinations.city, destinations.country, reports.reason, reports.reportedBy, destinations.destID, visits.username " +
 										   "FROM destinations, reports, visits " +
 										   "WHERE destinations.destID = visits.destID " +
 										   "AND reports.visitID = visits.visitID " +
