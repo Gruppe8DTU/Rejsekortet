@@ -44,7 +44,6 @@ public class AdminPopup extends javax.swing.JFrame {
 	   Image thumbnail = sourceImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 	   ImageIcon thumbIcon = new ImageIcon(thumbnail);
 	   jLabel2.setIcon(thumbIcon);
-	   System.out.println("jLabel2 method done");
    	}
    	public void hidePanel(){
 	   jPanel4.setVisible(false);

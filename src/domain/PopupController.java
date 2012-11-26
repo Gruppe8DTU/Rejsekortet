@@ -1,25 +1,20 @@
 package domain;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import persistance.SQL_Connect;
 import presentation.AdminPopup;
-import presentation.MessagePopup;
+
 
 public class PopupController {
 	final AdminPopup ap = new AdminPopup();
-	SQL_Connect connect;
+	private SQL_Connect connect;
 	private int intAction;
 	private String userAction;
-	//Object[][] data;
-	ResultSet data;
-	Object[] row;
-	private int currentReport = 0;
+	protected ResultSet data;
 	private int TOTAL_REPORTS;
-	private String body;
 	private int reportType;
 	boolean pic;
 	
@@ -27,8 +22,6 @@ public class PopupController {
 		this.connect = connect;
 		ap.setVisible(false);
 	}
-	
-
 	
 	public void init(ResultSet res, boolean pic){
 		data = res;
@@ -45,7 +38,6 @@ public class PopupController {
 		
 	}
 	
-	
 	private void showReport() throws Exception{
 		ap.setLabel("Report " + data.getRow() + " of " + TOTAL_REPORTS + " reports");
 		if(pic == true){
@@ -55,7 +47,6 @@ public class PopupController {
 	}
 	
 	public void showChangeUserRigths(){
-		System.out.println("woooooop");
 		ap.showChangeUserRigths();
 	}
 	private String reportText() throws SQLException{
@@ -95,7 +86,6 @@ public class PopupController {
 				new java.awt.event.ActionListener(){
 					public void actionPerformed(java.awt.event.ActionEvent evt){
 						userAction = ((javax.swing.JButton)evt.getSource()).getName();
-						System.out.println("popup action : " + userAction);
 						menuAction();
 					}
 				}
@@ -112,26 +102,23 @@ public class PopupController {
 				destroy();
 				break;
 			case 3:
-				System.out.println("next");
 				nextReport();
 				break;
 			case 4:
-				System.out.println("previous");
 				previousReport();
 				break;
 			case 5:
-				System.out.println("you pressed 5");
+				System.out.println("you pressed 5"); //TODO
 				break;
 			case 6:
-				System.out.println("you pressed 6");
+				System.out.println("you pressed 6"); //TODO
 				break;
 			case 7:
-				System.out.println("you pressed 7");
+				System.out.println("you pressed 7"); //TODO
 				break;	
 		}
 	}	
 	private void nextReport(){
-		System.out.println("pressing next report");
 		try {
 			if(!data.next())
 				data.first();
@@ -141,7 +128,6 @@ public class PopupController {
 
 	}
 	private void previousReport(){
-		System.out.println("pressing previous report");
 		try {
 			if(!data.previous())
 				data.last();
@@ -152,7 +138,6 @@ public class PopupController {
 
 	}
 	
-
 	private void setButtons(String str1){
 		ap.setButton1("delete " + str1);
 		ap.setButton2("delete user");
@@ -162,7 +147,6 @@ public class PopupController {
 		is = data.getBinaryStream(2);
 		ap.setPicture(is);
 	}
-	
 	private void setSize(){
 		int curRow;
 		try {
@@ -176,6 +160,5 @@ public class PopupController {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 	}
 }

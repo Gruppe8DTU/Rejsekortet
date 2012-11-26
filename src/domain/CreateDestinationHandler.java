@@ -46,7 +46,6 @@ public class CreateDestinationHandler {
 			new java.awt.event.ActionListener(){
 				public void actionPerformed(java.awt.event.ActionEvent evt){
 					userAction = ((javax.swing.JButton)evt.getSource()).getName();
-					System.out.println(userAction);
 					action();
 				}
 			});
@@ -100,7 +99,6 @@ public class CreateDestinationHandler {
 			try{
 				// initializes destID to the value in the 2 dimensional array if it is not empty if it is empty it will throw an exception
 				int destID =(Integer) dest[0][0];
-				System.out.println();
 				// Inserts username, destID, picID, textID, and the date of the upload will also be saved in the database
 				connect.executeUpdate("insert into visits(username,destID,picID,textID,date) values('"+user.getUserName()+ "',"+destID+","+picID+","+textID+",CURRENT_TIMESTAMP);");
 		
@@ -155,7 +153,6 @@ public class CreateDestinationHandler {
 		/* If the file is approved the pic variable will initialized to the picture chosen*/
 		if(status == JFileChooser.APPROVE_OPTION)
 			pic = chooser.getSelectedFile();	
-		System.out.println(pic);
 	}
 	
 	/*

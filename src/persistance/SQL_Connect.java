@@ -231,14 +231,11 @@ public class SQL_Connect {
 		  return salt;
 	  }
 	  public void setRights(String user, int right) throws Exception{
-		  System.out.println("" + user);
-		  System.out.println("" + right);
 		  Connection connection = DriverManager.getConnection(database_url, username, password);
 		  String executeQuery = "UPDATE users SET users.type = " + '?' + " WHERE users.userName = " + '?';
 		  PreparedStatement preparedStatement = connection.prepareStatement(executeQuery);
 		  preparedStatement.setInt(1, right);
 		  preparedStatement.setString(2, user);
-		  System.out.println(preparedStatement);
 		  preparedStatement.execute();		
 		  connection.close();
 	  }

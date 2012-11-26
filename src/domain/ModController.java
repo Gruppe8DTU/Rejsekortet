@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import persistance.SQL_Connect;
-import presentation.Boundary;
 import presentation.FriendList;
 import presentation.Home;
 import presentation.MessagePopup;
@@ -17,7 +16,6 @@ import data.UserData;
 
 public class ModController {
 	SQL_Connect connect;
-	Boundary bound;
 	UserData user;
 	final ModScreen ms = new ModScreen();
 	PopupController pc;
@@ -28,9 +26,8 @@ public class ModController {
 	protected int currentReport = 1;
 	protected ArrayList<Integer> picIDs;
 
-		public ModController(UserData user, Boundary bound, SQL_Connect connect){
+		public ModController(UserData user, SQL_Connect connect){
 			this.user = user;
-			this.bound = bound;
 			this.connect = connect;
 		}
 		
@@ -63,7 +60,6 @@ public class ModController {
 					break;
 				case 2: 
 					pc.destroy();
-					System.out.println("you pressed exit");
 					System.exit(0); // exit
 					break;
 				case 3: 

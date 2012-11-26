@@ -24,18 +24,15 @@ public class Encrypter {
         key = new SecretKeySpec(tmp.getEncoded(), "AES");
     }
     public String getSalt(){
-    	System.out.println("salt : " + salt);
     	return salt;
     }
     public String getKey(){
-    	System.out.println("key : " + key);
     	return key.toString();
     }
     public static String generateSalt(){
     	Random rnd = new Random(System.currentTimeMillis());
     	byte[] tmpSalt = new byte[SALT_LENGTH];
     	rnd.nextBytes(tmpSalt);
-    	System.out.println("byte arr again : " + tmpSalt);
     	String str = tmpSalt.toString();
     	return str;
     }    	

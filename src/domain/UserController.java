@@ -12,7 +12,6 @@ public class UserController {
 
 	
 	private final Home home = new Home();
-	private Boundary bound;
 	private UserData user;
 	private SQL_Connect connect;
 	private StartController start;
@@ -23,9 +22,8 @@ public class UserController {
 	/*
 	 * initializes 
 	 */
-	public UserController(UserData user, Boundary bound, SQL_Connect connect){
+	public UserController(UserData user, SQL_Connect connect){
 		this.user = user;
-		this.bound = bound;
 		this.connect = connect;
 		getFriends();
 		menu();
@@ -43,7 +41,6 @@ public class UserController {
 				new java.awt.event.ActionListener(){
 					public void actionPerformed(java.awt.event.ActionEvent evt){
 						String userAction = ((javax.swing.JButton)evt.getSource()).getName();
-						System.out.println(userAction);
 						menuAction(userAction);
 					}
 				}
@@ -92,19 +89,14 @@ public class UserController {
 	 */
 	private void redirectToOption() {
 		int type = user.getType(); 
-		System.out.println("your user type : " + type);
 		if (type == 1){
 			new MessagePopup("You dont have access!");
 		} else if (type == 2){
-			home.setVisible(false);
-			ModController mc = new ModController(user, bound, connect);
+			ModController mc = new ModController(user, connect);
 			mc.init();
-			System.out.println("new mod controller initialization complete");
 		} else if (type == 3){
-			home.setVisible(false);
-			AdminController ac = new AdminController(user, bound, connect);
+			AdminController ac = new AdminController(user, connect);
 			ac.init();
-			System.out.println("New admin controller initialization complete");
 		}	
 	}
 	/*
@@ -122,10 +114,7 @@ public class UserController {
 					}
 				});	
 	}
-	
-	
-	
-	
+
 	/*
 	 * Pulls list of friends from DB, saves it in the 2 dimensional friend array
 	 */
@@ -133,16 +122,13 @@ public class UserController {
 		
 		Object[][] friendArray = null;
 		String uName = user.getUserName();
-		System.out.println(uName);
 		try {
 			/* Calls a stored procedure that will return a list of friends as a 2 dimensional array*/
 			friendArray = connect.executeQuery("CALL Create_Friendlist('"+uName+"');");
-			System.out.println("hmmm");
 			/* If the user does not have any friends, stored procedure will not have returned anything and the 2 dimensional array will
 			 * still equal null, and we will stop the method */
 			if (friendArray == null){
-				System.out.println("no friensa");
-				return;
+				return; //TODO
 			}
 			/* Passes the 2 dimensional array to intialize the friends arraylist and binarytree*/
 			parseToArraylist(friendArray);

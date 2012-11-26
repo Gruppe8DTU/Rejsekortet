@@ -4,6 +4,8 @@
  */
 package presentation;
 
+import java.awt.Color;
+
 import domain.StartController;
 import data.UserData;
 
@@ -41,6 +43,15 @@ public class CreateUser extends javax.swing.JFrame {
 	 public String getPass2(){
 		 return jTextField6.getText();
 	 }
+	 public void wrongPass(){
+		 jTextField5.setText("Wrong pass, try again");
+		 jTextField5.setForeground(Color.red);
+		 jTextField6.setText("");
+	 }
+	 public void wrongName(){
+		 jTextField1.setText("Username not available");
+		 jTextField1.setForeground(Color.red);
+	 }
 	 
 
     /**
@@ -76,13 +87,18 @@ public class CreateUser extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("User name");
+
         jLabel2.setText("First Name");
+
         jLabel3.setText("Sur name");
+
         jLabel4.setText("Email");
+
         jLabel5.setText("Password");
+
         jLabel6.setText("Confirm pass");
+
         jButton1.setText("Submit");
-     
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -145,16 +161,6 @@ public class CreateUser extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseReleased
-    }//GEN-LAST:event_jButton1MouseReleased
 
     /**
      * @param args the command line arguments

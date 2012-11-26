@@ -83,7 +83,6 @@ public class ShowDestHandler {
 	 */
 	private void initVisitInfo(int visitID){
 		/* Declaration of the variables*/
-		System.out.println("visitID =" +visitID);
 		String userName = null;
 		String post = null;
 		String destName = null;
@@ -200,7 +199,6 @@ public class ShowDestHandler {
 			/* Creates a 2 dimensional array of destinations that the user has visited*/
 			visitsResult = connect.select("CALL create_Spec_Visits('"+name+"');");
 			if(visitsResult.next()){
-				System.out.println("heeeey");
 				addActionListener(visitsResult);
 			}else
 				new MessagePopup("You have no destinations yet");

@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import data.UserData;
 import presentation.ModScreen;
 import persistance.SQL_Connect;
-import presentation.Boundary;
 import presentation.MessagePopup;
 import presentation.ReportScreen;
 
@@ -19,11 +18,10 @@ public class AdminController extends ModController {
 	protected String body;
 	protected int currentReport = 1;
 	
-	public AdminController(UserData user, Boundary bound, SQL_Connect connect){
-		super (user, bound, connect);
+	public AdminController(UserData user, SQL_Connect connect){
+		super (user, connect);
 	}
 	public void init(){
-		System.out.println("init");
 		ms.setVisible(true);
 		addActionListener();
 	}
@@ -42,7 +40,6 @@ public class AdminController extends ModController {
 		if (isNumeric(userAction))
 			intAction = Integer.parseInt(userAction);
 		pc = new PopupController(connect);	
-		System.out.println("LOL");
 		switch (intAction){
 			case 1: 
 				pc.destroy();
@@ -50,7 +47,6 @@ public class AdminController extends ModController {
 				break;
 			case 2: 
 				pc.destroy();
-				System.out.println("you pressed exit");
 				System.exit(0); // exit
 				break;
 			case 3: 
@@ -110,14 +106,13 @@ public class AdminController extends ModController {
 					public void actionPerformed(ActionEvent evt){
 						int rights = changeRight.getType();
 						String action = ((javax.swing.JButton)evt.getSource()).getName();
-						System.out.println("ACTION : " + action);
-						
 						if(action.equals("0"))
 							changeRight.setVisible(false);
 						if(action.equals("1")){
 							String name = changeRight.getReportText();
 							try {
-								executePrivilege(name, rights);
+								// the radio buttons return value are 0-indexed user rights are not
+								executePrivilege(name, rights+1);
 							} catch (Exception e) {
 								System.out.println("Couldn't execute privileges");
 								e.printStackTrace();
@@ -132,7 +127,6 @@ public class AdminController extends ModController {
 	private boolean executePrivilege(String uName, int right) throws Exception{
 		try {
 			connect.setRights(uName, right);
-			System.out.println("WIN WIN WIN");
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -148,9 +142,6 @@ public class AdminController extends ModController {
 	}
 	protected boolean isNumeric(String str){
 		return super.isNumeric(str);
-	}
-	protected InputStream getPics(){
-		return super.getPics();
 	}
 	protected InputStream convertResultSetToStream(ResultSet picData, InputStream is) throws Exception{
 		return super.convertResultSetToStream(picData, is);

@@ -31,7 +31,6 @@ public class ModScreen extends javax.swing.JFrame {
     	jButton6.setVisible(false);
     }
     public void showUserRights(){
-    	System.out.println("kroko");
     	jButton6.setVisible(true);
     }
  
@@ -71,11 +70,6 @@ public class ModScreen extends javax.swing.JFrame {
 
         jButton5.setText("View reported dests");
         jButton5.setName("5"); // NOI18N
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
         jPanel1.add(jButton5);
 
         jButton6.setText("Change user rights");
@@ -134,10 +128,6 @@ public class ModScreen extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments

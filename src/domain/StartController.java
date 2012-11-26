@@ -4,7 +4,6 @@ import java.sql.SQLException;
 
 import persistance.Encrypter;
 import persistance.SQL_Connect;
-import presentation.Boundary;
 import presentation.Login;
 import presentation.CreateUser;
 import data.UserData;
@@ -15,7 +14,6 @@ public class StartController {
 	private String salt;
 	private int DEFAULT_USER_TYPE = 1;
 	private UserData user;
-	private Boundary bound = new Boundary();
 	private SQL_Connect connect = new SQL_Connect();
 	private CreateUser cu;
 	final Login login = new Login();
@@ -50,40 +48,43 @@ public class StartController {
 						try {
 							createUser();
 						} catch (Exception e) {
-							System.exit(1);
 							e.printStackTrace();
+							System.exit(1);
 						}
 					}
 				}
 		);
 	}
-	public void createUser() throws Exception {
+	public void createUser() {
 		String pass1 = cu.getPass1();
 		String pass2 = cu.getPass2();
-		if ( pass1.equals(pass2) ){
-			String salt = Encrypter.generateSalt();
-			Encrypter crypt;
-			crypt = new Encrypter(pass1, salt);
-			user = new UserData(cu.getUserName(), cu.getFirstName(), cu.getSurName(), cu.getMail(), crypt.getKey().substring(32), DEFAULT_USER_TYPE, salt);
-		} else {
-			System.out.println("passwords are typed incorrectly");
-		}
-		// check username availability
-		if (isNameAvailable(user.getUserName()) ){
-			System.out.println("user name available");
-			// now the actual insertion into db
+		System.out.println("length : " + cu.getUserName().length());
+		// Stop the method if input is too long
+		if (cu.getUserName().length() > 30)
+			return;
+		Encrypter crypt;
+		System.out.println("username : " + cu.getUserName());
+		if (pass1.equals(pass2)  && isNameAvailable(cu.getUserName()) && pass1.length() != 0){
+			System.out.println("isNAme available : " + isNameAvailable(pass1));
 			try {
-				connect.createUser(user);
-			} catch (SQLException e) {
-				System.out.println("User not created, might be connection error");
+				crypt = new Encrypter(pass1, Encrypter.generateSalt());
+				System.out.println("crypt created");
+				user = new UserData(cu.getUserName(), cu.getFirstName(), cu.getSurName(), cu.getMail(), crypt.getKey().substring(32), DEFAULT_USER_TYPE, crypt.getSalt());
+				// Stop method if userdata attributes are too long
+				if (user.checkLengths())
+					connect.createUser(user);
+				else return;
+				redirectToController();
+				cu.setVisible(false);
+			} catch (Exception e) {
+				System.out.println("createUser failed, could be various reasons");
 				e.printStackTrace();
 			}
-		} else {
-			System.out.println("username not availabe or passwords inconsistent");
+		} else if(!pass1.equals(pass2) || pass1.length() == 0){
+			cu.wrongPass();
+		}else{
+			cu.wrongName();
 		}
-		System.out.println("redirecting to controller");
-		redirectToController();
-		cu.setVisible(false);
 	}
 	
 	public void addActionListener(){
@@ -103,7 +104,6 @@ public class StartController {
 		int intAction = Integer.parseInt(userAction);
 		switch(intAction){
 			case 1:
-				System.out.println("get login");	
 				getLogin();
 				break;
 			case 2:
@@ -121,38 +121,6 @@ public class StartController {
 				break;
 		}
 	}
-	/*
-	 * Prombts user for login till he enters correct login info
-	 * if user enters '0' he will be redirected to create a new user
-	 */
-	
-	public void getLogin(){		
-		// for at holde mvc laegges eventet her i controlleren. Dette er login knappen		
-		
-		userName = login.getUserName();
-		System.out.println(userName);
-		password = login.getPass();
-		System.out.println("credentials saved in start controller");
-		// isLoginValid takes care of getting the salt and encrypting
-		if (isLoginValid(userName, password)){
-			System.out.println("login is valid");
-			login.setVisible(false);
-			user = getUser(userName);	
-			redirectToController();
-		} else {
-			login.setText("TRY AGAIN");
-		}
-	}	
-	
-	
-	/*
-	 * redirects the user to the right controller
-	 */
-	public void redirectToController(){
-		System.out.println(user.getType());
-		new UserController(user, bound, connect);
-	}
-	
 	/*
 	 * isNameAvailable tjekker om det userName der er blevet indtastet allerede er i brug.
 	 * Den pr¿ver at hente en r¾kke fra databasen med det username som pr¿ves at oprettes og gemmer dem i det 2 dimensionelle
@@ -174,23 +142,43 @@ public class StartController {
 		}
 		return false;
 	}
+	
+	/*
+	 * Prombts user for login till he enters correct login info
+	 * if user enters '0' he will be redirected to create a new user
+	 */
+	public void getLogin(){		
+		// for at holde mvc laegges eventet her i controlleren. Dette er login knappen		
+		
+		userName = login.getUserName();
+		password = login.getPass();
+		// isLoginValid takes care of getting the salt and encrypting
+		if (isLoginValid(userName, password)){
+			login.setVisible(false);
+			user = getUser(userName);	
+			redirectToController();
+		} else {
+			login.setText("TRY AGAIN");
+		}
+	}	
+	
+	
+	/*
+	 * redirects the user to the right controller
+	 */
+	public void redirectToController(){
+		new UserController(user, connect);
+	}
+	
+
 	/*
 	 * Calls checkLogin on SQL_connect and that returns true if password and username mathces
 	 */
 	public boolean isLoginValid(String userName, String password){
-		System.out.println("encrypting password");
 		Encrypter crypt;
-//		String salt;
-//		try {
-//			salt = connect.getSalt(userName);
-//			System.out.println("salt in isLoginValid : " + salt.toString());
-//		} catch (Exception e){
-//			System.out.println("Wrong user name " + e);
-//		}
 		try {
 			crypt = new Encrypter(password, connect.getSalt(userName));
 			encryptedPass = crypt.getKey().substring(32);
-			System.out.println("enc pass in isLoginValid : " + encryptedPass);
 		} catch (Exception e) {
 			System.out.println("Error getting salt while creating encrypter");
 			e.printStackTrace();
@@ -201,7 +189,6 @@ public class StartController {
 		boolean accepted = false; 
 		try {
 			if (connect.checkLogin(userName, encryptedPass)==true){
-				System.out.println("login succesfull");
 				accepted = true;
 			} else {
 				System.out.println("Login denied");
@@ -219,7 +206,6 @@ public class StartController {
 	private UserData getUser(String userName){
 		UserData user;
 		try {
-			System.out.println(userName);
 			Object[][] res = connect.executeQuery("select * from users where userName = '"+ userName+"'");
 			Object[] userRow = res[0];
 			userName = (String) userRow[0];
@@ -237,8 +223,6 @@ public class StartController {
 			e.printStackTrace();
 			return null;
 		}
-	}
-	
-	
+	}	
 }
 
