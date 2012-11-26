@@ -240,7 +240,8 @@ public class SQL_Connect {
 		  preparedStatement.setInt(1, right);
 		  preparedStatement.setString(2, user);
 		  System.out.println(preparedStatement);
-		  preparedStatement.execute();		  		  
+		  preparedStatement.execute();		
+		  connection.close();
 	  }
 }
 	  
