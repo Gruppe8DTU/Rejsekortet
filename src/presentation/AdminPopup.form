@@ -164,7 +164,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButton6">
           <Properties>
-            <Property name="text" type="java.lang.String" value="jButton6"/>
+            <Property name="text" type="java.lang.String" value="Delete user"/>
             <Property name="name" type="java.lang.String" value="6" noResource="true"/>
           </Properties>
         </Component>

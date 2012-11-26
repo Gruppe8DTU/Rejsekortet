@@ -125,7 +125,7 @@ public class AdminPopup extends javax.swing.JFrame {
         jButton5.setText("jButton5");
         jButton5.setName("5"); // NOI18N
 
-        jButton6.setText("jButton6");
+        jButton6.setText("Delete user");
         jButton6.setName("6"); // NOI18N
 
         jLabel1.setText("jLabel1");
