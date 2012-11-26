@@ -25,6 +25,7 @@ public class ReportScreen extends JFrame {
 	private JRadioButton rdbtnPic;
 	private ButtonGroup group;
 	private int type;
+	private JLabel lblNewLabel;
 	
 
 	public ReportScreen() {
@@ -34,7 +35,7 @@ public class ReportScreen extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Reason of report");
+		lblNewLabel = new JLabel("Reason of report");
 		lblNewLabel.setBounds(6, 133, 438, 25);
 		contentPane.add(lblNewLabel);
 		
@@ -88,7 +89,15 @@ public class ReportScreen extends JFrame {
 		cancel.addActionListener(listener);
 		submit.addActionListener(listener);
 	}
-	
+	public void setRadioButtonText(String str1, String str2, String str3){
+		rdbtnArticle.setText(str1);
+		rdbtnDest.setText(str2);
+		rdbtnPic.setText(str3);
+	}
+	public void setLabelText(String str){
+		lblNewLabel.setText(str);
+	}
+
 	private class RdbtnListener implements ActionListener{
 		
 		public void actionPerformed(ActionEvent e){

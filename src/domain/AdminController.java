@@ -1,5 +1,7 @@
 package domain;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.ResultSet;
@@ -9,6 +11,7 @@ import data.UserData;
 import presentation.ModScreen;
 import persistance.SQL_Connect;
 import presentation.Boundary;
+import presentation.ReportScreen;
 
 public class AdminController extends ModController {
 	final ModScreen ms = new ModScreen();
@@ -77,8 +80,8 @@ public class AdminController extends ModController {
 				String user = "";
 				int type = 1;
 				try {
-					changeUserRights(user, type);
-				} catch (SQLException e) {
+					changeUserRights(user);
+				} catch (Exception e) {
 					System.out.println("Couldn't change user rigths " + e);
 				e.printStackTrace();
 			}
@@ -95,10 +98,46 @@ public class AdminController extends ModController {
 		super.viewReportedDestinations();
 	}
 	// Method that is admin specific and doesn't exist in mod controller
-	private void changeUserRights(String uName, int type) throws SQLException{
-		if (type == 1 || type == 2 || type ==3)
-			connect.executeUpdate("UPDATE users SET users.type = " + type + " WHERE users.userName = " + uName);
-	}	
+	private void changeUserRights(String prompt){
+		final ReportScreen changeRight = new ReportScreen();
+		changeRight.setRadioButtonText("User", "Moderator", "Admin");
+		changeRight.setLabelText("Type the name of the user which rights you want to change");
+		changeRight.setVisible(true);
+		changeRight.addButtonListeners(
+				new ActionListener(){
+					public void actionPerformed(ActionEvent evt){
+						int rights = changeRight.getType();
+						String action = ((javax.swing.JButton)evt.getSource()).getName();
+						System.out.println("ACTION : " + action);
+						
+						if(action.equals("0"))
+							changeRight.setVisible(false);
+						if(action.equals("1")){
+							String name = changeRight.getReportText();
+							try {
+								executePrivilege(name, rights);
+							} catch (Exception e) {
+								System.out.println("Couldn't execute privileges");
+								e.printStackTrace();
+							}
+							changeRight.setVisible(false);
+						}
+						
+					}
+				}
+		);
+	}
+	private boolean executePrivilege(String uName, int right) throws Exception{
+		try {
+			connect.setRights(uName, right);
+			System.out.println("WIN WIN WIN");
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	// Warning, deleting a user also deletes the users visits and the reports regarding the user
 	public void deleteUser(String uName) throws SQLException {
 		connect.executeUpdate("DELETE " + uName + " FROM users");

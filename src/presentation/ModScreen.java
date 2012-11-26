@@ -24,7 +24,8 @@ public class ModScreen extends javax.swing.JFrame {
         jButton2.addActionListener(listener); // logout button
         jButton3.addActionListener(listener); // view reported posts
         jButton4.addActionListener(listener); // view reported pics
-        jButton5.addActionListener(listener); // Change user rights
+        jButton5.addActionListener(listener); // view reported destinations
+        jButton6.addActionListener(listener); // change user rights
       }
     public void hideUserRights(){
     	jButton6.setVisible(false);

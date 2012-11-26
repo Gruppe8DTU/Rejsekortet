@@ -64,7 +64,7 @@ public class StartController {
 			String salt = Encrypter.generateSalt();
 			Encrypter crypt;
 			crypt = new Encrypter(pass1, salt);
-			user = new UserData(cu.getUserName(), cu.getFirstName(), cu.getSurName(), cu.getMail(), crypt.getKey(), DEFAULT_USER_TYPE, salt);
+			user = new UserData(cu.getUserName(), cu.getFirstName(), cu.getSurName(), cu.getMail(), crypt.getKey().substring(32), DEFAULT_USER_TYPE, salt);
 		} else {
 			System.out.println("passwords are typed incorrectly");
 		}
