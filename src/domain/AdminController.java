@@ -25,15 +25,21 @@ public class AdminController extends ModController {
 		addActionListener();
 	}
 	public void addActionListener(){
-		System.out.println("add action listener");
-		super.addActionListener();
+		ms.addButtonActionListener1(
+				new java.awt.event.ActionListener(){
+					public void actionPerformed(java.awt.event.ActionEvent evt){
+						userAction = ((javax.swing.JButton)evt.getSource()).getName();
+						menuAction();
+					}
+				}
+		);
 	}
 	protected void menuAction(){
 		int intAction = 0;
 		if (isNumeric(userAction))
 			intAction = Integer.parseInt(userAction);
 		pc = new PopupController(connect);	
-		pc.hideChangeUserRigths();
+		System.out.println("LOL");
 		switch (intAction){
 			case 1: 
 				pc.destroy();

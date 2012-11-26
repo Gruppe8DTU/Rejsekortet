@@ -24,10 +24,12 @@ public class Crypto {
 	    private int keyStrength = 128;
 	    private SecretKey key;
 	    private byte[] iv;
+	    
+	    PBEKeySpec spec;
 
 	    public Crypto(String passPhrase) throws Exception {
 	        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-	        KeySpec spec = new PBEKeySpec(passPhrase.toCharArray(), salt, iterationCount, keyStrength);
+	        spec = new PBEKeySpec(passPhrase.toCharArray(), salt, iterationCount, keyStrength);
 	        System.out.println("spec = " + spec);
 	        SecretKey tmp = factory.generateSecret(spec);
 	        System.out.println(tmp);
@@ -37,7 +39,15 @@ public class Crypto {
 	        dcipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 	        System.out.println(dcipher.getIV());
 	    }
-	    
+	    public String getSpec(){
+	    	return spec.getPassword().toString();
+	    }
+	    public String getSecretKey(){
+	    	return key.toString();
+	    }
+	    public String encoded(){
+	    	return key.getEncoded().toString();
+	    }
 
 	    public String encrypt(String data) throws Exception {
 	        dcipher.init(Cipher.ENCRYPT_MODE, key);

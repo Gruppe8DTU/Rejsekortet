@@ -7,14 +7,16 @@ public class UserData {
 	private int type;
 	public ArrayList<String> friendArrayList = new ArrayList<String>();
 	public BinaryTree friends = new BinaryTree();
+	private byte[] salt = null;
 
-	public UserData(String uName, String fName, String lName, String eMail, String password, int type){
+	public UserData(String uName, String fName, String lName, String eMail, String password, int type, byte[] salt){
 		this.uName = uName;
 		this.fName = fName;
 		this.lName = lName;
 		this.eMail = eMail;
 		this.password = password;
 		this.type = type;
+		this.salt = salt;
 	}
 	public String getUserName(){
 		return uName;
@@ -39,4 +41,12 @@ public class UserData {
 	public int getType(){
 		return type;
 	}
+	
+	public void setSalt(byte[] salt){
+		this.salt = salt;
+	}
+	public byte[] getSalt(){
+		return salt;
+	}
+	
 }

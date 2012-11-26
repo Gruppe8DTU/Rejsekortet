@@ -116,7 +116,7 @@ public class SQL_Connect {
 	      //=== connect
 	      Class.forName(driver);
 	      connection = DriverManager.getConnection(database_url, username, password);                   
-	      String insertSQL = "insert into users values(?,?,?,?,?,?)";
+	      String insertSQL = "insert into users values(?,?,?,?,?,?,?)";
 	      
 	      //=== execute statement
 	      preparedStatement = connection.prepareStatement(insertSQL); // create statement object
@@ -127,6 +127,7 @@ public class SQL_Connect {
    	   	  preparedStatement.setString(4,user.getEmail());
    	   	  preparedStatement.setString(5, user.getPassword());
    	   	  preparedStatement.setInt(6,user.getType());
+   	   	  preparedStatement.setBytes(7, user.getSalt());
 	      rows = preparedStatement.executeUpdate();                     
 	          
 	    }
@@ -146,8 +147,7 @@ public class SQL_Connect {
 	   * Checks if the username and password matches
 	   */
 	  public boolean checkLogin(String userName, String password1) throws SQLException
-	  {
-		  
+	  {  
 	    PreparedStatement preparedStatement	= null;
 	    Connection connection 	= null;
 	    ResultSet resultSet = null;
@@ -206,13 +206,30 @@ public class SQL_Connect {
 		    connect.close();	
 		}
 	  }
-	  
 	  public ResultSet select(String query) throws Exception{
 		  Class.forName(driver);
 		  Connection connect = DriverManager.getConnection(database_url, username, password);
 		  PreparedStatement stmt = connect.prepareStatement(query);
 		  ResultSet result = stmt.executeQuery();
+		  connect.close();
 		  return result;
+	  }
+	  public byte[] getSalt(String user) throws Exception{
+		  byte[] salt = null;
+		  Connection connection = DriverManager.getConnection(database_url, username, password);
+		  String executeQuery = "SELECT salt FROM users WHERE users.userName = " + '?';
+		  PreparedStatement preparedStatement = connection.prepareStatement(executeQuery);
+		  preparedStatement.setString(1,user);
+		  ResultSet resultSet = preparedStatement.executeQuery();
+		  try {
+			  if (resultSet.next()){
+				  salt = resultSet.getBytes(0);
+			  }
+		  } catch (Exception e) {
+			  e.printStackTrace();
+			  System.exit(1);
+		  }
+		  return salt;
 	  }
 }
 	  
