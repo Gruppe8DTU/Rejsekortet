@@ -63,8 +63,7 @@ public class UserController {
 				new ShowDestHandler(friendArrayList, connect, user);
 				break;
 			case 4: 
-				//new ShowDestHandler(connect, user.getUserName());
-				//specificDest(user.getUserName());
+				new ShowDestHandler(connect, user.getUserName());
 				break;
 			case 5: 
 				getUsernameAndAdd("Enter the username of \nthe person you want to add");
@@ -72,7 +71,6 @@ public class UserController {
 			case 6: 
 				getUsernameAndSeeDest("Enter the Username that you want\nto browse destinations for");
 				break;
-			// redirect to option screen
 			case 7: 
 				redirectToOption();
 				break;

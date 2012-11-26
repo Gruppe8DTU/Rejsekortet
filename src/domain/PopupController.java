@@ -3,16 +3,19 @@ package domain;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import persistance.SQL_Connect;
 import presentation.AdminPopup;
+import presentation.MessagePopup;
 
 public class PopupController {
 	final AdminPopup ap = new AdminPopup();
 	SQL_Connect connect;
 	private int intAction;
 	private String userAction;
-	Object[][] data;
+	//Object[][] data;
+	ResultSet data;
 	Object[] row;
 	private int currentReport = 0;
 	private int TOTAL_REPORTS;
@@ -23,22 +26,57 @@ public class PopupController {
 		this.connect = connect;
 		ap.setVisible(false);
 	}
-	public void init(Object[][] res){
+	
+//	public void init(Object[][] res){
+//		data = res;
+//		try{
+//			row = data[0];
+//		}catch(ArrayIndexOutOfBoundsException e){
+//			new MessagePopup("no reports");
+//			return;
+//		}
+//
+//		TOTAL_REPORTS = data.length;
+//		// The tables are a bit different when querying for destinations
+//		try {
+//			reportType = Integer.parseInt(row[5].toString());
+//		} catch (Exception e){
+//			reportType = 3;
+//		}
+//		ap.setVisible(true);
+//		showReport();
+//		addActionListener();
+//	}
+	
+	public void init(ResultSet res){
 		data = res;
-		row = data[0];
+//		try{
+//			//row = data[0];
+//		}catch(ArrayIndexOutOfBoundsException e){
+//			new MessagePopup("no reports");
+//			return;
+//		}
 
-		TOTAL_REPORTS = data.length;
+//		TOTAL_REPORTS = data.length;
 		// The tables are a bit different when querying for destinations
+//		try {
+//			reportType = Integer.parseInt(row[5].toString());
+//		} catch (Exception e){
+//			reportType = 3;
+//		}
 		try {
-			reportType = Integer.parseInt(row[5].toString());
-		} catch (Exception e){
-			reportType = 3;
+			reportType = data.getInt(1);
+			ap.setVisible(true);
+			showReport();
+			addActionListener();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		ap.setVisible(true);
-		showReport();
-		addActionListener();
+		
 	}
-	private void showReport(){
+	
+	
+	private void showReport() throws SQLException{
 		ap.setLabel("Report " + (currentReport+1) + " of " + TOTAL_REPORTS + " reports");
 		ap.setText(reportText());
 	}
@@ -50,28 +88,31 @@ public class PopupController {
 		System.out.println("woooooop");
 		ap.showChangeUserRigths();
 	}
-	private String reportText(){
-		String reportedUser = "";
+	private String reportText() throws SQLException{
+		String reportedUser = null;
 		String body;
 		String footer;
-		String msg = "";
+		String msg = null;
 		// if 1 or 2 the data has same format for reported texts as pics
-		if (reportType == 1 || reportType == 2){
-				reportedUser = row[4].toString();
-				String header =	 "Reported " + typeToString(reportType) + " by user : " + reportedUser + "\n";
+		if (reportType == 1){
+				reportedUser = row[3].toString();
+				String header =	 "Reported text by user : " + reportedUser + "\n";
 				body =	 		 "Reported source :\n" + row[1].toString() + "\n" +
-								 "Reason : " + row[6].toString() + "\n";
-				footer =		 "Reported by : " + row[3].toString() + "\n"; 
+								 "Reason : " + row[4].toString() + "\n";
+				footer =		 "Reported by : " + row[5].toString() + "\n"; 
 				msg = header + body + footer;
-		} else if (reportType == 3) {
-				body = 			"Destination : " + row[1].toString() + "\n" +
-								"In Street : " + row[2].toString() + ", zip : " + row[4].toString() + ", country : " + row[5].toString() + "\n" +
-								"Reason : \n" + row[10].toString() + "\n";
-				footer  = 		"Reported by : " + row[7].toString();
+		} else if (reportType == 2) {
+				reportedUser = data.getString(4);
+				String header =	 "Reported picture by user : " + reportedUser + "\n";
+				body =	 		 "Reason : " + data.getString(5) + "\n";
+				footer =		 "Reported by : " + data.getString(6) + "\n"; 
+				msg = header + body + footer;
+		} else if (reportType == 3){
+				body = 			"Destination : " + row[0].toString() + "\n" +
+								"In Street : " + row[1].toString() + ", zip : " + row[4].toString() + ", country : " + row[5].toString() + "\n" +
+								"Reason : \n" + row[2].toString() + "\n";
+				footer  = 		"Reported by : " + row[3].toString();
 				msg = body + footer;
-		} else if (reportType == 4){
-				//TODO
-				msg = "hej";
 		}
 		return msg;
 	}
@@ -121,74 +162,105 @@ public class PopupController {
 	}	
 	private void nextReport(){
 		System.out.println("pressing next report");
-		// overflow condition
-		if (currentReport+2 > data.length){
-			System.out.println("condition : " + currentReport);
-			System.out.println(data.length);
-			row = data[0];
-			currentReport = 0;
+		try {
+			if(data.next())
+				currentReport++;
+			else
+				data.first();
+			showReport();
+		} catch (SQLException e) {
 		}
-		// normal condition
-		else if (currentReport+2 <= data.length){
-			System.out.println("Condition : " + currentReport);
-			System.out.println(data.length);
-			row = data[currentReport + 1];
-			currentReport++;
-		}
-		showReport();
+//		// overflow condition
+//		if (currentReport+2 > data.length){
+//			System.out.println("condition : " + currentReport);
+//			System.out.println(data.length);
+//			row = data[0];
+//			currentReport = 0;
+//		}
+//		// normal condition
+//		else if (currentReport+2 <= data.length){
+//			System.out.println("Condition : " + currentReport);
+//			System.out.println(data.length);
+//			row = data[currentReport + 1];
+//			currentReport++;
+//		}
+//		showReport();
 	}
 	private void previousReport(){
 		System.out.println("pressing previous report");
 		// underflow condition
-		if (currentReport-1 < 0){
-			row = data[data.length-1];
-			currentReport = data.length;
+		try {
+			if(data.previous()){
+				currentReport--;
+			}else
+				data.last();
+			showReport();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		// normal condition
-		else if (currentReport-1 >= 0)
-			row = data[currentReport - 1];
-		currentReport--;
-		showReport();
+			
+//		if (currentReport-1 < 0){
+//			row = data[data.length-1];
+//			currentReport = data.length;
+//		}
+//		// normal condition
+//		else if (currentReport-1 >= 0)
+//			row = data[currentReport - 1];
+//		currentReport--;
 	}
 	
-	public void setData(Object[][] res){
-		data = res;
-	}
-	private String getReportNumber(){
-
-		String str = "Report no " + currentReport + " of " + data.length + "\n";
-		return str;
-	}
+//	public void setData(Object[][] res){
+//		data = res;
+//	}
+	
+	
 	// this toString method is a little hacky and sets the button texts according to report type
-	private String typeToString(int repType){
-		String str = "";
-		if (repType != 2)
-			ap.hidePanel();
-		switch(repType){
-		case 1: 
-			str = "text";
-			setButtons(str);
-			break;
-		case 2: 
-			str = "picture";
-			setButtons(str);
-			break;
-		case 3: 
-			str = "destination";
-			setButtons(str);
-			break;
-		case 4: 
-			str = "user";
-			setButtons(str);
-			break;
-		}
-		return str;
-	}
+//	private String typeToString(int repType){
+//		String str = "";
+//		if (repType != 2)
+//			ap.hidePanel();
+//		switch(repType){
+//		case 1: 
+//			str = "text";
+//			setButtons(str);
+//			break;
+//		case 2: 
+//			str = "picture";
+//			setButtons(str);
+//			break;
+//		case 3: 
+//			str = "destination";
+//			setButtons(str);
+//			break;
+//		case 4: 
+//			str = "user";
+//			setButtons(str);
+//			break;
+//		}
+//		return str;
+//	}
 	private void setButtons(String str1){
 		ap.setButton1("delete " + str1);
 		ap.setButton2("delete user");
 	}
 	public void setPictures(InputStream is) throws IOException {
 		ap.setPicture(is);
+	}
+	
+	private int getSetSize(){
+		int curRow;
+		int size = 0;
+		try {
+			curRow = data.getRow();
+		
+			data.last();
+			size = data.getRow();
+			data.absolute(curRow);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return size;
+		
 	}
 }

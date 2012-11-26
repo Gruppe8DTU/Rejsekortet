@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import persistance.SQL_Connect;
 import presentation.Boundary;
@@ -20,11 +21,12 @@ public class ModController {
 	final ModScreen ms = new ModScreen();
 	PopupController pc;
 	Object[][] res = null;
+	ResultSet ressi = null;
 	ResultSet picData;
 	protected String userAction;
 	protected String body;
 	protected int currentReport = 1;
-	protected int[] picIDs;
+	protected ArrayList<Integer> picIDs;
 
 		public ModController(UserData user, Boundary bound, SQL_Connect connect){
 			this.user = user;
@@ -71,10 +73,10 @@ public class ModController {
 					break;
 				case 4:
 					viewReportedPics();
-					pc.init(res);
-					picIDs = new int[res.length];
+					pc.init(ressi);
+					picIDs = new ArrayList();
 					for (int i = 0; i < res.length; i++){
-						picIDs[i] = Integer.parseInt( res[i][9].toString() );
+						picIDs.add( Integer.parseInt( res[i][1].toString() ) );
 					}
 				try {
 					pc.setPictures(getPics());
@@ -92,22 +94,44 @@ public class ModController {
 		
 		protected void viewReportedPosts(){
 			try {
-				res = connect.executeQuery("SELECT * FROM text, reports WHERE text.text_Id = reports.textID");
+				res = connect.executeQuery("SELECT reports.contentType, text.source, visits.visitID, visits.username, reports.reason, reports.reportedBy " +
+										   "FROM text, reports, visits " +
+										   "WHERE reports.visitID = visits.visitID " +
+										   "AND visits.textID = text.text_ID");
 			} catch (Exception e) {
 				System.out.println("connection error");
 				e.printStackTrace();
 			}
 		}
+		
 		protected void viewReportedPics(){
 			try {
-				res = connect.executeQuery("SELECT * FROM pics, reports WHERE pics.picID = reports.picID");
+				ressi = connect.select("SELECT reports.contentType, pics.picID, visits.visitID, visits.username, reports.reason, reports.reportedBy " +
+										   "FROM pics, reports, visits " +
+										   "WHERE reports.visitID = visits.visitID " +
+						   				   "AND visits.picID = pics.picID");
 			} catch (Exception e) {
 				System.out.println("connection error " + e);
 			}
 		}
+		
+		
+//		protected void viewReportedPics(){
+//			try {
+//				res = connect.executeQuery("SELECT reports.contentType, pics.picID, visits.visitID, visits.username, reports.reason, reports.reportedBy " +
+//										   "FROM pics, reports, visits " +
+//										   "WHERE reports.visitID = visits.visitID " +
+//						   				   "AND visits.picID = pics.picID");
+//			} catch (Exception e) {
+//				System.out.println("connection error " + e);
+//			}
+//		}
 		protected void viewReportedDestinations(){
 			try {
-				res = connect.executeQuery("SELECT * FROM destinations, reports WHERE destinations.destID = reports.destID");
+				res = connect.executeQuery("SELECT destinations.name, destinations.street, report.reason, reports.reportedBy" +
+										   "FROM destinations, reports, visits" +
+										   "WHERE destinations.destID = visits.destID" +
+										   "AND reports.visitID = visits.visitID");
 			} catch (Exception e){
 				System.out.println("connection error " + e);
 			}
@@ -125,10 +149,10 @@ public class ModController {
 			InputStream is = null;
 			String str = " OR picID = ";
 			String query = "";
-			for (int i = 0; i < picIDs.length; i++){
-				int id = picIDs[i];
+			for (int i = 0; i < picIDs.size(); i++){
+				int id = picIDs.get(i);
 				query += id;
-				if ( picIDs[i] != picIDs[picIDs.length-1])
+				if ( id != picIDs.get( picIDs.size() ) )
 					query += str;
 			}
 			System.out.println("Appended pic query = " + query);
