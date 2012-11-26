@@ -168,8 +168,10 @@ public class ShowDestHandler {
 						userAction = ((javax.swing.JButton)evt.getSource()).getName();
 						if(userAction.equals("0"))
 							rs.setVisible(false);
-						if(userAction.equals("1"))
+						if(userAction.equals("1")){
 							submitReport(rs);
+							rs.setVisible(false);
+						}
 					}
 				});	
 	}
@@ -180,14 +182,12 @@ public class ShowDestHandler {
 	private void submitReport(ReportScreen rs){
 		String reportText = rs.getReportText();
 		int type = rs.getType();
-		System.out.println(reportText+" heeey type: "+type+" heeey visitID = " +visitID);
-//		try {
-//			connect.executeUpdate("INSERT INTO reports(visitID, reportedBy, contentType, reason)" +
-//								  "VALUES("+visitID+",'"+user.getUserName()+"',"+type+",'"+reportText+"');");
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-		// insert into report values reporttext, username, visitid
+		try{
+			connect.executeUpdate("INSERT INTO reports(visitID, reportedBy, contentType, reason)" +
+								  "VALUES("+visitID+",'"+user.getUserName()+"',"+type+",'"+reportText+"');");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -203,8 +203,7 @@ public class ShowDestHandler {
 				System.out.println("heeeey");
 				addActionListener(visitsResult);
 			}else
-				pop = new MessagePopup("You have no destinations yet");
-				pop.setVisible(true);
+				new MessagePopup("You have no destinations yet");
 		}catch (Exception e) {
 			e.printStackTrace();
 		}

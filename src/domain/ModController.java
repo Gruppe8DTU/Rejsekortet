@@ -10,6 +10,7 @@ import persistance.SQL_Connect;
 import presentation.Boundary;
 import presentation.FriendList;
 import presentation.Home;
+import presentation.MessagePopup;
 import presentation.ModScreen;
 import presentation.AdminPopup;
 import data.UserData;
@@ -20,8 +21,7 @@ public class ModController {
 	UserData user;
 	final ModScreen ms = new ModScreen();
 	PopupController pc;
-	Object[][] res = null;
-	ResultSet ressi = null;
+	ResultSet res = null;
 	ResultSet picData;
 	protected String userAction;
 	protected String body;
@@ -55,8 +55,7 @@ public class ModController {
 			int intAction = 0;
 			if (isNumeric(userAction))
 				intAction = Integer.parseInt(userAction);
-			pc = new PopupController(connect);	
-			pc.hideChangeUserRigths();
+			pc = new PopupController(connect);
 			switch (intAction){
 				case 1: 
 					pc.destroy();
@@ -69,35 +68,39 @@ public class ModController {
 					break;
 				case 3: 
 					viewReportedPosts();
-					pc.init(res);
+					if(isEmpty()){
+						new MessagePopup("There is no reports");
+					}else{
+						pc.init(res, false);
+					}
 					break;
 				case 4:
 					viewReportedPics();
-					pc.init(ressi);
-					picIDs = new ArrayList();
-					for (int i = 0; i < res.length; i++){
-						picIDs.add( Integer.parseInt( res[i][1].toString() ) );
+					if(isEmpty()){
+						new MessagePopup("There is no reports");
+					}else{
+					pc.init(res, true);
 					}
-				try {
-					pc.setPictures(getPics());
-				} catch (IOException e) {
-					System.out.println("IOException while trying to set picture " + e);
-					e.printStackTrace();
-				}
 					break;
 				case 5: 
 					viewReportedDestinations();
-					pc.init(res);
+					if(isEmpty()){
+						new MessagePopup("There is no reports");
+					}else{
+					pc.init(res, false);
+					}
 					break;
 			}
 		}
 		
 		protected void viewReportedPosts(){
 			try {
-				res = connect.executeQuery("SELECT reports.contentType, text.source, visits.visitID, visits.username, reports.reason, reports.reportedBy " +
+				res = connect.select("SELECT reports.contentType, text.source, visits.visitID, visits.username, reports.reason, reports.reportedBy " +
 										   "FROM text, reports, visits " +
 										   "WHERE reports.visitID = visits.visitID " +
-										   "AND visits.textID = text.text_ID");
+										   "AND visits.textID = text.text_ID " +
+										   "AND contentType = 1");
+				
 			} catch (Exception e) {
 				System.out.println("connection error");
 				e.printStackTrace();
@@ -106,32 +109,25 @@ public class ModController {
 		
 		protected void viewReportedPics(){
 			try {
-				ressi = connect.select("SELECT reports.contentType, pics.picID, visits.visitID, visits.username, reports.reason, reports.reportedBy " +
+				res = connect.select("SELECT reports.contentType, pics.picSource, visits.visitID, visits.username, reports.reason, reports.reportedBy " +
 										   "FROM pics, reports, visits " +
 										   "WHERE reports.visitID = visits.visitID " +
-						   				   "AND visits.picID = pics.picID");
+						   				   "AND visits.picID = pics.picID " +
+						   				   "AND contentType = 2");
 			} catch (Exception e) {
 				System.out.println("connection error " + e);
 			}
 		}
 		
 		
-//		protected void viewReportedPics(){
-//			try {
-//				res = connect.executeQuery("SELECT reports.contentType, pics.picID, visits.visitID, visits.username, reports.reason, reports.reportedBy " +
-//										   "FROM pics, reports, visits " +
-//										   "WHERE reports.visitID = visits.visitID " +
-//						   				   "AND visits.picID = pics.picID");
-//			} catch (Exception e) {
-//				System.out.println("connection error " + e);
-//			}
-//		}
+
 		protected void viewReportedDestinations(){
 			try {
-				res = connect.executeQuery("SELECT destinations.name, destinations.street, report.reason, reports.reportedBy" +
-										   "FROM destinations, reports, visits" +
-										   "WHERE destinations.destID = visits.destID" +
-										   "AND reports.visitID = visits.visitID");
+				res = connect.select("SELECT reports.contentType, destinations.name, destinations.street, destinations.city, destinations.country, reports.reason, reports.reportedBy " +
+										   "FROM destinations, reports, visits " +
+										   "WHERE destinations.destID = visits.destID " +
+										   "AND reports.visitID = visits.visitID " +
+										   "AND contentType = 3");
 			} catch (Exception e){
 				System.out.println("connection error " + e);
 			}
@@ -145,37 +141,24 @@ public class ModController {
 			}
 			return true;
 		}
-		protected InputStream getPics(){
-			InputStream is = null;
-			String str = " OR picID = ";
-			String query = "";
-			for (int i = 0; i < picIDs.size(); i++){
-				int id = picIDs.get(i);
-				query += id;
-				if ( id != picIDs.get( picIDs.size() ) )
-					query += str;
-			}
-			System.out.println("Appended pic query = " + query);
-			try {
-				picData = connect.select("SELECT * FROM pics WHERE picID = " + query);
-				System.out.println("Select query succesfull");
-			} catch (Exception e) {
-				System.out.println("Error while trying to get pics " + e);
-			}
-			try {
-				is = convertResultSetToStream(picData, is);
-			} catch (Exception e) {
-				System.out.println("Error converting pic result set to stream " + e);
-				e.printStackTrace();
-			}
-			return is;
-		}
+		
 		
 		protected InputStream convertResultSetToStream(ResultSet picData, InputStream is) throws Exception{
 			if(picData.next())
 				/* Saves the picture as a inputstream */
 				is =  picData.getBinaryStream(2);
 			return is;
+		}
+		
+		protected boolean isEmpty(){
+			try{
+				if(res.first()){
+					return false;
+				}else
+					return true;
+			}catch(Exception e){
+				return true;
+			}
 		}
 		
 }
