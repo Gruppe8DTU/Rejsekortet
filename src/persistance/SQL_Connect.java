@@ -127,7 +127,7 @@ public class SQL_Connect {
    	   	  preparedStatement.setString(4,user.getEmail());
    	   	  preparedStatement.setString(5, user.getPassword());
    	   	  preparedStatement.setInt(6,user.getType());
-   	   	  preparedStatement.setBytes(7, user.getSalt());
+   	   	  preparedStatement.setString(7, user.getSalt());
 	      rows = preparedStatement.executeUpdate();                     
 	          
 	    }
@@ -214,8 +214,8 @@ public class SQL_Connect {
 		  connect.close();
 		  return result;
 	  }
-	  public byte[] getSalt(String user) throws Exception{
-		  byte[] salt = null;
+	  public String getSalt(String user) throws Exception{
+		  String salt = null;
 		  Connection connection = DriverManager.getConnection(database_url, username, password);
 		  String executeQuery = "SELECT salt FROM users WHERE users.userName = " + '?';
 		  PreparedStatement preparedStatement = connection.prepareStatement(executeQuery);
@@ -223,7 +223,7 @@ public class SQL_Connect {
 		  ResultSet resultSet = preparedStatement.executeQuery();
 		  try {
 			  if (resultSet.next()){
-				  salt = resultSet.getBytes(0);
+				  salt = resultSet.getString(1);
 			  }
 		  } catch (Exception e) {
 			  e.printStackTrace();

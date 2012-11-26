@@ -3,13 +3,12 @@ package data;
 import java.util.ArrayList;
 
 public class UserData {
-	private String uName, fName, lName, eMail, password;
+	private String uName, fName, lName, eMail, password, salt;
 	private int type;
 	public ArrayList<String> friendArrayList = new ArrayList<String>();
 	public BinaryTree friends = new BinaryTree();
-	private byte[] salt = null;
 
-	public UserData(String uName, String fName, String lName, String eMail, String password, int type, byte[] salt){
+	public UserData(String uName, String fName, String lName, String eMail, String password, int type, String salt){
 		this.uName = uName;
 		this.fName = fName;
 		this.lName = lName;
@@ -42,10 +41,10 @@ public class UserData {
 		return type;
 	}
 	
-	public void setSalt(byte[] salt){
+	public void setSalt(String salt){
 		this.salt = salt;
 	}
-	public byte[] getSalt(){
+	public String getSalt(){
 		return salt;
 	}
 	

@@ -2,7 +2,6 @@ package domain;
 
 import java.sql.SQLException;
 
-import persistance.Crypto;
 import persistance.Encrypter;
 import persistance.SQL_Connect;
 import presentation.Boundary;
@@ -13,7 +12,7 @@ import data.UserData;
 
 public class StartController {
 	private String userName, firstName, lastName, eMail, password, encryptedPass;
-	private byte[] salt;
+	private String salt;
 	private int DEFAULT_USER_TYPE = 1;
 	private UserData user;
 	private Boundary bound = new Boundary();
@@ -62,7 +61,7 @@ public class StartController {
 		String pass1 = cu.getPass1();
 		String pass2 = cu.getPass2();
 		if ( pass1.equals(pass2) ){
-			byte[] salt = Encrypter.generateSalt();
+			String salt = Encrypter.generateSalt();
 			Encrypter crypt;
 			crypt = new Encrypter(pass1, salt);
 			user = new UserData(cu.getUserName(), cu.getFirstName(), cu.getSurName(), cu.getMail(), crypt.getKey(), DEFAULT_USER_TYPE, salt);
@@ -181,16 +180,24 @@ public class StartController {
 	public boolean isLoginValid(String userName, String password){
 		System.out.println("encrypting password");
 		Encrypter crypt;
+//		String salt;
+//		try {
+//			salt = connect.getSalt(userName);
+//			System.out.println("salt in isLoginValid : " + salt.toString());
+//		} catch (Exception e){
+//			System.out.println("Wrong user name " + e);
+//		}
 		try {
-			crypt = new Encrypter(userName, connect.getSalt(userName));
-			encryptedPass = crypt.getKey();
+			crypt = new Encrypter(password, connect.getSalt(userName));
+			encryptedPass = crypt.getKey().substring(32);
+			System.out.println("enc pass in isLoginValid : " + encryptedPass);
 		} catch (Exception e) {
 			System.out.println("Error getting salt while creating encrypter");
 			e.printStackTrace();
 		}
 		if (encryptedPass == null)
 			System.out.println("encrypted pass equals null");
-		System.out.println("checking login");
+		
 		boolean accepted = false; 
 		try {
 			if (connect.checkLogin(userName, encryptedPass)==true){
@@ -221,7 +228,7 @@ public class StartController {
 			eMail = (String) userRow[3];
 			password = (String) userRow[4];
 			int uType = (Integer) userRow[5];
-			byte[] salt = (byte[]) userRow[6];
+			String salt = (String) userRow[6];
 			
 			user = new UserData(userName,firstName,lastName,eMail,password,uType,salt);
 			return user;

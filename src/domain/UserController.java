@@ -67,8 +67,8 @@ public class UserController {
 				new ShowDestHandler(friendArrayList, connect, user);
 				break;
 			case 4: 
-				new ShowDestHandler(connect, user.getUserName());
-//				specificDest(user.getUserName());
+				//new ShowDestHandler(connect, user.getUserName());
+				//specificDest(user.getUserName());
 				break;
 			case 5: 
 				getUsernameAndAdd("Enter the username of the person you want to add");
