@@ -21,49 +21,19 @@ public class PopupController {
 	private int TOTAL_REPORTS;
 	private String body;
 	private int reportType;
+	boolean pic;
 	
 	public PopupController(SQL_Connect connect){
 		this.connect = connect;
 		ap.setVisible(false);
 	}
 	
-//	public void init(Object[][] res){
-//		data = res;
-//		try{
-//			row = data[0];
-//		}catch(ArrayIndexOutOfBoundsException e){
-//			new MessagePopup("no reports");
-//			return;
-//		}
-//
-//		TOTAL_REPORTS = data.length;
-//		// The tables are a bit different when querying for destinations
-//		try {
-//			reportType = Integer.parseInt(row[5].toString());
-//		} catch (Exception e){
-//			reportType = 3;
-//		}
-//		ap.setVisible(true);
-//		showReport();
-//		addActionListener();
-//	}
-	
-	public void init(ResultSet res){
-		data = res;
-//		try{
-//			//row = data[0];
-//		}catch(ArrayIndexOutOfBoundsException e){
-//			new MessagePopup("no reports");
-//			return;
-//		}
 
-//		TOTAL_REPORTS = data.length;
-		// The tables are a bit different when querying for destinations
-//		try {
-//			reportType = Integer.parseInt(row[5].toString());
-//		} catch (Exception e){
-//			reportType = 3;
-//		}
+	
+	public void init(ResultSet res, boolean pic){
+		data = res;
+		setSize();
+		this.pic = pic;
 		try {
 			reportType = data.getInt(1);
 			ap.setVisible(true);
@@ -76,14 +46,14 @@ public class PopupController {
 	}
 	
 	
-	private void showReport() throws SQLException{
-		ap.setLabel("Report " + (currentReport+1) + " of " + TOTAL_REPORTS + " reports");
+	private void showReport() throws Exception{
+		ap.setLabel("Report " + data.getRow() + " of " + TOTAL_REPORTS + " reports");
+		if(pic == true){
+			setPicture();
+		}
 		ap.setText(reportText());
 	}
-	public void hideChangeUserRigths(){
-		System.out.println("trying to hide user rigths");
-		ap.hideChangeUserRigths();
-	}
+	
 	public void showChangeUserRigths(){
 		System.out.println("woooooop");
 		ap.showChangeUserRigths();
@@ -95,11 +65,11 @@ public class PopupController {
 		String msg = null;
 		// if 1 or 2 the data has same format for reported texts as pics
 		if (reportType == 1){
-				reportedUser = row[3].toString();
+				reportedUser = data.getString(4);
 				String header =	 "Reported text by user : " + reportedUser + "\n";
-				body =	 		 "Reported source :\n" + row[1].toString() + "\n" +
-								 "Reason : " + row[4].toString() + "\n";
-				footer =		 "Reported by : " + row[5].toString() + "\n"; 
+				body =	 		 "Reported source :\n" + data.getString(2) + "\n" +
+								 "Reason : " + data.getString(5) + "\n";
+				footer =		 "Reported by : " + data.getString(6) + "\n"; 
 				msg = header + body + footer;
 		} else if (reportType == 2) {
 				reportedUser = data.getString(4);
@@ -108,10 +78,10 @@ public class PopupController {
 				footer =		 "Reported by : " + data.getString(6) + "\n"; 
 				msg = header + body + footer;
 		} else if (reportType == 3){
-				body = 			"Destination : " + row[0].toString() + "\n" +
-								"In Street : " + row[1].toString() + ", zip : " + row[4].toString() + ", country : " + row[5].toString() + "\n" +
-								"Reason : \n" + row[2].toString() + "\n";
-				footer  = 		"Reported by : " + row[3].toString();
+				body = 			"Destination : " + data.getString(2) + "\n" +
+								"In Street : " + data.getString(3) + ", city : " + data.getString(4) + ", country : " + data.getString(5) + "\n" +
+								"Reason : \n" + data.getString(6) + "\n";
+				footer  = 		"Reported by : " + data.getString(7);
 				msg = body + footer;
 		}
 		return msg;
@@ -163,104 +133,49 @@ public class PopupController {
 	private void nextReport(){
 		System.out.println("pressing next report");
 		try {
-			if(data.next())
-				currentReport++;
-			else
+			if(!data.next())
 				data.first();
 			showReport();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 		}
-//		// overflow condition
-//		if (currentReport+2 > data.length){
-//			System.out.println("condition : " + currentReport);
-//			System.out.println(data.length);
-//			row = data[0];
-//			currentReport = 0;
-//		}
-//		// normal condition
-//		else if (currentReport+2 <= data.length){
-//			System.out.println("Condition : " + currentReport);
-//			System.out.println(data.length);
-//			row = data[currentReport + 1];
-//			currentReport++;
-//		}
-//		showReport();
+
 	}
 	private void previousReport(){
 		System.out.println("pressing previous report");
-		// underflow condition
 		try {
-			if(data.previous()){
-				currentReport--;
-			}else
+			if(!data.previous())
 				data.last();
 			showReport();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-			
-//		if (currentReport-1 < 0){
-//			row = data[data.length-1];
-//			currentReport = data.length;
-//		}
-//		// normal condition
-//		else if (currentReport-1 >= 0)
-//			row = data[currentReport - 1];
-//		currentReport--;
+
 	}
 	
-//	public void setData(Object[][] res){
-//		data = res;
-//	}
-	
-	
-	// this toString method is a little hacky and sets the button texts according to report type
-//	private String typeToString(int repType){
-//		String str = "";
-//		if (repType != 2)
-//			ap.hidePanel();
-//		switch(repType){
-//		case 1: 
-//			str = "text";
-//			setButtons(str);
-//			break;
-//		case 2: 
-//			str = "picture";
-//			setButtons(str);
-//			break;
-//		case 3: 
-//			str = "destination";
-//			setButtons(str);
-//			break;
-//		case 4: 
-//			str = "user";
-//			setButtons(str);
-//			break;
-//		}
-//		return str;
-//	}
+
 	private void setButtons(String str1){
 		ap.setButton1("delete " + str1);
 		ap.setButton2("delete user");
 	}
-	public void setPictures(InputStream is) throws IOException {
+	public void setPicture() throws Exception {
+		InputStream is;
+		is = data.getBinaryStream(2);
 		ap.setPicture(is);
 	}
 	
-	private int getSetSize(){
+	private void setSize(){
 		int curRow;
-		int size = 0;
 		try {
 			curRow = data.getRow();
-		
 			data.last();
-			size = data.getRow();
-			data.absolute(curRow);
+			TOTAL_REPORTS = data.getRow();
+			if(curRow == 0)
+				data.first();
+			else
+				data.absolute(curRow);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return size;
 		
 	}
 }

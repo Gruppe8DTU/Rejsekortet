@@ -94,7 +94,7 @@ public class UserController {
 		int type = user.getType(); 
 		System.out.println("your user type : " + type);
 		if (type == 1){
-			System.out.println("you don't have access noob!");
+			new MessagePopup("You dont have access!");
 		} else if (type == 2){
 			home.setVisible(false);
 			ModController mc = new ModController(user, bound, connect);
