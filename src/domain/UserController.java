@@ -4,25 +4,21 @@ import java.sql.SQLException;
 import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
 import persistance.SQL_Connect;
 import presentation.*;
 import data.*;
 
 public class UserController {
 
-	CreateDestinationHandler newDest;
-	final Home home = new Home();
-	Boundary bound;
-	UserData user;
-	SQL_Connect connect;
-	StartController start;
-	ArrayList<String> friendArrayList = new ArrayList<String>();
-	BinaryTree friends = new BinaryTree();
+	
+	private final Home home = new Home();
+	private Boundary bound;
+	private UserData user;
+	private SQL_Connect connect;
+	private StartController start;
+	private ArrayList<String> friendArrayList = new ArrayList<String>();
+	private BinaryTree friends = new BinaryTree();
 	protected String userAction;
-	int intAction;
-	String un = null;
-	boolean add;
 	
 	/*
 	 * initializes 
@@ -71,10 +67,10 @@ public class UserController {
 				//specificDest(user.getUserName());
 				break;
 			case 5: 
-				getUsernameAndAdd("Enter the username of the person you want to add");
+				getUsernameAndAdd("Enter the username of \nthe person you want to add");
 				break;
 			case 6: 
-				getUsernameAndSeeDest("Enter the Username that you want to browse destinations for");
+				getUsernameAndSeeDest("Enter the Username that you want\nto browse destinations for");
 				break;
 			// redirect to option screen
 			case 7: 
@@ -194,9 +190,9 @@ public class UserController {
 			
 			/* If the nameAvailabilty is empty there is no such name in the database and it will return true, else it will return false*/
 			if(nameAvailability == null)
-				return true;
-			else
 				return false;
+			else
+				return true;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -238,15 +234,21 @@ public class UserController {
 							usernameScreen.setVisible(false);
 						if(action.equals("1")){
 							String name = usernameScreen.getUserName();
-							if(isNameAvailable(name)){
+							/* If the binary tree of friends contains the name entered, 
+							 * the users is already friends with that person and it will let the user know*/
+							if(friends.contains(name)){
 								usernameScreen.setVisible(false);
-								new ShowDestHandler(connect, name);
-							}else if(friends.contains(name)){
+								getUsernameAndAdd(name+" is already your friend, try another name");
+							/* If the the name that the user tries to add is not available there is a user with that name
+							 * and that user will be added as a friend */
+							}else if(!isNameAvailable(name)){
 								usernameScreen.setVisible(false);
-								getUsernameAndSeeDest(name+" is already your friend, try another name");
+								addFriend(name);
+								getUsernameAndAdd(name+" is now added. Add another");
+							/* The last possibilty is that the username entered does not exist and it will let the user know*/
 							}else{
 								usernameScreen.setVisible(false);
-								getUsernameAndSeeDest(name+" does not exist");
+								getUsernameAndAdd(name+" does not exist");
 							}		
 						}
 					}

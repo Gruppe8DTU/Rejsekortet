@@ -88,7 +88,7 @@ public class ListOfFriendDest extends JFrame {
 			destPanel.add(button, gbcButton);
 			button.setText("see details");
 			//button.setName(""+(Integer)visits[i][1]);
-			button.setName(""+visits.getInt(1));
+			button.setName(""+visits.getInt(2));
 			buttons.add(button);
 			i++;
 			
@@ -115,5 +115,7 @@ public class ListOfFriendDest extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane(destPanel);
 		contentPane.add(scrollPane, BorderLayout.CENTER);
+		pack();
+		
 	}
 }

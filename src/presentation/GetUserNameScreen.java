@@ -28,28 +28,28 @@ public class GetUserNameScreen extends JFrame {
 	}
 
 	public GetUserNameScreen(String str) {
-		setBounds(100, 100, 300, 150);
+		setBounds(100, 100, 400, 150);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel(str);
-		lblNewLabel.setBounds(6, 6, 288, 22);
+		lblNewLabel.setBounds(6, 6, 388, 43);
 		contentPane.add(lblNewLabel);
 		
 		textField = new JTextField();
-		textField.setBounds(6, 38, 288, 28);
+		textField.setBounds(6, 51, 388, 28);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		submit = new JButton("Submit");
-		submit.setBounds(177, 78, 117, 29);
+		submit.setBounds(277, 91, 117, 29);
 		submit.setName("1");
 		contentPane.add(submit);
 		
 		cancel = new JButton("Cancel");
-		cancel.setBounds(6, 78, 117, 29);
+		cancel.setBounds(6, 91, 117, 29);
 		cancel.setName("0");
 		contentPane.add(cancel);
 	}
