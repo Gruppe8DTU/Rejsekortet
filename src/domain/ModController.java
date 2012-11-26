@@ -21,7 +21,7 @@ public class ModController {
 	UserData user;
 	final ModScreen ms = new ModScreen();
 	PopupController pc;
-	ResultSet res = null;
+	protected ResultSet res = null;
 	ResultSet picData;
 	protected String userAction;
 	protected String body;

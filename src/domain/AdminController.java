@@ -11,11 +11,11 @@ import data.UserData;
 import presentation.ModScreen;
 import persistance.SQL_Connect;
 import presentation.Boundary;
+import presentation.MessagePopup;
 import presentation.ReportScreen;
 
 public class AdminController extends ModController {
 	final ModScreen ms = new ModScreen();
-	Object[][] res;
 	protected String body;
 	protected int currentReport = 1;
 	
@@ -55,25 +55,27 @@ public class AdminController extends ModController {
 				break;
 			case 3: 
 				viewReportedPosts();
-				pc.init(res);
+				if(isEmpty()){
+					new MessagePopup("There is no reports");
+				}else{
+					pc.init(res, false);
+				}
 				break;
 			case 4:
 				viewReportedPics();
-				pc.init(res);
-				picIDs = new int[res.length];
-				for (int i = 0; i < res.length; i++){
-					picIDs[i] = Integer.parseInt( res[i][9].toString() );
-				}
-				try {
-					pc.setPictures(getPics());
-				} catch (IOException e) {
-					System.out.println("IOException while trying to set picture " + e);
-					e.printStackTrace();
+				if(isEmpty()){
+					new MessagePopup("There is no reports");
+				}else{
+				pc.init(res, true);
 				}
 				break;
 			case 5: 
 				viewReportedDestinations();
-				pc.init(res);
+				if(isEmpty()){
+					new MessagePopup("There is no reports");
+				}else{
+				pc.init(res, false);
+				}
 				break;
 			// reimplementation needed because of case 6
 			case 6:
