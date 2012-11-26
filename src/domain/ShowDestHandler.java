@@ -13,6 +13,7 @@ import data.UserData;
 
 import persistance.SQL_Connect;
 import presentation.ListOfFriendDest;
+import presentation.MessagePopup;
 import presentation.ReportScreen;
 import presentation.ShowDest;
 
@@ -23,6 +24,7 @@ public class ShowDestHandler {
 	UserData user;
 	String visitID;
 	String userAction;
+	MessagePopup pop;
 	
 	public ShowDestHandler(SQL_Connect connect, String username){
 		this.friendArray = friendArray;
@@ -45,17 +47,18 @@ public class ShowDestHandler {
 		ResultSet visits = null;
 		try {
 			/* Initializes  visits to a 2 dimensional array with all destinations the users friends has visited ordered by date*/
-			visits = connect.select("CALL create_Friend_Visits('"+user.getUserName()+"')");
+			visits = connect.select("CALL create_Friend_Visits('"+user.getUserName()+"');");
+			if(visits.next()){
+				addActionListener(visits);
+				// fejl meddelese
+				return;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		/* If the 2 dimensional array is empty, it will let the user know there is no destinations and return to menu
 		 * If it is not empty it will print the destinations 10 at a time */
-		if(visits == null){
-			// fejl meddelese
-			return;
-		}else
-			addActionListener(visits);
+		
 	}
 	
 	private void addActionListener(/*Object[][]*/ResultSet visits){
@@ -196,13 +199,13 @@ public class ShowDestHandler {
 		try{
 			/* Creates a 2 dimensional array of destinations that the user has visited*/
 			visitsResult = connect.select("CALL create_Spec_Visits('"+name+"');");
-			if(!visitsResult.next()){
-				// fejl besked
-				return;
-			}else			
+			if(visitsResult.next()){
+				System.out.println("heeeey");
 				addActionListener(visitsResult);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			}else
+				pop = new MessagePopup("You have no destinations yet");
+				pop.setVisible(true);
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 				

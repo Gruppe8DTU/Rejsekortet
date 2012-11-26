@@ -211,7 +211,6 @@ public class SQL_Connect {
 		  Connection connect = DriverManager.getConnection(database_url, username, password);
 		  PreparedStatement stmt = connect.prepareStatement(query);
 		  ResultSet result = stmt.executeQuery();
-		  connect.close();
 		  return result;
 	  }
 	  public String getSalt(String user) throws Exception{

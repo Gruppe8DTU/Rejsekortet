@@ -40,7 +40,7 @@ public class ListOfFriendDest extends JFrame {
 		}		
 	}
 	
-	public void addButtonActionListeners(java.awt.event.ActionListener listener){
+	public void addButtonActionListeners(ActionListener listener){
 		for(JButton button : buttons){
 			button.addActionListener(listener);	
 		}
@@ -68,12 +68,11 @@ public class ListOfFriendDest extends JFrame {
 		/* -------------------- Sets Up a panel for the destinations -------------------- */
 		
 		/* -------------------- Adds buttons and labels to the panel -------------------- */
-		//for(int i = 0; i < visits.length; i++){
+
 		int i = 0;
-		visits.first();
+		visits.first();		
 		do{
 			JLabel label = new JLabel();
-			//label.setText((String)visits[i][2]+" visited "+(String)visits[i][3]+" in "+(String)visits[i][4]+", "+(String)visits[i][5]);
 			label.setText(visits.getString(2)+" visited "+visits.getString(3)+" in "+visits.getString(4)+", "+visits.getString(5));
 			GridBagConstraints gbcLabel = new GridBagConstraints();
 			gbcLabel.insets = new Insets(0, 0, 5, 5);
@@ -87,7 +86,6 @@ public class ListOfFriendDest extends JFrame {
 			gbcButton.gridy = i;
 			destPanel.add(button, gbcButton);
 			button.setText("see details");
-			//button.setName(""+(Integer)visits[i][1]);
 			button.setName(""+visits.getInt(2));
 			buttons.add(button);
 			i++;
@@ -99,7 +97,6 @@ public class ListOfFriendDest extends JFrame {
 		GridBagConstraints gbcFake = new GridBagConstraints();
 		gbcFake.insets = new Insets(0, 0, 5, 5);
 		gbcFake.gridx = 0;
-//		gbcFake.gridy = visits.length;
 		gbcFake.gridy = buttons.size();
 		destPanel.add(fake, gbcFake);
 		
@@ -109,7 +106,6 @@ public class ListOfFriendDest extends JFrame {
 		buttons.add(back);
 		GridBagConstraints gbcBack = new GridBagConstraints();
 		gbcBack.gridx = 1;
-//		gbcBack.gridy = visits.length;
 		gbcBack.gridy = buttons.size();
 		destPanel.add(back, gbcBack);
 		

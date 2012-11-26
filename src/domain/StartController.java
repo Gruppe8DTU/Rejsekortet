@@ -111,7 +111,7 @@ public class StartController {
 				break;				
 			case 3:
 				try {
-					createUser();
+					initCreateUser();	
 				} catch (Exception e) {
 					System.exit(1);
 					System.out.println(e);
