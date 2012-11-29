@@ -1,5 +1,4 @@
 package persistance;
-
 import java.security.spec.KeySpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKey;
@@ -7,7 +6,11 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.SecretKeyFactory;
 import java.util.Random;
 
-
+/*
+ *  2012 Niclas Falck-Andersen
+ *  This class creates a secret key spec that we use to validate the user. The static method
+ *  generateSalt() is needed when a new user is created
+ */
 public class Encrypter {
 	
 	private static String salt;
@@ -37,5 +40,6 @@ public class Encrypter {
     	return str;
     }    	
 }
+
     
 

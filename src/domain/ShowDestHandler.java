@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,25 +18,23 @@ import presentation.ShowDest;
 
 public class ShowDestHandler {
 	
-	ArrayList<String> friendArray;
-	SQL_Connect connect;
-	UserData user;
-	String visitID;
-	String userAction;
-	MessagePopup pop;
+	private ArrayList<String> friendArray;
+	private SQL_Connect connect;
+	private UserData user;
+	private String visitID;
+	private String userAction;
 	
+	// This constructor is for specific friends destinations
 	public ShowDestHandler(SQL_Connect connect, String username){
-		this.friendArray = friendArray;
 		this.connect = connect;
-		this.user = user;
 		specificDest(username);
 	}
+	// This constructor is for all your friends destinations and take more parameters
 	public ShowDestHandler(ArrayList<String> friendArray, SQL_Connect connect, UserData user){
 		this.friendArray = friendArray;
 		this.connect = connect;
 		this.user = user;
-		recentFriendDestinations();
-		
+		recentFriendDestinations();	
 	}
 	
 	/*
@@ -186,8 +183,7 @@ public class ShowDestHandler {
 								  "VALUES("+visitID+",'"+user.getUserName()+"',"+type+",'"+reportText+"');");
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		
+		}		
 	}
 	
 	/*
@@ -204,11 +200,6 @@ public class ShowDestHandler {
 				new MessagePopup("You have no destinations yet");
 		}catch (Exception e) {
 			e.printStackTrace();
-		}
-				
+		}				
 	}
-	
-	
-	
-
 }

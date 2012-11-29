@@ -10,13 +10,12 @@ import data.UserData;
  * Skaber forbindelse til vores database
  */ 
 //=== Provides an interface to execute SQL statements
-// WHAT THE COMMIT!
 //=== 2011 Henrik Hauge - vi har ændret en smule i den 
 public class SQL_Connect {
-	private String driver			= "com.mysql.jdbc.Driver";
-	private String database_url	= "jdbc:mysql://localhost:8889/Rejsekortet";
-	private String username		= "root";	
-	private String password		= "root";
+	private String driver		= "com.mysql.jdbc.Driver";
+	private String database_url	= "jdbc:mysql://ks352829.dediseedbox.com/eksamendb";
+	private String username		= "eksamensbruger";	
+	private String password		= "hesthestkrokofest";
 	
 		public Object[][] executeQuery(String query) throws SQLException
 	  {  

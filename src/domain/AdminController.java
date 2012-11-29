@@ -39,7 +39,7 @@ public class AdminController extends ModController {
 		int intAction = 0;
 		if (isNumeric(userAction))
 			intAction = Integer.parseInt(userAction);
-		pc = new PopupController(connect);	
+		pc = new ReportController(connect);	
 		switch (intAction){
 			case 1: 
 				pc.destroy();

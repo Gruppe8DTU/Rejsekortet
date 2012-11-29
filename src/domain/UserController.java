@@ -11,7 +11,7 @@ import data.*;
 public class UserController {
 
 	
-	private final Home home = new Home();
+	private final HomeScreen home = new HomeScreen();
 	private UserData user;
 	private SQL_Connect connect;
 	private StartController start;
@@ -36,7 +36,7 @@ public class UserController {
 		addActionListener(home);
 	}
 	
-	protected void addActionListener(Home home){
+	protected void addActionListener(HomeScreen home){
 		home.addButtonActionListener1(
 				new java.awt.event.ActionListener(){
 					public void actionPerformed(java.awt.event.ActionEvent evt){

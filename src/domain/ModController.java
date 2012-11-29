@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import persistance.SQL_Connect;
 import presentation.FriendList;
-import presentation.Home;
+import presentation.HomeScreen;
 import presentation.MessagePopup;
 import presentation.ModScreen;
 import presentation.AdminPopup;
@@ -18,7 +18,7 @@ public class ModController {
 	SQL_Connect connect;
 	UserData user;
 	final ModScreen ms = new ModScreen();
-	PopupController pc;
+	ReportController pc;
 	protected ResultSet res = null;
 	ResultSet picData;
 	protected String userAction;
@@ -52,7 +52,7 @@ public class ModController {
 			int intAction = 0;
 			if (isNumeric(userAction))
 				intAction = Integer.parseInt(userAction);
-			pc = new PopupController(connect);
+			pc = new ReportController(connect);
 			switch (intAction){
 				case 1: 
 					pc.destroy();
