@@ -1,4 +1,7 @@
 package presentation;
+/*
+ * This class handles the popup from the user menu that presents the user with a list of friends
+ */
 
 import java.awt.BorderLayout;
 import java.awt.Color;

@@ -22,23 +22,23 @@ public class MessagePopup extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLabel lblNewLabel = new JLabel(str);
 		lblNewLabel.setBounds(6, 6, 288, 37);
 		contentPane.add(lblNewLabel);
-		
+
 		JButton btnClose = new JButton("Close");
 		btnClose.setBounds(6, 43, 117, 29);
 		btnClose.addActionListener(new ButtonListener());
 		contentPane.add(btnClose);
 		setVisible(true);
 	}
-	
-	private class ButtonListener implements ActionListener{
-		
+
+	private class ButtonListener implements ActionListener {
+
 		public void actionPerformed(ActionEvent e) {
 			setVisible(false);
-			
+
 		}
 	}
 }

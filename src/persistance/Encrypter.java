@@ -9,7 +9,7 @@ import java.util.Random;
 /*
  *  2012 Niclas Falck-Andersen
  *  This class creates a secret key spec that we use to validate the user. The static method
- *  generateSalt() is needed when a new user is created
+ *  generateSalt() is needed when a new user is created. Existing users need their salt from the db
  */
 public class Encrypter {
 	

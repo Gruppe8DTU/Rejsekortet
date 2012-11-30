@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import data.UserData;
 
 /*
- * Skaber forbindelse til vores database
+ * Creates connection to database and handles the data manipulation.
  */ 
-//=== Provides an interface to execute SQL statements
-//=== 2011 Henrik Hauge - vi har ændret en smule i den 
+//=== 2011 Henrik Hauge har skrevet f¿lgende metoder: executeQuery, executeUpdate 
 public class SQL_Connect {
 	private String driver		= "com.mysql.jdbc.Driver";
+									// this server is located in France and has some latency
 	private String database_url	= "jdbc:mysql://ks352829.dediseedbox.com/eksamendb";
 	private String username		= "eksamensbruger";	
 	private String password		= "hesthestkrokofest";
@@ -102,6 +102,7 @@ public class SQL_Connect {
 	    return rows;
 	  }
 	  
+	  // Her slutter Henrik Hauges kode, og vores egne domaenespecifikke metoder foelger
 	  public int createUser(UserData user) throws SQLException
 	  {
 	

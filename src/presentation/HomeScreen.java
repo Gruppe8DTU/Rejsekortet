@@ -5,7 +5,7 @@
 package presentation;
 
 /**
- *
+ * This is the main menu
  * @author user
  */
 public class HomeScreen extends javax.swing.JFrame {

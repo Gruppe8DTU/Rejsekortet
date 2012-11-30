@@ -1,4 +1,8 @@
 package domain;
+/*
+ * This class the login process and create user
+ * Niclas & Jacob
+ */
 
 import java.sql.SQLException;
 
@@ -100,7 +104,6 @@ public class StartController {
 	}
 	
 	private void action(){
-
 		int intAction = Integer.parseInt(userAction);
 		switch(intAction){
 			case 1:
@@ -144,7 +147,7 @@ public class StartController {
 	}
 	
 	/*
-	 * Prombts user for login till he enters correct login info
+	 * Prompts user for login till he enters correct login info
 	 * if user enters '0' he will be redirected to create a new user
 	 */
 	public void getLogin(){		

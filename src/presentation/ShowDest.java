@@ -1,6 +1,5 @@
 package presentation;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -19,10 +18,10 @@ import java.io.*;
 import java.sql.Blob;
 import java.sql.SQLException;
 import javax.swing.JButton;
+import data.images.*;
 
 /*
  * Class ShowDest, shows the destination post selected
- * 
  * Written by: Jacob Espersen
  */
 
@@ -46,7 +45,10 @@ public class ShowDest extends JFrame {
 		this.destName = destName;
 		this.country = country;
 		System.out.println();
-		/* Sets the text to "No Article" if there is no post saved in the database */
+		/*
+		 * Sets the text to "No Article" if there is no post saved in the
+		 * database
+		 */
 		if (post == null)
 			this.text = "No Article";
 		else
@@ -57,14 +59,15 @@ public class ShowDest extends JFrame {
 		else {
 			/* Sets a default picture if no picture is added to the destination */
 			file = new File(
-					"/Users/Jacob/Documents/workspace/Rejsekortet/src/data/images/1353790262_iPhoto.png");
+				"/Users/Jacob/Documents/workspace/Rejsekortet/src/data/images/1353790262_iPhoto.png");
 			image = ImageIO.read(file);
 		}
 		initComponents();
 	}
 
-	/* 
-	 * -------------------- Adds Action listeners to the two buttons -------------------- 
+	/*
+	 * -------------------- Adds Action listeners to the two buttons
+	 * --------------------
 	 */
 	public void buttonListener(ActionListener listener) {
 		back.addActionListener(listener);
@@ -85,7 +88,10 @@ public class ShowDest extends JFrame {
 		pic.setBounds(6, 6, 438, 251);
 		contentPane.add(pic);
 
-		/* -------------------- Sets the headline of the destination post -------------------- */
+		/*
+		 * -------------------- Sets the headline of the destination post
+		 * --------------------
+		 */
 		JLabel headLine = new JLabel(userName + " visited " + destName + " in "
 				+ city + ", " + country);
 		headLine.setBounds(6, 269, 438, 16);
@@ -96,13 +102,13 @@ public class ShowDest extends JFrame {
 		postArea.setBounds(6, 297, 438, 146);
 		postArea.setEditable(false);
 		contentPane.add(postArea);
-		
+
 		/* -------------------- Sets the back button -------------------- */
 		report = new JButton("Report");
 		report.setBounds(48, 443, 117, 29);
 		report.setName("1");
 		contentPane.add(report);
-		
+
 		/* -------------------- Sets the report button -------------------- */
 		back = new JButton("Back");
 		back.setBounds(285, 443, 117, 29);

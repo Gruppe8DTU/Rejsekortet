@@ -1,4 +1,7 @@
 package data;
+/*
+ * This object holds the users data, so the controller don't have to
+ */
 
 import java.util.ArrayList;
 
